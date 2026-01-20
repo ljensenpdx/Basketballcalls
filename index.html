@@ -5,271 +5,223 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Estacada Rangers Broadcast Vault</title>
+    <title>Estacada Rangers Vault</title>
     <style>
         :root {
-            --ranger-green: #00471b; 
-            --ranger-white: #ffffff;
-            --ranger-black: #000000;
-            --ranger-grey: #1a1a1a;
+            --green: #00471b; /* Official Estacada Green */
+            --white: #ffffff;
+            --black: #000000;
+            --grey: #1c1c1c;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            background-color: var(--ranger-black);
-            color: var(--ranger-white);
+            background-color: var(--black);
+            color: var(--white);
             height: 100vh;
             display: flex;
-            justify-content: center;
-            overflow: hidden;
-            padding: 15px;
-            box-sizing: border-box;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            display: flex;
             flex-direction: column;
-            gap: 15px;
+            padding: 10px;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
-        header {
+        /* Top Bar */
+        .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 4px solid var(--ranger-green);
-            padding-bottom: 10px;
+            border-bottom: 3px solid var(--green);
+            padding-bottom: 8px;
         }
 
-        h1 { margin: 0; font-size: 2rem; text-transform: uppercase; letter-spacing: 3px; }
+        .title { font-size: 1.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; }
 
         select {
-            background: var(--ranger-grey);
+            background: var(--grey);
             color: white;
-            border: 2px solid var(--ranger-green);
-            padding: 12px;
-            font-weight: 900;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            cursor: pointer;
+            border: 2px solid var(--green);
+            padding: 8px 12px;
+            font-weight: 700;
+            border-radius: 8px;
+            font-size: 1rem;
         }
 
+        /* Call Monitor */
         .monitor {
-            background: linear-gradient(145deg, #0a0a0a, #000);
-            border: 3px solid var(--ranger-green);
-            border-radius: 25px;
-            padding: 30px;
-            min-height: 150px;
+            background: #080808;
+            border: 2px solid var(--green);
+            border-radius: 15px;
+            margin: 10px 0;
+            padding: 20px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 30px rgba(0, 71, 27, 0.5);
+            box-shadow: 0 0 25px rgba(0, 71, 27, 0.4);
         }
 
-        #voiceTag { font-size: 1.1rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
-        #callText { font-size: 2.2rem; font-weight: 900; line-height: 1.2; text-align: center; }
+        #voiceTag { font-size: 0.9rem; color: var(--green); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        #callText { font-size: 1.6rem; font-weight: 900; line-height: 1.2; text-align: center; }
 
-        .main-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-        .action-btn {
-            padding: 25px;
-            font-size: 1.4rem;
+        /* Shot Buttons */
+        .shot-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .s-btn {
+            padding: 18px;
+            font-size: 1.1rem;
             font-weight: 900;
-            border-radius: 15px;
-            cursor: pointer;
+            border-radius: 12px;
             border: none;
             text-transform: uppercase;
         }
+        .btn-2 { background: var(--green); color: white; }
+        .btn-3 { background: var(--white); color: black; }
 
-        .btn-2 { background: var(--ranger-green); color: white; box-shadow: 0 8px 0 #002e11; }
-        .btn-3 { background: var(--ranger-white); color: black; box-shadow: 0 8px 0 #ccc; }
-        .action-btn:active { transform: translateY(6px); box-shadow: none; }
+        /* Roster Grid */
+        .roster-area {
+            flex-grow: 1;
+            overflow-y: auto;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
 
-        .roster-section { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
-        .roster-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
 
-        .player-btn {
-            background: var(--ranger-grey);
+        .p-btn {
+            background: var(--grey);
             color: white;
             border: 1px solid #333;
-            padding: 25px 5px;
-            border-radius: 15px;
-            font-size: 1.1rem;
+            padding: 22px 5px;
+            border-radius: 10px;
+            font-size: 0.95rem;
             font-weight: 700;
             cursor: pointer;
             text-align: center;
         }
 
-        .player-btn:active { background: var(--ranger-green); transform: scale(0.95); }
-        
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-thumb { background: var(--ranger-green); border-radius: 10px; }
+        .p-btn:active { background: var(--green); }
+
+        .ver { font-size: 0.6rem; color: #444; text-align: right; margin-top: 5px; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <h1>Ranger Nation</h1>
-        <select id="teamSelector">
+    <div class="top-nav">
+        <div class="title">Ranger Vault</div>
+        <select id="teamPick">
             <option value="boys">Boys Varsity</option>
             <option value="girls">Girls Varsity</option>
-            <option value="unified">Unified Team</option>
+            <option value="unified">Unified</option>
         </select>
-    </header>
+    </div>
 
     <div class="monitor">
-        <div id="voiceTag">On the Air</div>
-        <div id="callText">Select a Team & Player</div>
+        <div id="voiceTag">Status: Active</div>
+        <div id="callText">Select a Team to Load Roster</div>
     </div>
 
-    <div class="main-actions">
-        <button class="action-btn btn-2" id="btnRandom2pt">Random 2pt</button>
-        <button class="action-btn btn-3" id="btnRandom3pt">Random 3pt</button>
+    <div class="shot-bar">
+        <button class="s-btn btn-2" onclick="playShot('2pt')">Random 2pt</button>
+        <button class="s-btn btn-3" onclick="playShot('3pt')">Random 3pt</button>
     </div>
 
-    <div class="roster-section">
-        <div id="rosterGrid" class="roster-grid"></div>
+    <div class="roster-area">
+        <div id="playerGrid" class="grid"></div>
     </div>
-</div>
+
+    <div class="ver">Version 4.0 - Galaxy Tab S9 FE 5G Optimized</div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const callState = {};
-        const rosters = {
-            boys: [
-                { n: "Davin Olson", num: "0", calls: [
-                    "Mike Breen: Davin Olson... BANG! A Ranger explosion!", "Kevin Harlan: OLSON WITH NO REGARD FOR HUMAN LIFE!", "Marv Albert: YES! And the foul for Davin Olson!", "Chick Hearn: Olson puts it in the refrigerator!", "Hubie Brown: Give Davin Olson credit for that tough finish.", "Stacey King: Did you get the memo?! Olson goes upstairs!", "John Mason: DAVIN... OOOOOOO-LSON!", "Walt Frazier: Olson spinning and winning, wheeling and dealing!", "Brian Wheeler: BOOM-SHAKALAKA, Davin Olson!", "Mike Tirico: Olson gives it a ride... GOT IT!"
-                ]},
-                { n: "Gavin Gates", num: "1", calls: [
-                    "Kevin Harlan: GATES FROM THE PARKING LOT!", "Mike Breen: Gavin Gates... BANG! From way downtown!", "Marv Albert: A spectacular move by Gavin Gates!", "Chick Hearn: Gates with a pitty-pat in the briar patch!", "John Mason: GAVIN... GAAAAA-TES!", "Reggie Miller: Welcome to your Kodak moment, Gavin Gates!", "Stacey King: Gavin Gates! Gimme the hot sauce!", "Walt Frazier: Gates, dancin' and prancin'!", "Ian Eagle: A rim-rocking rack attack by Gavin Gates!", "Kevin Calabro: Gates slinging the rock down the boulevard!"
-                ]},
-                { n: "Connor Crawford", num: "2", calls: [
-                    "Marv Albert: YES! Connor Crawford from the land of plenty!", "Kevin Harlan: CRAWFORD... RIGHT BETWEEN THE EYES!", "Mike Breen: Put it in the book for Connor Crawford!", "Chick Hearn: Crawford makes 'em pay! The eggs are cooling!", "Bill Walton: Connor Crawford! A celestial event!", "Brian Wheeler: Connor Crawford, mystified and mesmerized!", "John Mason: CONNOR... CRAAAAAA-WFORD!", "Travis Demers: L-L-L-L-LEADERSHIP from Crawford!", "Mark Jones: Crawford is just too hot as fish grease!", "Mike Tirico: Crawford pulls up... OH WHAT A SHOT!"
-                ]},
-                { n: "Broden Gates", num: "5", calls: [
-                    "Kevin Harlan: GATES SLAMS THE DOOR!", "Mike Breen: Broden Gates... BANG! BANG!", "Marv Albert: YES! Broden Gates from downtown!", "Stacey King: Broden Gates! Did you get the memo?!", "John Mason: BRODEN... GAAAAA-TES!", "Brian Wheeler: BOOM-SHAKALAKA, Broden Gates!", "Ian Eagle: Gates with the elevation and termination!", "Jeff Van Gundy: That's a high-level basketball play by Gates!", "Mike Tirico: Broden Gates gives it a ride... GOT IT!", "Mark Mason: From North Carolina... #5 Broden Gates!"
-                ]},
-                { n: "Wyatt Nerpel", num: "10", calls: [
-                    "Bill Walton: Wyatt Nerpel! A violation of the laws of physics!", "Kevin Harlan: NERPEL! WITH THE THUNDER!", "Mike Breen: Wyatt Nerpel... BANG!", "Marv Albert: YES! And the foul for Wyatt Nerpel!", "John Mason: WYATT... NEEEEEER-PEL!", "Brian Wheeler: Nerpel, right down the boulevard!", "Hubie Brown: You've got to give Wyatt Nerpel a lot of credit!", "Chick Hearn: Nerpel with the finger roll!", "Reggie Miller: Are you kidding me, Wyatt Nerpel?!", "Stacey King: Nerpel goes upstairs! Beep beep!"
-                ]},
-                { n: "Landen Thomas", num: "11", calls: [
-                    "Mike Breen: Landen Thomas... BANG! From the corner!", "Kevin Harlan: THOMAS SUCKS THE GRAVITY OUT OF THE ROOM!", "Marv Albert: YES! Thomas from the parking lot!", "Chick Hearn: Thomas puts it in the refrigerator!", "John Mason: LANDEN... THOOOOO-MAS!", "Brian Wheeler: BOOM-SHAKALAKA, Landen Thomas!", "Reggie Miller: Landen Thomas! Welcome to the show!", "Walt Frazier: Thomas, spinning and winning!", "Ian Eagle: Landen Thomas with the rack attack!", "Mike Tirico: Thomas pulls the trigger... GOT IT!"
-                ]},
-                { n: "Lincoln Bunyard", num: "13", calls: [
-                    "Kevin Harlan: BUNYARD! RIGHT BETWEEN THE EYES!", "Mike Breen: Lincoln Bunyard... BANG!", "Marv Albert: A spectacular finish by Lincoln Bunyard!", "Chick Hearn: Bunyard with a pitty-pat layup!", "John Mason: LINCOLN... BUUUUUN-YARD!", "Brian Wheeler: Lincoln Bunyard, do it 'til you're satisfied!", "Hubie Brown: Now you see, Bunyard knows the game!", "Stacey King: Bunyard with the spicy meatballs!", "Walt Frazier: Bunyard wheeling and dealing!", "Kevin Calabro: Bunyard slinging the rock!"
-                ]},
-                { n: "Paul Ables", num: "15", calls: [
-                    "Marv Albert: YES! And the foul for Paul Ables!", "Kevin Harlan: ABLES! WITH NO REGARD!", "Mike Breen: Paul Ables... BANG!", "Chick Hearn: Ables makes it look easy! Jello's jiggling!", "John Mason: PAUL... AAAAAAA-BLES!", "Brian Wheeler: BOOM-SHAKALAKA, Paul Ables!", "Travis Demers: L-L-L-L-LEADERSHIP from Ables!", "Mike Tirico: Paul Ables gives it a ride... GOT IT!", "Stacey King: Paul Ables with the hot sauce!", "Walt Frazier: Ables, dancin' and prancin'!"
-                ]},
-                { n: "Dane Carpenter", num: "20", calls: [
-                    "Kevin Harlan: CARPENTER! WITH THE POWER!", "Mike Breen: Dane Carpenter... BANG!", "Marv Albert: YES! Carpenter from the land of plenty!", "Chick Hearn: Carpenter puts the eggs in the fridge!", "John Mason: DANE... CAAAAAAR-PENTER!", "Brian Wheeler: Dane Carpenter, mystified and mesmerized!", "Hubie Brown: Give Dane Carpenter credit for that spacing!", "Reggie Miller: Dane Carpenter! Kodak moment!", "Stacey King: Carpenter! Did you get the memo?!", "Ian Eagle: Dane Carpenter with the termination!"
-                ]},
-                { n: "Duke Durand", num: "22", calls: [
-                    "Kevin Harlan: THE DUKE! WITH THE THUNDER!", "Mike Breen: Duke Durand... BANG!", "Marv Albert: YES! Durand from downtown!", "Chick Hearn: Duke Durand puts it in the refrigerator!", "John Mason: DUKE... DURAAAAAAAAND!", "Brian Wheeler: BOOM-SHAKALAKA, Duke Durand!", "Bill Walton: Duke Durand! A celestial event!", "Stacey King: Durand goes upstairs! Beep beep!", "Walt Frazier: Durand, spinning and winning!", "Mike Tirico: Duke Durand gives it a ride... GOT IT!"
-                ]},
-                { n: "Zander Hulsey", num: "30", calls: [
-                    "Mike Breen: Zander Hulsey... BANG! BANG!", "Kevin Harlan: HULSEY! RIGHT BETWEEN THE EYES!", "Marv Albert: YES! And the foul for Hulsey!", "Chick Hearn: Hulsey with a pitty-pat finish!", "John Mason: ZANDER... HUUUUUUUL-SEY!", "Brian Wheeler: Zander Hulsey! Boom-Shakalaka!", "Hubie Brown: Now you see, Hulsey knows the game!", "Reggie Miller: Zander Hulsey! Kodak moment!", "Stacey King: Hulsey with the hot sauce!", "Ian Eagle: Zander Hulsey with the rack attack!"
-                ]},
-                { n: "Grant Carpenter", num: "41", calls: [
-                    "Kevin Harlan: CARPENTER FROM THE PARKING LOT!", "Mike Breen: Grant Carpenter... BANG!", "Marv Albert: YES! Grant Carpenter from deep!", "Chick Hearn: Carpenter puts 'em in the fridge!", "John Mason: GRANT... CAAAAAAR-PENTER!", "Brian Wheeler: Grant Carpenter, do it 'til you're satisfied!", "Bill Walton: Grant Carpenter! A celestial event!", "Stacey King: Grant Carpenter! Did you get the memo?!", "Walt Frazier: Carpenter wheeling and dealing!", "Mike Tirico: Grant Carpenter... OH WHAT A SHOT!"
-                ]}
-            ],
-            girls: [
-                { n: "Payton Lee", num: "1", calls: [
-                    "Mike Breen: Payton Lee... BANG! From downtown!", "Kevin Harlan: LEE! WITH NO REGARD!", "Marv Albert: YES! And the foul for Payton Lee!", "Chick Hearn: Payton Lee puts it in the refrigerator!", "John Mason: PAYTON... LEEEEEEEEEE!", "Brian Wheeler: BOOM-SHAKALAKA, Payton Lee!", "Reggie Miller: Payton Lee! Kodak moment!", "Hubie Brown: Give Payton Lee a lot of credit there!", "Walt Frazier: Lee, spinning and winning!", "Stacey King: Payton Lee! Gimme the hot sauce!"
-                ]},
-                { n: "Sammi Klein", num: "2", calls: [
-                    "Kevin Harlan: KLEIN! FROM THE PARKING LOT!", "Mike Breen: Sammi Klein... BANG!", "Marv Albert: A spectacular move by Sammi Klein!", "Chick Hearn: Klein with a pitty-pat layup!", "John Mason: SAMMI... KLEEEEEEEIN!", "Brian Wheeler: Do it 'til you're satisfied, Sammi Klein!", "Mike Tirico: Sammi Klein gives it a ride... GOT IT!", "Stacey King: Sammi Klein! Spicy meatballs!", "Walt Frazier: Klein, dancin' and prancin'!", "Ian Eagle: A rim-rocking rack attack by Klein!"
-                ]},
-                { n: "Ellianna Zavala", num: "3", calls: [
-                    "Marv Albert: YES! Ellianna Zavala from the land of plenty!", "Kevin Harlan: ZAVALA... RIGHT BETWEEN THE EYES!", "Mike Breen: Put it in the book for Ellianna Zavala!", "Chick Hearn: Zavala puts 'em in the fridge!", "John Mason: ELLIANNA... ZAVAAAAA-LA!", "Bill Walton: Ellianna Zavala! A celestial event!", "Brian Wheeler: Ellianna Zavala, mystified and mesmerized!", "Mark Jones: Zavala is too hot as fish grease!", "Stacey King: Zavala goes upstairs! Beep beep!", "Mike Tirico: Zavala pulls up... OH WHAT A SHOT!"
-                ]},
-                { n: "Ella Sandell", num: "4", calls: [
-                    "Kevin Harlan: SANDELL SLAMS THE DOOR!", "Mike Breen: Ella Sandell... BANG! BANG!", "Marv Albert: YES! Ella Sandell from the corner!", "Chick Hearn: Sandell with a pitty-pat finish!", "John Mason: ELLA... SANDEEEEEEE-LL!", "Brian Wheeler: BOOM-SHAKALAKA, Ella Sandell!", "Travis Demers: L-L-L-L-LEADERSHIP from Sandell!", "Stacey King: Sandell! Did you get the memo?!", "Walt Frazier: Sandell wheeling and dealing!", "Mike Tirico: Ella Sandell gives it a ride... SPLASH!"
-                ]},
-                { n: "Emily Yost", num: "10", calls: [
-                    "Bill Walton: Emily Yost! A violation of physics!", "Kevin Harlan: YOST! WITH THE THUNDER!", "Mike Breen: Emily Yost... BANG!", "Marv Albert: YES! And the foul for Emily Yost!", "John Mason: EMILY... YOOOOOOOOOST!", "Brian Wheeler: Yost, right down the boulevard!", "Hubie Brown: Give Emily Yost a lot of credit!", "Chick Hearn: Yost puts the jello in the fridge!", "Reggie Miller: Are you kidding me, Emily Yost?!", "Stacey King: Yost with the hot sauce!"
-                ]},
-                { n: "Madison Seal", num: "11", calls: [
-                    "Mike Breen: Madison Seal... BANG! From downtown!", "Kevin Harlan: SEAL SUCKS THE GRAVITY OUT OF THE ROOM!", "Marv Albert: YES! Seal from the parking lot!", "Chick Hearn: Madison Seal puts it in the fridge!", "John Mason: MADISON... SEEEEEEEEEAL!", "Brian Wheeler: BOOM-SHAKALAKA, Madison Seal!", "Walt Frazier: Seal, spinning and winning!", "Reggie Miller: Madison Seal! Welcome to the show!", "Ian Eagle: Madison Seal with the rack attack!", "Mike Tirico: Seal pulls the trigger... GOT IT!"
-                ]},
-                { n: "Kenzie Stubblefield", num: "14", calls: [
-                    "Kevin Harlan: STUBBLEFIELD! RIGHT BETWEEN THE EYES!", "Mike Breen: Kenzie Stubblefield... BANG!", "Marv Albert: A spectacular finish by Stubblefield!", "Chick Hearn: Stubblefield with a pitty-pat layup!", "John Mason: KENZIE... STUBBLEFIELD!", "Brian Wheeler: Stubblefield, do it 'til you're satisfied!", "Hubie Brown: Now you see, Stubblefield knows the game!", "Stacey King: Stubblefield spicy meatballs!", "Walt Frazier: Stubblefield wheeling and dealing!", "Kevin Calabro: Stubblefield slinging the rock!"
-                ]},
-                { n: "Reagan Riggs", num: "15", calls: [
-                    "Marv Albert: YES! And the foul for Reagan Riggs!", "Kevin Harlan: RIGGS! WITH NO REGARD!", "Mike Breen: Reagan Riggs... BANG!", "Chick Hearn: Riggs makes it look easy!", "John Mason: REAGAN... RIIIIIIII-GGS!", "Brian Wheeler: BOOM-SHAKALAKA, Reagan Riggs!", "Travis Demers: L-L-L-L-LEADERSHIP from Riggs!", "Mike Tirico: Reagan Riggs gives it a ride... GOT IT!", "Stacey King: Reagan Riggs with the hot sauce!", "Walt Frazier: Riggs, dancin' and prancin'!"
-                ]},
-                { n: "Paisley Shaw", num: "20", calls: [
-                    "Kevin Harlan: SHAW! WITH THE POWER!", "Mike Breen: Paisley Shaw... BANG!", "Marv Albert: YES! Paisley Shaw from deep!", "Chick Hearn: Shaw puts 'em in the fridge!", "John Mason: PAISLEY... SHAAAAAAAAW!", "Brian Wheeler: Paisley Shaw, mystified and mesmerized!", "Hubie Brown: Give Paisley Shaw credit!", "Reggie Miller: Paisley Shaw! Kodak moment!", "Stacey King: Shaw! Did you get the memo?!", "Ian Eagle: Paisley Shaw with the termination!"
-                ]},
-                { n: "Grace Sager", num: "21", calls: [
-                    "Kevin Harlan: SAGER! WITH NO REGARD!", "Mike Breen: Grace Sager... BANG!", "Marv Albert: YES! Sager from the land of plenty!", "Chick Hearn: Grace Sager puts it in the fridge!", "John Mason: GRACE... SAAAAAAA-GER!", "Brian Wheeler: BOOM-SHAKALAKA, Grace Sager!", "Bill Walton: Grace Sager! Celestial event!", "Stacey King: Sager spicy meatballs!", "Walt Frazier: Sager wheeling and dealing!", "Mike Tirico: Grace Sager... OH WHAT A SHOT!"
-                ]},
-                { n: "Shanley Colby", num: "24", calls: [
-                    "Mike Breen: Shanley Colby... BANG! BANG!", "Kevin Harlan: COLBY! FROM THE PARKING LOT!", "Marv Albert: YES! And the foul for Colby!", "Chick Hearn: Colby with a pitty-pat finish!", "John Mason: SHANLEY... COOOOOOL-BY!", "Brian Wheeler: Shanley Colby! Boom-Shakalaka!", "Hubie Brown: Now you see, Colby knows the game!", "Reggie Miller: Shanley Colby! Kodak moment!", "Stacey King: Colby goes upstairs!", "Tirico: Shanley Colby... GOT IT!"
-                ]
-            ],
-            unified: [
-                { n: "Unified Athlete", num: "00", calls: [
-                    "Mike Breen: Unified... BANG!", "Marv Albert: YES! Unified!", "Harlan: UNIFIED WITH THE POWER!", "Hearn: Unified fridge!", "King: Unified meatballs!", "Walton: Unified celestial!", "Wheels: Unified Boom!", "Tirico: Unified shot!", "Mason: UNIFIED BASKETBALL!", "Reggie: Unified moment!"
-                ]}
-            ]
-        };
+    const teamData = {
+        boys: [
+            {n:"Davin Olson", i:"0", c:["Wheels: Davin Olson... BOOM-SHAKALAKA!","Breen: Davin Olson... BANG!","Harlan: Olson with no regard for human life!","Albert: YES! And the foul for Olson!","Hearn: Olson puts it in the fridge!","Frazier: Davin Olson spinning and winning!","Walton: Davin Olson... A celestial event!","Brown: Give Davin Olson a lot of credit!","King: Davin Olson! Gimme the hot sauce!","John Mason: DAVIN... OOOOO-LSON!"]},
+            {n:"Gavin Gates", i:"1", c:["Tirico: Gavin Gates... GOT IT!","Harlan: GATES WITH THE THUNDER!","Wheels: Do it 'til you're satisfied, Gavin Gates!","Calabro: Gates slinging the rock!","Albert: A spectacular move by Gavin Gates!","Breen: Gates from way downtown... BANG!","PA: GAVIN GATES FOR TWOOOOO!","Hearn: Gates with a pitty-pat layup!","King: Gates goes upstairs! Beep beep!","Eagle: A rim-rocking rack attack by Gates!"]},
+            {n:"Connor Crawford", i:"2", c:["Harlan: CRAWFORD... RIGHT BETWEEN THE EYES!","Wheels: Connor Crawford... mesmerized!","Breen: Put it in the book for Crawford!","Marv: YES! Crawford from the parking lot!","Walton: Crawford! A violation of physics!","Brown: Now you see, Crawford knows the game!","PA: #2... CONNOR CRAWFORD!","Frazier: Crawford hooping and scooping!","Jones: Crawford is too hot as fish grease!","Lawler: Oh me, oh my! BINGO for Crawford!"]},
+            {n:"Broden Gates", i:"5", c:["Wheels: BOOM-SHAKALAKA, Broden Gates!","Harlan: GATES SLAMS THE DOOR!","Breen: Broden Gates... BANG! BANG!","Albert: YES! Broden Gates from deep!","King: Broden Gates! Did you get the memo?!","PA: BRODEN... GAAAAA-TES!","Tirico: Gates gives it a ride... SPLASH!","Hearn: Broden Gates puts the jello in the fridge!","Frazier: Gates wheeling and dealing!","Demers: L-L-L-L-LEADERSHIP from Broden Gates!"]},
+            {n:"Wyatt Nerpel", i:"10", c:["Walton: Nerpel! A celestial event!","Harlan: NERPEL! WITH THE THUNDER!","Wheels: Nerpel, right down the boulevard!","PA: WYATT... NEEEEEER-PEL!","Breen: Nerpel... BANG!","Albert: YES! And the foul for Wyatt Nerpel!","Brown: Give Nerpel credit for that finish!","King: Nerpel with the hot sauce!","Calabro: Nerpel slinging the rock inside!","Hearn: Nerpel with the finger roll!"]},
+            {n:"Landen Thomas", i:"11", c:["Breen: Landen Thomas... BANG!","Harlan: THOMAS SUCKS THE GRAVITY OUT!","Wheels: BOOM-SHAKALAKA, Landen Thomas!","Albert: YES! Thomas from the parking lot!","Tirico: Landen Thomas... OH WHAT A SHOT!","PA: LANDEN THOMAS FOR THREEEEE!","King: Thomas too big, too strong, too good!","Frazier: Thomas, dancin' and prancin'!","Lawler: BINGO! Landen Thomas!","Eagle: Thomas elevation and termination!"]},
+            {n:"Lincoln Bunyard", i:"13", c:["Wheels: Bunyard! Do it 'til you're satisfied!","Harlan: LINCOLN BUNYARD! NO REGARD!","Breen: Bunyard... BANG!","PA: LINCOLN... BUUUUUN-YARD!","Marv: YES! Bunyard from the corner!","Hearn: Bunyard with a pitty-pat layup!","Frazier: Bunyard, spinning and winning!","Brown: Give Bunyard credit!","King: Bunyard! Spicy meatballs!","Walton: Bunyard! Celestial event at the rim!"]},
+            {n:"Paul Ables", i:"15", c:["Albert: YES! And the foul for Paul Ables!","Harlan: ABLES! RIGHT BETWEEN THE EYES!","Wheels: BOOM-SHAKALAKA, Paul Ables!","PA: PAUL ABLES FOR TWOOOOO!","Breen: Ables... BANG!","Tirico: Paul Ables... GOT IT!","Calabro: Ables slinging the rock!","Hearn: Ables puts it in the refrigerator!","King: Ables goes upstairs!","Demers: L-L-L-L-LEADERSHIP from Paul Ables!"]},
+            {n:"Dane Carpenter", i:"20", c:["Wheels: Dane Carpenter... mesmerized!","Harlan: CARPENTER! WITH THE POWER!","Breen: Carpenter... BANG!","Albert: YES! Dane Carpenter from deep!","PA: DANE... CAAAAARPENTER!","King: Carpenter! Did you get the memo?!","Frazier: Carpenter hooping and scooping!","Hearn: Carpenter with the finger roll!","Tirico: Dane Carpenter... OH WHAT A SHOT!","Eagle: Carpenter with the termination!"]},
+            {n:"Duke Durand", i:"22", c:["Harlan: THE DUKE! WITH NO REGARD!","Wheels: BOOM-SHAKALAKA, Duke Durand!","Breen: Durand... BANG!","PA: DUKE... DURAAAAAND!","Marv: YES! Durand from the land of plenty!","Hearn: Duke Durand puts it in the fridge!","King: Durand with the spicy meatballs!","Frazier: Durand, wheeling and dealing!","Walton: Duke Durand! Violation of physics!","Lawler: BINGO! Duke Durand!"]},
+            {n:"Zander Hulsey", i:"30", c:["Wheels: Zander Hulsey! Boom-Shakalaka!","Harlan: HULSEY FROM THE PARKING LOT!","Breen: Hulsey... BANG!","PA: ZANDER... HUUUUUUUL-SEY!","Marv: YES! And the foul for Hulsey!","Hearn: Hulsey with a pitty-pat finish!","Frazier: Hulsey dancin' and prancin'!","Brown: Give Zander Hulsey credit!","King: Hulsey goes upstairs!","Tirico: Hulsey gives it a ride... GOT IT!"]},
+            {n:"Grant Carpenter", i:"41", c:["Breen: Grant Carpenter... BANG!","Harlan: CARPENTER! RIGHT BETWEEN THE EYES!","Wheels: BOOM-SHAKALAKA, Grant Carpenter!","PA: GRANT... CAAAAARPENTER!","Marv: YES! And the foul for Carpenter!","Hearn: Grant Carpenter puts it in the fridge!","Frazier: Carpenter spinning and winning!","Brown: Grant Carpenter knows the game!","King: Carpenter with the hot sauce!","Walton: Grant Carpenter! Celestial event!"]}
+        ],
+        girls: [
+            {n:"Payton Lee", i:"1", c:["Wheels: BOOM-SHAKALAKA! Payton Lee!","Breen: Payton Lee... BANG!","Harlan: LEE! WITH NO REGARD!","Albert: YES! And the foul for Payton Lee!","Hearn: Payton Lee puts it in the fridge!","Frazier: Lee spinning and winning!","Walton: Payton Lee! Celestial event!","Brown: Give Lee a lot of credit!","King: Payton Lee! Gimme the hot sauce!","PA: PAYTON... LEEE!"]},
+            {n:"Sammi Klein", i:"2", c:["Tirico: Sammi Klein gives it a ride... GOT IT!","Harlan: KLEIN FROM DOWNTOWN!","Wheels: Do it 'til you're satisfied, Sammi Klein!","Calabro: Klein slinging the rock!","Albert: YES! Klein from the wing!","Breen: Klein from way downtown... BANG!","PA: SAMMI KLEIN FOR TWOOOOO!","Hearn: Klein with the pitty-pat finish!","King: Klein! Spicy meatballs!","Eagle: Klein with the termination!"]},
+            {n:"Ellianna Zavala", i:"3", c:["Harlan: ZAVALA... RIGHT BETWEEN THE EYES!","Wheels: Zavala... mesmerized!","Breen: Put it in the book for Ellianna Zavala!","Marv: YES! Zavala from the land of plenty!","Walton: Zavala! A violation of physics!","Brown: Zavala knows the game!","PA: #3... ELLIANNA ZAVALA!","Frazier: Zavala hooping and scooping!","Jones: Zavala is too hot as fish grease!","Lawler: BINGO for Zavala!"]},
+            {n:"Ella Sandell", i:"4", c:["Wheels: BOOM-SHAKALAKA, Ella Sandell!","Harlan: SANDELL SLAMS THE DOOR!","Breen: Sandell... BANG! BANG!","Albert: YES! Ella Sandell from the corner!","King: Sandell! Did you get the memo?!","PA: ELLA... SANDEEEEELL!","Tirico: Sandell gives it a ride... SPLASH!","Hearn: Sandell puts the jello in the fridge!","Frazier: Sandell wheeling and dealing!","Demers: L-L-L-L-LEADERSHIP from Sandell!"]},
+            {n:"Emily Yost", i:"10", c:["Walton: Emily Yost! A celestial event!","Harlan: YOST! WITH THE THUNDER!","Wheels: Yost right down the boulevard!","PA: EMILY... YOOOOST!","Breen: Yost... BANG! From the wing!","Albert: YES! And the foul for Emily Yost!","Brown: Give Yost credit!","King: Yost with the hot sauce!","Calabro: Yost slinging the rock!","Hearn: Yost with the finger roll!"]},
+            {n:"Madison Seal", i:"11", c:["Breen: Madison Seal... BANG! From downtown!","Harlan: SEAL SUCKS THE GRAVITY OUT!","Wheels: BOOM-SHAKALAKA, Madison Seal!","Albert: YES! Seal from the parking lot!","Tirico: Madison Seal... OH WHAT A SHOT!","PA: MADISON SEAL FOR THREEEEE!","King: Seal is too big, too strong, too good!","Frazier: Seal, dancin' and prancin'!","Lawler: BINGO! Madison Seal!","Eagle: Seal with the termination!"]},
+            {n:"Kenzie Stubblefield", i:"14", c:["Harlan: STUBBLEFIELD! RIGHT BETWEEN THE EYES!","Breen: Kenzie Stubblefield... BANG!","Marv: A spectacular finish by Stubblefield!","Hearn: Stubblefield with a pitty-pat layup!","PA: KENZIE... STUBBLEFIELD!","Wheels: Stubblefield, do it 'til you're satisfied!","Brown: Now you see, Stubblefield knows the game!","King: Stubblefield spicy meatballs!","Frazier: Stubblefield wheeling and dealing!","Calabro: Stubblefield slinging the rock!"]},
+            {n:"Reagan Riggs", i:"15", c:["Albert: YES! And the foul for Reagan Riggs!","Harlan: RIGGS! WITH NO REGARD!","Breen: Reagan Riggs... BANG!","Hearn: Riggs makes it look easy!","PA: REAGAN... RIIIIIIII-GGS!","Wheels: BOOM-SHAKALAKA, Reagan Riggs!","Demers: L-L-L-L-LEADERSHIP from Riggs!","Tirico: Reagan Riggs gives it a ride... GOT IT!","King: Reagan Riggs with the hot sauce!","Frazier: Riggs, dancin' and prancin'!"]},
+            {n:"Paisley Shaw", i:"20", c:["Harlan: SHAW! WITH THE POWER!","Breen: Paisley Shaw... BANG!","Albert: YES! Paisley Shaw from deep!","Hearn: Shaw puts 'em in the fridge!","PA: PAISLEY... SHAAAAAW!","Wheels: Paisley Shaw... mesmerized!","Brown: Give Paisley Shaw credit!","Reggie Miller: Paisley Shaw! Kodak moment!","King: Shaw! Did you get the memo?!","Eagle: Paisley Shaw with the termination!"]},
+            {n:"Grace Sager", i:"21", c:["Harlan: SAGER! WITH NO REGARD!","Breen: Grace Sager... BANG!","Albert: YES! Sager from the land of plenty!","Hearn: Grace Sager puts it in the fridge!","PA: GRACE... SAAAAAAA-GER!","Wheels: BOOM-SHAKALAKA, Grace Sager!","Walton: Grace Sager! Celestial event!","King: Sager spicy meatballs!","Frazier: Sager wheeling and dealing!","Lawler: BINGO! Grace Sager!"]},
+            {n:"Shanley Colby", i:"24", c:["Breen: Shanley Colby... BANG! BANG!","Harlan: COLBY FROM THE PARKING LOT!","Marv: YES! And the foul for Colby!","Hearn: Colby with a pitty-pat finish!","PA: SHANLEY... COOOOOOL-BY!","Wheels: Shanley Colby! Boom-Shakalaka!","Brown: Now you see, Colby knows the game!","Reggie Miller: Shanley Colby! Kodak moment!","King: Colby goes upstairs!","Tirico: Shanley Colby... GOT IT!"]}
+        ],
+        unified: [{n:"Ranger Unified", i:"00", c:["Unified: BANG!","Unified: BOOM!","Unified: YES!","Unified: Power!","Unified: Splash!","Unified: Score!","Unified: Bucket!","Unified: Swish!","Unified: Pure!","Unified: Got it!"]}]
+    };
 
-        const updateRoster = () => {
-            const team = document.getElementById('teamSelector').value;
-            const grid = document.getElementById('rosterGrid');
-            grid.innerHTML = '';
-            rosters[team].forEach((p, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'player-btn';
-                btn.innerText = `#${p.num} ${p.n}`;
-                btn.onclick = () => playUniqueCall(p.n, team, i);
-                grid.appendChild(btn);
-            });
-        };
+    const callTracker = {};
 
-        const playRandom = (type) => {
-            const tag = document.getElementById('voiceTag');
-            const txt = document.getElementById('callText');
-            const calls = type === '2pt' ? 
-                ["Harlan: NO REGARD!", "Breen: Bang!", "Wheels: Boom-Shakalaka!"] : 
-                ["Clackamas River Triple! 🌊", "Milo McIver Arc! ⛓️", "Main Street Bomb! 🏙️"];
-            tag.innerText = "General Play";
-            txt.innerText = calls[Math.floor(Math.random() * calls.length)];
-            txt.style.color = (type === '3pt') ? "#4ade80" : "white";
-        };
+    function setup() {
+        const teamSel = document.getElementById('teamPick');
+        teamSel.onchange = buildGrid;
+        buildGrid();
+    }
 
-        const playUniqueCall = (name, team, index) => {
-            const tag = document.getElementById('voiceTag');
-            const txt = document.getElementById('callText');
-            const p = rosters[team][index];
-
-            if (!callState[name]) {
-                callState[name] = p.calls.slice().sort(() => Math.random() - 0.5);
-            }
-
-            if (callState[name].length === 0) {
-                callState[name] = p.calls.slice().sort(() => Math.random() - 0.5);
-            }
-
-            tag.innerText = "Ranger Call: " + name;
-            txt.innerText = callState[name].pop();
-            txt.style.color = "white";
-        };
-
-        // Attach listeners and run initial setup
-        document.getElementById('teamSelector').addEventListener('change', updateRoster);
-        document.getElementById('btnRandom2pt').addEventListener('click', () => playRandom('2pt'));
-        document.getElementById('btnRandom3pt').addEventListener('click', () => playRandom('3pt'));
+    function buildGrid() {
+        const teamKey = document.getElementById('teamPick').value;
+        const grid = document.getElementById('playerGrid');
+        grid.innerHTML = '';
         
-        // Initial build
-        updateRoster();
-    });
+        teamData[teamKey].forEach((p, idx) => {
+            const btn = document.createElement('button');
+            btn.className = 'p-btn';
+            btn.innerText = `#${p.i} ${p.n}`;
+            btn.onclick = () => playerCall(p.n, teamKey, idx);
+            grid.appendChild(btn);
+        });
+    }
+
+    function playShot(type) {
+        const txt = document.getElementById('callText');
+        const tag = document.getElementById('voiceTag');
+        const calls = type === '2pt' ? 
+            ["Harlan: NO REGARD!", "Breen: Bang!", "Wheels: Boom-Shakalaka!"] : 
+            ["Clackamas River Triple! 🌊", "Milo McIver Arc! ⛓️", "Main Street Bomb! 🏙️"];
+        
+        tag.innerText = "General Play";
+        txt.innerText = calls[Math.floor(Math.random() * calls.length)];
+        txt.style.color = (type === '3pt') ? "#4ade80" : "white";
+    }
+
+    function playerCall(name, team, idx) {
+        const tag = document.getElementById('voiceTag');
+        const txt = document.getElementById('callText');
+        const p = teamData[team][idx];
+
+        if (!callTracker[name]) {
+            callTracker[name] = p.c.slice().sort(() => Math.random() - 0.5);
+        }
+
+        if (callTracker[name].length === 0) {
+            callTracker[name] = p.c.slice().sort(() => Math.random() - 0.5);
+        }
+
+        tag.innerText = "Call: " + name;
+        txt.innerText = callTracker[name].pop();
+        txt.style.color = "white";
+    }
+
+    window.onload = setup;
 </script>
 </body>
 </html>
