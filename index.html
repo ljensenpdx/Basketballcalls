@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basketball Play Caller</title>
+    <title>Estacada Hoops Caller</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,93 +12,116 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f4f4f9;
+            background-color: #f0f2f5;
             color: #333;
         }
         .container {
             text-align: center;
             background: white;
             padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             width: 90%;
-            max-width: 400px;
+            max-width: 450px;
+            border-top: 8px solid #e65100;
         }
-        h1 { color: #e65100; margin-bottom: 1rem; }
+        h1 { color: #e65100; margin-bottom: 0.5rem; font-size: 1.8rem; }
+        p { color: #666; margin-bottom: 1.5rem; font-style: italic; }
         .display-box {
-            min-height: 80px;
+            min-height: 100px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
             margin: 20px 0;
-            padding: 15px;
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            background-color: #fffaf0;
+            padding: 20px;
+            border: 2px solid #ffccbc;
+            border-radius: 12px;
+            background-color: #fffbf0;
+            transition: all 0.3s ease;
         }
-        .btn-group { display: flex; gap: 10px; justify-content: center; }
+        .btn-group { display: flex; gap: 12px; justify-content: center; }
         button {
-            padding: 12px 24px;
+            padding: 15px 25px;
             font-size: 1rem;
+            font-weight: bold;
             cursor: pointer;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             transition: transform 0.1s, background-color 0.2s;
             color: white;
+            flex: 1;
         }
-        button:active { transform: scale(0.95); }
-        .btn-2pt { background-color: #1976d2; }
-        .btn-2pt:hover { background-color: #1565c0; }
-        .btn-3pt { background-color: #388e3c; }
-        .btn-3pt:hover { background-color: #2e7d32; }
+        button:active { transform: scale(0.96); }
+        .btn-2pt { background-color: #0277bd; }
+        .btn-2pt:hover { background-color: #01579b; }
+        .btn-3pt { background-color: #2e7d32; }
+        .btn-3pt:hover { background-color: #1b5e20; }
+        .location-tag {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #e65100;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Hoops Call</h1>
-    <div class="display-box" id="callDisplay">Press a button to start!</div>
+    <h1>Estacada Play Caller</h1>
+    <p>Practice like a local</p>
+    
+    <div class="display-box" id="displayArea">
+        <div id="locationTag" class="location-tag">Ready?</div>
+        <div id="callText">Select your shot type!</div>
+    </div>
     
     <div class="btn-group">
-        <button class="btn-2pt" onclick="generateCall('2pt')">2-Point Call</button>
-        <button class="btn-3pt" onclick="generateCall('3pt')">3-Point Call</button>
+        <button class="btn-2pt" onclick="generateCall('2pt')">2-Pointer</button>
+        <button class="btn-3pt" onclick="generateCall('3pt')">3-Pointer</button>
     </div>
 </div>
 
 <script>
     const calls2pt = [
-        "Driving Layup ??",
-        "Mid-range Jumper ??",
-        "Post-up Fadeaway ??",
-        "Pick and Roll Finish ??",
-        "Fast Break Dunk ??",
-        "Floater in the Lane ??",
-        "Reverse Layup ??"
+        "Fast Break Layup 🏃‍♂️",
+        "Mid-Range Pull-up 🏀",
+        "Post-up Power Move 💪",
+        "Pick and Roll Finish ↗️",
+        "Floater in the Paint 🎈",
+        "Turnaround Jumper 🔄",
+        "Contested Bank Shot 🏦"
     ];
 
+    // Localized 3-point calls for the Estacada area
     const calls3pt = [
-        "Corner Three ??",
-        "Top of the Arc ??",
-        "Step-back Three ??",
-        "Catch and Shoot ??",
-        "Deep Wing Triple ???",
-        "Transition Three ?????",
-        "Pump Fake and Side-step ??"
+        { loc: "Clackamas River", play: "Deep Splash Triple 🌊" },
+        { loc: "Milo McIver", play: "Disc-Golf Style Arc ⛓️" },
+        { loc: "Eagle Creek", play: "Corner Pocket Three 🦅" },
+        { loc: "North Fork Reservoir", play: "Long Distance Launch 🛥️" },
+        { loc: "Faraday Lake", play: "Smooth Step-back ⚡" },
+        { loc: "Main Street", play: "Downtown Bomb! 🏙️" },
+        { loc: "Timber Park", play: "Catch and Shoot 🌲" },
+        { loc: "Promontory Park", play: "High-Arcing Wing Shot ⛰️" },
+        { loc: "Springwater", play: "Transition Triple 🚜" },
+        { loc: "Cazadero Dam", play: "High Energy Three 🔌" }
     ];
 
     function generateCall(type) {
-        const display = document.getElementById('callDisplay');
-        let selection;
+        const tag = document.getElementById('locationTag');
+        const text = document.getElementById('callText');
         
         if (type === '2pt') {
-            selection = calls2pt[Math.floor(Math.random() * calls2pt.length)];
+            tag.innerText = "Interior Play";
+            text.innerText = calls2pt[Math.floor(Math.random() * calls2pt.length)];
         } else {
-            selection = calls3pt[Math.floor(Math.random() * calls3pt.length)];
+            const selection = calls3pt[Math.floor(Math.random() * calls3pt.length)];
+            tag.innerText = selection.loc;
+            text.innerText = selection.play;
         }
-        
-        display.innerText = selection;
     }
 </script>
 
