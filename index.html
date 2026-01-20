@@ -8,7 +8,7 @@
     <title>Estacada Rangers Broadcast Vault</title>
     <style>
         :root {
-            --ranger-green: #00471b; /* Official Estacada Forest Green */
+            --ranger-green: #00471b; 
             --ranger-white: #ffffff;
             --ranger-black: #000000;
             --ranger-grey: #1a1a1a;
@@ -101,7 +101,6 @@
             font-weight: 700;
             cursor: pointer;
             text-align: center;
-            transition: all 0.1s;
         }
 
         .player-btn:active { background: var(--ranger-green); transform: scale(0.95); }
@@ -138,7 +137,6 @@
 </div>
 
 <script>
-    // State to ensure non-repeating calls per player
     const callState = {};
 
     const rosters = {
@@ -214,7 +212,7 @@
             { n: "Shanley Colby", num: "24", calls: [
                 "Mike Breen: Shanley Colby... BANG! BANG!", "Kevin Harlan: COLBY! FROM THE PARKING LOT!", "Marv Albert: YES! And the foul for Colby!", "Chick Hearn: Colby with a pitty-pat finish!", "John Mason: SHANLEY... COOOOOOL-BY!", "Brian Wheeler: Shanley Colby! Boom-Shakalaka!", "Hubie Brown: Now you see, Colby knows the game!", "Reggie Miller: Shanley Colby! Kodak moment!", "Stacey King: Colby goes upstairs!", "Tirico: Shanley Colby... GOT IT!"
             ]
-        ],
+        },
         unified: [
             { n: "Unified Athlete", num: "00", calls: [
                 "Mike Breen: Unified... BANG!", "Marv Albert: YES! Unified!", "Harlan: UNIFIED WITH THE POWER!", "Hearn: Unified fridge!", "King: Unified meatballs!", "Walton: Unified celestial!", "Wheels: Unified Boom!", "Tirico: Unified shot!", "Mason: UNIFIED BASKETBALL!", "Reggie: Unified moment!"
@@ -265,7 +263,6 @@
         txt.style.color = "white";
     }
 
-    // Initialize Roster on Load
     updateRoster();
 </script>
 </body>
