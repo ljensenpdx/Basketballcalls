@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Estacada Rangers Broadcast Hub</title>
     <style>
         :root {
-            --ranger-green: #00471b;
+            --ranger-green: #00471b; /* Official Estacada Forest Green */
             --ranger-white: #ffffff;
             --ranger-black: #0a0a0a;
-            --ranger-grey: #222222;
+            --ranger-grey: #1e1e1e;
         }
 
         body {
@@ -21,7 +23,7 @@
             justify-content: center;
             height: 100vh;
             overflow: hidden;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
 
@@ -30,140 +32,95 @@
             max-width: 1000px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
-        /* Header optimized for S9 FE */
         header {
             text-align: center;
             border-bottom: 4px solid var(--ranger-green);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
+        h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 3px; }
 
-        /* Central Display Box */
         .monitor {
             background: #000;
             border: 3px solid var(--ranger-green);
-            border-radius: 25px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 25px;
             flex-grow: 0;
-            min-height: 150px;
+            min-height: 130px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 30px rgba(0, 71, 27, 0.3);
+            box-shadow: 0 0 25px rgba(0, 71, 27, 0.4);
         }
 
-        #voiceTag {
-            font-size: 1.1rem;
-            color: var(--ranger-green);
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
+        #voiceTag { font-size: 1rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+        #callText { font-size: 2rem; font-weight: 900; line-height: 1.2; text-align: center; }
 
-        #callText {
-            font-size: 2.2rem;
-            font-weight: 900;
-            line-height: 1.2;
-            text-align: center;
-        }
-
-        /* Large Action Buttons */
-        .main-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        .main-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 
         .action-btn {
-            padding: 30px;
-            font-size: 1.6rem;
+            padding: 25px;
+            font-size: 1.4rem;
             font-weight: 900;
-            border-radius: 20px;
+            border-radius: 15px;
             cursor: pointer;
             border: none;
             text-transform: uppercase;
             transition: transform 0.1s;
         }
 
-        .btn-2 { background: var(--ranger-green); color: white; box-shadow: 0 8px 0 #002e11; }
-        .btn-3 { background: #fff; color: black; box-shadow: 0 8px 0 #ccc; }
+        .btn-2 { background: var(--ranger-green); color: white; box-shadow: 0 6px 0 #002e11; }
+        .btn-3 { background: var(--ranger-white); color: black; box-shadow: 0 6px 0 #ccc; }
         .action-btn:active { transform: translateY(4px); box-shadow: none; }
 
-        /* Roster Grid optimized for Tablet 5G touch */
-        .roster-section {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
+        .roster-section { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
+        .roster-label { font-size: 0.9rem; text-transform: uppercase; color: #777; margin-bottom: 12px; border-left: 5px solid var(--ranger-green); padding-left: 10px; font-weight: bold; }
 
-        .roster-label {
-            font-size: 1rem;
-            text-transform: uppercase;
-            color: #666;
-            margin-bottom: 15px;
-            border-left: 5px solid var(--ranger-green);
-            padding-left: 10px;
-            font-weight: bold;
-        }
-
-        .roster-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
+        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 
         .player-btn {
             background: var(--ranger-grey);
             color: white;
             border: 1px solid #333;
-            padding: 22px 10px;
-            border-radius: 15px;
-            font-size: 1.1rem;
+            padding: 20px 5px;
+            border-radius: 12px;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            text-align: center;
         }
 
-        .player-btn:active { background: var(--ranger-green); }
+        .player-btn:active { background: var(--ranger-green); color: white; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Ranger Nation</h1>
-    </header>
+    <header><h1>Ranger Nation</h1></header>
 
     <div class="monitor">
-        <div id="voiceTag">On the Air</div>
-        <div id="callText">Tap to Call the Play</div>
+        <div id="voiceTag">Broadcaster Booth</div>
+        <div id="callText">Tap a Player or Shot</div>
     </div>
 
     <div class="main-actions">
-        <button class="action-btn btn-2" onclick="playStandard('2pt')">Random 2pt</button>
-        <button class="action-btn btn-3" onclick="playStandard('3pt')">Random 3pt</button>
+        <button class="action-btn btn-2" onclick="playShot('2pt')">Random 2pt</button>
+        <button class="action-btn btn-3" onclick="playShot('3pt')">Random 3pt</button>
     </div>
 
     <div class="roster-section">
-        <div class="roster-label">Varsity Team Roster</div>
+        <div class="roster-label">Varsity Roster</div>
         <div class="roster-grid" id="rosterGrid"></div>
     </div>
 </div>
 
 <script>
-    const broadcasters = [
+    const shooters = [
         { v: "Marv Albert", c: "YES! And the foul! 🏀" },
-        { v: "Reggie Miller", c: "Welcome to your Kodak moment! 📸" },
+        { v: "Reggie Miller", c: "Are you kidding me?! 😱" },
         { v: "Mike Tirico", c: "Gives it a ride... GOT IT! 🎯" },
         { v: "Wheels", c: "BOOM-SHAKALAKA! 💥" },
         { v: "Kevin Harlan", c: "WITH NO REGARD FOR HUMAN LIFE! 😱" },
@@ -171,46 +128,40 @@
         { v: "Travis Demers", c: "L-L-L-L-LEADERSHIP! 🫡" }
     ];
 
-    const locations = [
+    const spots = [
         { v: "Clackamas River", c: "Deep Splash Triple! 🌊" },
         { v: "Milo McIver", c: "High Arc over the Hill! ⛓️" },
-        { v: "North Fork Reservoir", c: "Long Distance Launch! 🛥️" },
+        { v: "Eagle Creek", c: "Corner Pocket Three! 🦅" },
         { v: "Main Street", c: "Downtown Bomb! 🏙️" },
-        { v: "Cazadero Dam", c: "High Voltage Triple! 🔌" },
         { v: "Timber Park", c: "Pure Timber Triple! 🌲" }
     ];
 
-    // Roster from image
+    // Roster from Image
     const roster = [
-        { n: "Payton Lee", num: "1" },
-        { n: "Sammi Klein", num: "2" },
-        { n: "Ellianna Zavala", num: "3" },
-        { n: "Ella Sandell", num: "4" },
-        { n: "Emily Yost", num: "10" },
-        { n: "Madison Seal", num: "11" },
-        { n: "Kenzie Stubblefield", num: "14" },
-        { n: "Reagan Riggs", num: "15" },
-        { n: "Paisley Shaw", num: "20" },
-        { n: "Grace Sager", num: "21" },
+        { n: "Payton Lee", num: "1" }, { n: "Sammi Klein", num: "2" },
+        { n: "Ellianna Zavala", num: "3" }, { n: "Ella Sandell", num: "4" },
+        { n: "Emily Yost", num: "10" }, { n: "Madison Seal", num: "11" },
+        { n: "Kenzie Stubblefield", num: "14" }, { n: "Reagan Riggs", num: "15" },
+        { n: "Paisley Shaw", num: "20" }, { n: "Grace Sager", num: "21" },
         { n: "Shanley Colby", num: "24" }
     ];
 
-    function playStandard(type) {
+    function playShot(type) {
         const tag = document.getElementById('voiceTag');
         const txt = document.getElementById('callText');
-        const pool = type === '2pt' ? broadcasters : locations;
+        const pool = type === '2pt' ? shooters : spots;
         const s = pool[Math.floor(Math.random() * pool.length)];
         tag.innerText = s.v;
         txt.innerText = s.c;
-        txt.style.color = (type === '3pt') ? "#00ff62" : "white";
+        txt.style.color = (type === '3pt') ? "#4ade80" : "white";
     }
 
     function playPlayer(name) {
         const tag = document.getElementById('voiceTag');
         const txt = document.getElementById('callText');
         const calls = [
-            `Marv Albert: YES! ${name} from deep!`,
-            `Reggie Miller: ${name}... ARE YOU KIDDING ME?!`,
+            `Marv Albert: YES! ${name} with the bucket!`,
+            `Reggie Miller: ${name}... Welcome to your Kodak moment!`,
             `Mike Tirico: ${name} gives it a ride... GOT IT!`,
             `Wheels: BOOM-SHAKALAKA, ${name}!`,
             `Harlan: ${name} with no regard for human life!`
@@ -229,6 +180,5 @@
         grid.appendChild(btn);
     });
 </script>
-
 </body>
 </html>
