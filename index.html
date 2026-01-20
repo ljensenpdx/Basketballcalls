@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Estacada Rangers Broadcast Hub</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Ranger Broadcast Control</title>
     <style>
         :root {
-            --ranger-green: #00471b; /* Official Estacada Forest Green */
+            --ranger-green: #00471b; /* Official Forest Green */
             --ranger-white: #ffffff;
-            --ranger-black: #0a0a0a;
-            --ranger-grey: #1e1e1e;
+            --ranger-black: #000000;
+            --ranger-grey: #1a1a1a;
+            --ranger-accent: #2e7d32;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
             background-color: var(--ranger-black);
             color: var(--ranger-white);
+            height: 100vh;
             display: flex;
             justify-content: center;
-            height: 100vh;
             overflow: hidden;
             padding: 15px;
             box-sizing: border-box;
@@ -29,7 +30,7 @@
 
         .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1100px;
             display: flex;
             flex-direction: column;
             gap: 15px;
@@ -38,145 +39,231 @@
         header {
             text-align: center;
             border-bottom: 4px solid var(--ranger-green);
-            padding-bottom: 8px;
+            padding-bottom: 10px;
         }
 
-        h1 { margin: 0; font-size: 2.2rem; text-transform: uppercase; letter-spacing: 3px; }
+        h1 { margin: 0; font-size: 2.4rem; text-transform: uppercase; letter-spacing: 5px; color: var(--ranger-white); }
+        .subtitle { font-size: 0.9rem; color: var(--ranger-green); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
 
+        /* The Main Announcer Monitor */
         .monitor {
-            background: #000;
+            background: linear-gradient(145deg, #0a0a0a, #000);
             border: 3px solid var(--ranger-green);
             border-radius: 20px;
-            padding: 25px;
-            flex-grow: 0;
-            min-height: 130px;
+            padding: 30px;
+            min-height: 160px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 25px rgba(0, 71, 27, 0.4);
+            box-shadow: 0 0 40px rgba(0, 71, 27, 0.5);
         }
 
-        #voiceTag { font-size: 1rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
-        #callText { font-size: 2rem; font-weight: 900; line-height: 1.2; text-align: center; }
+        #voiceTag { font-size: 1.1rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
+        #callText { font-size: 2.2rem; font-weight: 900; line-height: 1.3; text-align: center; color: var(--ranger-white); text-shadow: 2px 2px 5px rgba(0,0,0,0.8); }
 
-        .main-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-
+        /* Random Shot Buttons */
+        .shot-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .action-btn {
             padding: 25px;
             font-size: 1.4rem;
             font-weight: 900;
-            border-radius: 15px;
+            border-radius: 18px;
             cursor: pointer;
             border: none;
             text-transform: uppercase;
-            transition: transform 0.1s;
+            transition: transform 0.1s, background-color 0.2s;
         }
-
         .btn-2 { background: var(--ranger-green); color: white; box-shadow: 0 6px 0 #002e11; }
         .btn-3 { background: var(--ranger-white); color: black; box-shadow: 0 6px 0 #ccc; }
         .action-btn:active { transform: translateY(4px); box-shadow: none; }
 
+        /* Roster Grid optimized for S9 FE 5G */
         .roster-section { flex-grow: 1; overflow-y: auto; padding-top: 10px; }
-        .roster-label { font-size: 0.9rem; text-transform: uppercase; color: #777; margin-bottom: 12px; border-left: 5px solid var(--ranger-green); padding-left: 10px; font-weight: bold; }
-
-        .roster-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .roster-label { font-size: 1rem; text-transform: uppercase; color: #555; margin-bottom: 15px; border-left: 6px solid var(--ranger-green); padding-left: 12px; font-weight: bold; }
+        .roster-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
 
         .player-btn {
             background: var(--ranger-grey);
             color: white;
             border: 1px solid #333;
-            padding: 20px 5px;
-            border-radius: 12px;
-            font-size: 1rem;
+            padding: 25px 10px;
+            border-radius: 15px;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
+            transition: all 0.2s;
         }
+        .player-btn:active { background: var(--ranger-green); transform: scale(0.95); }
 
-        .player-btn:active { background: var(--ranger-green); color: white; }
+        /* Scrollbar for Tablet */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--ranger-green); border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header><h1>Ranger Nation</h1></header>
+    <header>
+        <h1>Ranger Nation</h1>
+        <div class="subtitle">Broadcast Legends Hub</div>
+    </header>
 
     <div class="monitor">
-        <div id="voiceTag">Broadcaster Booth</div>
-        <div id="callText">Tap a Player or Shot</div>
+        <div id="voiceTag">Live from Estacada</div>
+        <div id="callText">Tap to Call the Play</div>
     </div>
 
-    <div class="main-actions">
-        <button class="action-btn btn-2" onclick="playShot('2pt')">Random 2pt</button>
-        <button class="action-btn btn-3" onclick="playShot('3pt')">Random 3pt</button>
+    <div class="shot-actions">
+        <button class="action-btn btn-2" onclick="playShot('2pt')">Random 2pt (Broadcasters)</button>
+        <button class="action-btn btn-3" onclick="playShot('3pt')">Random 3pt (Local)</button>
     </div>
 
     <div class="roster-section">
-        <div class="roster-label">Varsity Roster</div>
+        <div class="roster-label">Varsity Roster Control</div>
         <div class="roster-grid" id="rosterGrid"></div>
     </div>
 </div>
 
 <script>
-    const shooters = [
-        { v: "Marv Albert", c: "YES! And the foul! 🏀" },
-        { v: "Reggie Miller", c: "Are you kidding me?! 😱" },
-        { v: "Mike Tirico", c: "Gives it a ride... GOT IT! 🎯" },
-        { v: "Wheels", c: "BOOM-SHAKALAKA! 💥" },
+    // Top 15 Broadcasters + Previous Favorites
+    const broadcasters = [
+        { v: "Mike Breen", c: "BANG! 💥" },
         { v: "Kevin Harlan", c: "WITH NO REGARD FOR HUMAN LIFE! 😱" },
-        { v: "Kevin Calabro", c: "Rye bread and mustard, Grandma! 🥪" },
+        { v: "Marv Albert", c: "YES! And the foul! 🏀" },
+        { v: "Chick Hearn", c: "The jello's jiggling, the eggs are cooling! 🍮" },
+        { v: "Hubie Brown", c: "Give this kid a lot of credit! 👏" },
+        { v: "Jeff Van Gundy", c: "That is a high-level basketball play! 🧠" },
+        { v: "Reggie Miller", c: "Welcome to your Kodak moment! 📸" },
+        { v: "Ian Eagle", c: "A rim-rocking rack attack! 🔨" },
+        { v: "Walt Frazier", c: "Spinning and winning, wheeling and dealing! 🌀" },
+        { v: "Doug Collins", c: "He's just a special, special talent! ✨" },
+        { v: "Mark Jones", c: "Butter! He's in his bag! 🧈" },
+        { v: "Bill Walton", c: "A celestial event in the Wheelhouse! 🪐" },
+        { v: "Bob Costas", c: "A moment of pure drama! 🎭" },
+        { v: "Al Michaels", c: "Do you believe in miracles?! 🗽" },
+        { v: "Mike Fratello", c: "The Czar says: Perfection! 👑" },
+        { v: "Kevin Calabro", c: "Get out the rye bread and mustard, Grandma! 🥪" },
+        { v: "Brian Wheeler", c: "BOOM-SHAKALAKA! 💥" },
         { v: "Travis Demers", c: "L-L-L-L-LEADERSHIP! 🫡" }
     ];
 
-    const spots = [
+    const landmarks = [
         { v: "Clackamas River", c: "Deep Splash Triple! 🌊" },
         { v: "Milo McIver", c: "High Arc over the Hill! ⛓️" },
-        { v: "Eagle Creek", c: "Corner Pocket Three! 🦅" },
-        { v: "Main Street", c: "Downtown Bomb! 🏙️" },
-        { v: "Timber Park", c: "Pure Timber Triple! 🌲" }
+        { v: "Main Street", c: "Downtown Bomb from Estacada! 🏙️" },
+        { v: "Timber Park", c: "Pure Timber Triple! 🌲" },
+        { v: "Cazadero Dam", c: "High Voltage Three! 🔌" },
+        { v: "Eagle Creek", c: "Eagle-Eye Wing Triple! 🦅" }
     ];
 
-    // Roster from Image
+    // Roster from image
     const roster = [
-        { n: "Payton Lee", num: "1" }, { n: "Sammi Klein", num: "2" },
-        { n: "Ellianna Zavala", num: "3" }, { n: "Ella Sandell", num: "4" },
-        { n: "Emily Yost", num: "10" }, { n: "Madison Seal", num: "11" },
-        { n: "Kenzie Stubblefield", num: "14" }, { n: "Reagan Riggs", num: "15" },
-        { n: "Paisley Shaw", num: "20" }, { n: "Grace Sager", num: "21" },
-        { n: "Shanley Colby", num: "24" }
+        { n: "Payton Lee", num: "1", calls: [
+            "Mike Breen: Payton Lee... BANG! 💥",
+            "Marv Albert: YES! Payton Lee with the touch! ✨",
+            "Ian Eagle: Lee with a rim-rocking rack attack! 🔨",
+            "Chick Hearn: Payton Lee puts it in the refrigerator! 🧊",
+            "Wheels: BOOM-SHAKALAKA, Payton Lee! 💥"
+        ]},
+        { n: "Sammi Klein", num: "2", calls: [
+            "Kevin Harlan: Sammi Klein... RIGHT BETWEEN THE EYES! 🎯",
+            "Walt Frazier: Klein, spinning and winning! 🌀",
+            "Hubie Brown: You've gotta give Klein a lot of credit! 👏",
+            "Reggie Miller: Welcome to your Kodak moment, Sammi Klein! 📸",
+            "Calabro: Klein gets out the rye bread and mustard! 🥪"
+        ]},
+        { n: "Ellianna Zavala", num: "3", calls: [
+            "Mark Jones: Zavala's in her bag! Fish grease! 🐟",
+            "Bill Walton: Ellianna Zavala... A celestial event! 🪐",
+            "Mike Tirico: Zavala gives it a ride... GOT IT! 🎯",
+            "Doug Collins: Zavala is just a special talent! ✨",
+            "Demers: L-L-L-L-LEADERSHIP from Zavala! 🫡"
+        ]},
+        { n: "Ella Sandell", num: "4", calls: [
+            "Marv Albert: YES! Sandell with the reverse! 🔄",
+            "Jeff Van Gundy: That's a high-level play by Ella Sandell! 🧠",
+            "Al Michaels: Do you believe in Sandell? YES! 🗽",
+            "Kevin Harlan: Sandell with no regard for human life! 😱",
+            "Mike Breen: Put it in the book for Ella Sandell! 📖"
+        ]},
+        { n: "Emily Yost", num: "10", calls: [
+            "Mike Fratello: The Czar loves that Emily Yost spacing! 👑",
+            "Bob Costas: Yost... A moment of drama! 🎭",
+            "Wheels: Emily Yost, do it 'til you're satisfied! ✨",
+            "Chick Hearn: The jello is jiggling for Emily Yost! 🍮",
+            "Reggie Miller: Are you kidding me, Emily Yost?! 😱"
+        ]},
+        { n: "Madison Seal", num: "11", calls: [
+            "Mike Breen: Madison Seal... BANG! 💥",
+            "Ian Eagle: A rack attack by Madison Seal! 🔨",
+            "Walt Frazier: Seal, bounding and astounding! 🏀",
+            "Marv Albert: YES! Seal from the land of plenty! 🌊",
+            "Kevin Harlan: Madison Seal... HE SLAMMED IT HOME! 🔨"
+        ]},
+        { n: "Kenzie Stubblefield", num: "14", calls: [
+            "Mark Jones: Stubblefield... Butter! 🧈",
+            "Bill Walton: Stubblefield, a violation of the laws of physics! 🌌",
+            "Kevin Harlan: Stubblefield is cooking with gas! ⛽",
+            "Wheels: BOOM-SHAKALAKA, Stubblefield! 💥",
+            "Marv Albert: A spectacular move by Stubblefield! ✨"
+        ]},
+        { n: "Reagan Riggs", num: "15", calls: [
+            "Demers: L-L-L-L-LEADERSHIP from Reagan Riggs! 🫡",
+            "Hubie Brown: Now you see, Riggs knows the game! 🧠",
+            "Mike Breen: Riggs from downtown... BANG! 💥",
+            "Kevin Harlan: Riggs with the thunder! ⚡",
+            "Doug Collins: Reagan Riggs finishes through contact! 💪"
+        ]},
+        { n: "Paisley Shaw", num: "20", calls: [
+            "Reggie Miller: Welcome to the Kodak moment, Paisley Shaw! 📸",
+            "Marv Albert: YES! Shaw with the pure stroke! 🎯",
+            "Kevin Calabro: Paisley Shaw slinging the rock! 🪨",
+            "Mike Tirico: Shaw... OH WHAT A SHOT! 🎢",
+            "Walt Frazier: Shaw, dancin' and prancin'! 💃"
+        ]},
+        { n: "Grace Sager", num: "21", calls: [
+            "Al Michaels: Grace Sager... Unbelievable! 🗽",
+            "Wheels: Grace Sager, mystified and mesmerized! 😵‍💫",
+            "Kevin Harlan: Sager... BUCKLE UP! 🎢",
+            "Ian Eagle: Sager with the elevation and termination! 🦅",
+            "Marv Albert: YES! Sager bails them out! 🚨"
+        ]},
+        { n: "Shanley Colby", num: "24", calls: [
+            "Jeff Van Gundy: Shanley Colby is a high-level competitor! 😤",
+            "Mark Jones: Colby's deep in the silicon valley! 💻",
+            "Chick Hearn: Colby with the finger roll! ☝️",
+            "Wheels: BOOM-SHAKALAKA, Shanley Colby! 💥",
+            "Mike Breen: Shanley Colby... BANG! 💥"
+        ]}
     ];
 
     function playShot(type) {
         const tag = document.getElementById('voiceTag');
         const txt = document.getElementById('callText');
-        const pool = type === '2pt' ? shooters : spots;
+        const pool = type === '2pt' ? broadcasters : landmarks;
         const s = pool[Math.floor(Math.random() * pool.length)];
         tag.innerText = s.v;
         txt.innerText = s.c;
         txt.style.color = (type === '3pt') ? "#4ade80" : "white";
     }
 
-    function playPlayer(name) {
+    function playPlayer(index) {
+        const p = roster[index];
         const tag = document.getElementById('voiceTag');
         const txt = document.getElementById('callText');
-        const calls = [
-            `Marv Albert: YES! ${name} with the bucket!`,
-            `Reggie Miller: ${name}... Welcome to your Kodak moment!`,
-            `Mike Tirico: ${name} gives it a ride... GOT IT!`,
-            `Wheels: BOOM-SHAKALAKA, ${name}!`,
-            `Harlan: ${name} with no regard for human life!`
-        ];
-        tag.innerText = "The Call for " + name;
-        txt.innerText = calls[Math.floor(Math.random() * calls.length)];
+        const call = p.calls[Math.floor(Math.random() * p.calls.length)];
+        tag.innerText = "The Call for " + p.n;
+        txt.innerText = call;
         txt.style.color = "white";
     }
 
     const grid = document.getElementById('rosterGrid');
-    roster.forEach(p => {
+    roster.forEach((p, i) => {
         const btn = document.createElement('button');
         btn.className = 'player-btn';
         btn.innerText = `#${p.num} ${p.n}`;
-        btn.onclick = () => playPlayer(p.n);
+        btn.onclick = () => playPlayer(i);
         grid.appendChild(btn);
     });
 </script>
