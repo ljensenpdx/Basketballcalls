@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Ranger Gameday Dashboard</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#00471b">
+    
+    <title>Ranger Gameday Hub</title>
     <style>
         :root {
-            --ranger-green: #00471b;
+            --ranger-green: #00471b; /* Official Forest Green */
             --ranger-white: #ffffff;
             --ranger-black: #0a0a0a;
             --ranger-grey: #1a1a1a;
@@ -25,6 +29,8 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            /* Ensures content stays below the front-facing camera/notch area */
+            padding-top: env(safe-area-inset-top); 
         }
 
         header {
@@ -36,36 +42,37 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        h1 { margin: 0; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { margin: 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
 
-        .header-controls { display: flex; align-items: center; gap: 15px; }
+        .header-controls { display: flex; align-items: center; gap: 10px; }
         
-        .btn-ctrl {
+        select, .btn-ctrl {
             background: var(--ranger-black);
             color: white;
             border: 1px solid var(--ranger-white);
-            padding: 8px 12px;
+            padding: 6px 10px;
             font-weight: 900;
             border-radius: 8px;
             cursor: pointer;
+            font-size: 0.85rem;
         }
 
         .possession-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: #222;
-            padding: 5px 15px;
+            padding: 4px 12px;
             border-radius: 50px;
             border: 1px solid #444;
         }
 
-        .arrow { font-size: 1.8rem; color: #444; cursor: pointer; user-select: none; }
+        .arrow { font-size: 1.5rem; color: #444; cursor: pointer; user-select: none; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
         .dashboard {
             display: grid;
-            grid-template-columns: 340px 1fr 340px; 
+            grid-template-columns: 320px 1fr 320px; 
             flex-grow: 1;
             overflow: hidden;
         }
@@ -80,23 +87,22 @@
         }
 
         .pane-header {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--ranger-green);
             background: var(--ranger-white);
             text-align: center;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            padding: 8px;
+            margin-bottom: 8px;
+            padding: 5px;
             font-weight: 900;
             border-radius: 4px;
         }
 
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
-        /* PLAYER ITEM STATES */
         .p-item {
-            padding: 12px 10px;
-            margin-bottom: 5px;
+            padding: 10px 8px;
+            margin-bottom: 4px;
             border-radius: 6px;
             background: #252525;
             cursor: pointer;
@@ -104,21 +110,20 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid #333;
-            transition: background-color 0.2s, color 0.2s;
         }
 
         .p-item.starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: black; }
         .p-item.unavailable { background: var(--unavailable-red); color: white; border-color: white; opacity: 0.6; }
 
-        .p-num { font-weight: 900; width: 35px; }
-        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
-        .p-meta { font-size: 0.8rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
+        .p-num { font-weight: 900; width: 30px; }
+        .p-name { flex-grow: 1; text-align: left; padding-left: 6px; font-size: 0.9rem; }
+        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
 
         .center-stage {
-            padding: 15px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
             overflow-y: auto;
             border-left: 2px solid var(--ranger-green);
             border-right: 2px solid var(--ranger-green);
@@ -128,8 +133,8 @@
             background: #000;
             border: 2px solid var(--ranger-green);
             border-radius: 15px;
-            padding: 25px;
-            min-height: 140px;
+            padding: 15px;
+            min-height: 110px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -137,31 +142,30 @@
             position: relative;
         }
 
-        #voiceTag { font-size: 1rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
-        #callText { font-size: 1.8rem; font-weight: 900; text-align: center; line-height: 1.2; }
-        #callCounter { position: absolute; bottom: 10px; right: 15px; font-size: 0.75rem; color: #444; font-weight: bold; }
+        #voiceTag { font-size: 0.85rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
+        #callText { font-size: 1.5rem; font-weight: 900; text-align: center; line-height: 1.2; }
+        #callCounter { position: absolute; bottom: 8px; right: 12px; font-size: 0.65rem; color: #444; font-weight: bold; }
 
-        .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .s-btn {
-            padding: 20px;
-            font-size: 1.2rem;
+            padding: 15px;
+            font-size: 0.95rem;
             font-weight: 900;
             border-radius: 10px;
             border: none;
             text-transform: uppercase;
-            cursor: pointer;
         }
         .btn-2 { background: var(--ranger-green); color: white; }
         .btn-3 { background: var(--ranger-white); color: black; }
 
-        .call-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .call-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .p-call-btn {
             background: #222;
             color: white;
             border: 1px solid #444;
-            padding: 15px 5px;
-            border-radius: 10px;
-            font-size: 0.9rem;
+            padding: 12px 2px;
+            border-radius: 8px;
+            font-size: 0.75rem;
             font-weight: 700;
             cursor: pointer;
         }
@@ -170,14 +174,17 @@
 <body>
 
 <header>
-    <h1>Ranger Gameday</h1>
+    <h1>Ranger Hub</h1>
     <div class="header-controls">
         <div class="possession-container">
             <span id="posLeft" class="arrow" onclick="togglePossession('left')">◀</span>
-            <span style="font-size: 0.7rem; color: #777; font-weight: 900;">POSS</span>
             <span id="posRight" class="arrow" onclick="togglePossession('right')">▶</span>
         </div>
-        <button class="btn-ctrl" onclick="flipShootingSides()">Switch Shooting Sides</button>
+        <button class="btn-ctrl" onclick="flipShootingSides()">Flip Sides</button>
+        <select id="teamSelector" onchange="init()">
+            <option value="girls">Girls Varsity</option>
+            <option value="boys">Boys Varsity</option>
+        </select>
     </div>
 </header>
 
@@ -189,48 +196,48 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Broadcaster Hub</div>
-            <div id="callText">Select an Estacada Player</div>
+            <div id="voiceTag">Active Broadcast</div>
+            <div id="callText">Tap Player for Call</div>
             <div id="callCounter">0 / 100</div>
         </div>
         <div class="action-row">
-            <button class="s-btn btn-2" onclick="playRandom('2pt')">Random 2pt</button>
-            <button class="s-btn btn-3" onclick="playRandom('3pt')">Random 3pt</button>
+            <button class="s-btn btn-2" onclick="playRandom('2pt')">Rand 2pt</button>
+            <button class="s-btn btn-3" onclick="playRandom('3pt')">Rand 3pt</button>
         </div>
-        <div class="pane-header" style="background: var(--ranger-green); color: white;">Trigger Ranger Call</div>
         <div id="callTriggers" class="call-grid"></div>
     </div>
 
     <div id="rightPane" class="roster-pane">
-        <div class="pane-header" id="rightTitle">Molalla (Visitor)</div>
+        <div class="pane-header" id="rightTitle">Visitor</div>
         <div id="rightList" class="scroll-list"></div>
     </div>
 </div>
 
 <script>
+    // 100 TEMPLATES RESTORED
     const callTemplates = [
         "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
         "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
-        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin' and prancin'!",
-        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] a lot of credit!",
+        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin'!",
+        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] credit!",
         "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
         "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
         "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] with the finger roll!",
         "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs!",
-        "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] is too cold!",
-        "Walton: [NAME]! A violation of physics!", "Harlan: [NAME] sucks the gravity out!", "Breen: BANG! BANG! [NAME]!",
-        "Mason: [NAME] for TWOOOOO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME]! LAWLER'S LAW!",
-        "Most: [NAME] with the intercept!", "Vitale: Awesome baby, [NAME]!", "Eagle: [NAME] with the elevation!",
-        "Albert: A spectacular move by [NAME]!", "Hearn: [NAME] with a pitty-pat!", "King: [NAME]! Did you get the memo?!",
-        "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] wheeling and dealing!", "Brown: [NAME] knows the game!",
-        "Jones: [NAME] from the silicon valley!", "Walton: [NAME] is a giant!", "Harlan: [NAME] FROM THE PARKING LOT!",
-        "Breen: [NAME] from downtown!", "Mason: [NAME]! DE-TROIT STYLE!", "Marv: [NAME] with the touch!",
-        "Hearn: [NAME] with the reverse!", "King: [NAME]! I like it spicy!", "Eagle: [NAME] terminate!",
-        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME] astounding!", "Brown: [NAME] finishes!",
-        "Albert: [NAME] from deep!", "Hearn: [NAME] jello's jiggling!", "King: [NAME] hot meatballs!",
+        "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] bag!",
+        "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!",
+        "Mason: [NAME] for TWO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME] BINGO!",
+        "Most: [NAME] intercept!", "Vitale: [NAME] awesome baby!", "Eagle: [NAME] elevation!",
+        "Marv: Spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
+        "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] dealin'!", "Brown: [NAME] knows the game!",
+        "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!",
+        "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] with the touch!",
+        "Hearn: [NAME] reverse!", "King: [NAME] spicy sauce!", "Eagle: [NAME] terminate!",
+        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] play!",
+        "Albert: [NAME] from deep!", "Hearn: [NAME] jello!", "King: [NAME] meatballs!",
         "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: Number [NUM], [NAME]!",
-        "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP'er!", "Eagle: [NAME] rim-rocking!",
-        "Marv: [NAME] from the wing!", "Hearn: [NAME] eggs are cooling!", "King: [NAME] hot sauce!",
+        "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP!", "Eagle: [NAME] rim-rocking!",
+        "Marv: [NAME] wing!", "Hearn: [NAME] eggs!", "King: [NAME] hot!",
         "Tirico: [NAME] got it!", "Frazier: [NAME] bounds!", "Brown: [NAME] credit!",
         "Jones: [NAME] bag!", "Walton: [NAME] star!", "Harlan: [NAME] thunder!",
         "Breen: [NAME] triple!", "Mason: [NAME] Rangers!", "Albert: [NAME] YES!",
@@ -244,35 +251,29 @@
         "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!"
     ];
 
-    // Estacada Girls (Positions Blanked)
-    const estRoster = [
-        {n:"Payton Lee", i:"1", g:"JR", p:""}, {n:"Sammi Klein", i:"2", g:"SO", p:""},
-        {n:"Ellianna Zavala", i:"3", g:"JR", p:""}, {n:"Ella Sandell", i:"4", g:"FR", p:""},
-        {n:"Emily Yost", i:"10", g:"SR", p:""}, {n:"Madison Seal", i:"11", g:"SO", p:""},
-        {n:"Kenzie Stubblefield", i:"14", g:"FR", p:""}, {n:"Reagan Riggs", i:"15", g:"SR", p:""},
-        {n:"Paisley Shaw", i:"20", g:"FR", p:""}, {n:"Grace Sager", i:"21", g:"SO", p:""},
-        {n:"Shanley Colby", i:"24", g:"SO", p:""}
-    ];
-
-    // Molalla Girls
-    const molRoster = [
-        {n:"Grace Teigen", i:"2", p:"G", g:"SR"}, {n:"Madison Shultz", i:"3", p:"G", g:"SO"},
-        {n:"Emma Hugo", i:"4", p:"G", g:"SR"}, {n:"Natalie Settje", i:"5", p:"F", g:"JR"},
-        {n:"Yasmin Montiel", i:"10", p:"G", g:"SR"}, {n:"Evelynn Stephens", i:"11", p:"G", g:"SR"},
-        {n:"Hailey Anderson", i:"12", p:"F", g:"FR"}, {n:"Savanna Padgett", i:"15", p:"G", g:"SO"},
-        {n:"Emma Reiman", i:"20", p:"C", g:"JR"}, {n:"Ava Dunn", i:"22", p:"C", g:"SO"},
-        {n:"Payton Greer", i:"24", p:"G", g:"SO"}, {n:"Gracie Fisher", i:"32", p:"F", g:"JR"}
-    ];
+    const teamData = {
+        girls: {
+            est: [{n:"Payton Lee", i:"1", g:"JR"}, {n:"Sammi Klein", i:"2", g:"SO"}, {n:"Ellianna Zavala", i:"3", g:"JR"}, {n:"Ella Sandell", i:"4", g:"FR"}, {n:"Emily Yost", i:"10", g:"SR"}, {n:"Madison Seal", i:"11", g:"SO"}, {n:"Kenzie Stubblefield", i:"14", g:"FR"}, {n:"Reagan Riggs", i:"15", g:"SR"}, {n:"Paisley Shaw", i:"20", g:"FR"}, {n:"Grace Sager", i:"21", g:"SO"}, {n:"Shanley Colby", i:"24", g:"SO"}],
+            mol: [{n:"Grace Teigen", i:"2", p:"G", g:"SR"}, {n:"Madison Shultz", i:"3", p:"G", g:"SO"}, {n:"Emma Hugo", i:"4", p:"G", g:"SR"}, {n:"Natalie Settje", i:"5", p:"F", g:"JR"}, {n:"Yasmin Montiel", i:"10", p:"G", g:"SR"}, {n:"Evelynn Stephens", i:"11", p:"G", g:"SR"}, {n:"Hailey Anderson", i:"12", p:"F", g:"FR"}, {n:"Savanna Padgett", i:"15", p:"G", g:"SO"}, {n:"Emma Reiman", i:"20", p:"C", g:"JR"}, {n:"Ava Dunn", i:"22", p:"C", g:"SO"}, {n:"Payton Greer", i:"24", p:"G", g:"SO"}, {n:"Gracie Fisher", i:"32", p:"F", g:"JR"}]
+        },
+        boys: {
+            est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
+            mol: [{n:"Molalla Visitor", i:"0", p:"G", g:"SR"}]
+        }
+    };
 
     let sidesFlipped = false;
-    const playerCounters = {};
+    const pCounters = {};
 
     function init() {
-        renderRoster('leftList', sidesFlipped ? molRoster : estRoster);
-        renderRoster('rightList', sidesFlipped ? estRoster : molRoster);
-        document.getElementById('leftTitle').innerText = sidesFlipped ? "Molalla (Visitor)" : "Estacada (Home)";
-        document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Molalla (Visitor)";
-        renderButtons(estRoster);
+        const teamKey = document.getElementById('teamSelector').value;
+        const est = teamData[teamKey].est;
+        const mol = teamData[teamKey].mol;
+        renderRoster('leftList', sidesFlipped ? mol : est);
+        renderRoster('rightList', sidesFlipped ? est : mol);
+        document.getElementById('leftTitle').innerText = sidesFlipped ? "Visitor" : "Estacada (Home)";
+        document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Visitor";
+        renderButtons(est);
     }
 
     function renderRoster(id, data) {
@@ -281,20 +282,12 @@
         data.forEach(p => {
             const item = document.createElement('div');
             item.className = 'p-item';
-            // Show Position only if it exists
             const meta = p.p ? `${p.p} | ${p.g}` : p.g;
             item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-meta">${meta}</span>`;
-            
-            // Cycle: Standard -> Starter (Yellow) -> Unavailable (Red) -> Standard
             item.onclick = () => {
-                if (!item.classList.contains('starter') && !item.classList.contains('unavailable')) {
-                    item.classList.add('starter');
-                } else if (item.classList.contains('starter')) {
-                    item.classList.remove('starter');
-                    item.classList.add('unavailable');
-                } else {
-                    item.classList.remove('unavailable');
-                }
+                if (!item.classList.contains('starter') && !item.classList.contains('unavailable')) { item.classList.add('starter'); }
+                else if (item.classList.contains('starter')) { item.classList.remove('starter'); item.classList.add('unavailable'); }
+                else { item.classList.remove('unavailable'); }
             };
             div.appendChild(item);
         });
@@ -317,27 +310,23 @@
     function togglePossession(dir) {
         document.getElementById('posLeft').classList.remove('active');
         document.getElementById('posRight').classList.remove('active');
-        if (dir === 'left') document.getElementById('posLeft').classList.add('active');
-        if (dir === 'right') document.getElementById('posRight').classList.add('active');
+        document.getElementById('pos' + (dir === 'left' ? 'Left' : 'Right')).classList.add('active');
     }
 
     function playerCall(name, num) {
         const txt = document.getElementById('callText');
         const countDisplay = document.getElementById('callCounter');
-        if (!playerCounters[name]) playerCounters[name] = 0;
-        const currentIdx = playerCounters[name];
-        const template = callTemplates[currentIdx];
-        txt.innerText = template.replace("[NAME]", name).replace("[NUM]", num);
+        if (!pCounters[name]) pCounters[name] = 0;
+        const currentIdx = pCounters[name];
+        txt.innerText = callTemplates[currentIdx].replace("[NAME]", name).replace("[NUM]", num);
         countDisplay.innerText = `${currentIdx + 1} / 100`;
-        playerCounters[name] = (currentIdx + 1) % 100;
-        txt.style.color = "white";
+        pCounters[name] = (currentIdx + 1) % 100;
     }
 
     function playRandom(type) {
         const txt = document.getElementById('callText');
-        const calls = type === '2pt' ? ["Boom-Shakalaka!", "Bang!", "YES!"] : ["Clackamas River Triple!", "Milo McIver Arc!", "Main Street Bomb!"];
+        const calls = type === '2pt' ? ["Boom-Shakalaka!", "Bang!", "YES!"] : ["River Triple!", "McIver Arc!", "Main St Bomb!"];
         txt.innerText = calls[Math.floor(Math.random() * calls.length)];
-        txt.style.color = (type === '3pt') ? "#4ade80" : "white";
     }
 
     window.onload = init;
