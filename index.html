@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>Ranger Gameday Hub</title>
+    <title>Ranger Gameday Dashboard</title>
     <style>
         :root {
             --ranger-green: #00471b;
@@ -64,7 +64,7 @@
 
         .dashboard {
             display: grid;
-            grid-template-columns: 320px 1fr 320px;
+            grid-template-columns: 320px 1fr 350px; /* Slightly wider visitor box for details */
             flex-grow: 1;
             overflow: hidden;
         }
@@ -106,8 +106,8 @@
 
         .p-item.is-starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: #000; }
         .p-num { font-weight: 900; width: 35px; }
-        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 1rem; }
-        .p-info { font-size: 0.85rem; font-weight: 800; opacity: 0.9; width: 30px; text-align: right; }
+        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
+        .p-meta { font-size: 0.8rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
 
         .center-stage {
             padding: 15px;
@@ -129,10 +129,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
         #voiceTag { font-size: 1rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
         #callText { font-size: 1.8rem; font-weight: 900; text-align: center; line-height: 1.2; }
+        #callCounter { position: absolute; bottom: 10px; right: 15px; font-size: 0.75rem; color: #444; font-weight: bold; }
 
         .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .s-btn {
@@ -158,7 +160,6 @@
             font-weight: 700;
             cursor: pointer;
         }
-        .p-call-btn:active { background: var(--ranger-green); }
     </style>
 </head>
 <body>
@@ -185,6 +186,7 @@
         <div class="monitor">
             <div id="voiceTag">Broadcaster Hub</div>
             <div id="callText">Select an Estacada Player</div>
+            <div id="callCounter">0 / 100</div>
         </div>
         <div class="action-row">
             <button class="s-btn btn-2" onclick="playRandom('2pt')">Random 2pt</button>
@@ -201,32 +203,69 @@
 </div>
 
 <script>
-    // Estacada Girls Roster
-    const estRoster = [
-        {n:"Payton Lee", i:"1", info:"JR"}, {n:"Sammi Klein", i:"2", info:"SO"},
-        {n:"Ellianna Zavala", i:"3", info:"JR"}, {n:"Ella Sandell", i:"4", info:"FR"},
-        {n:"Emily Yost", i:"10", info:"SR"}, {n:"Madison Seal", i:"11", info:"SO"},
-        {n:"Kenzie Stubblefield", i:"14", info:"FR"}, {n:"Reagan Riggs", i:"15", info:"SR"},
-        {n:"Paisley Shaw", i:"20", info:"FR"}, {n:"Grace Sager", i:"21", info:"SO"},
-        {n:"Shanley Colby", i:"24", info:"SO"}
+    // 100 UNIQUE TEMPLATES (Restored from Previous Expansion)
+    const callTemplates = [
+        "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
+        "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
+        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin' and prancin'!",
+        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] a lot of credit!",
+        "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
+        "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
+        "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] with the finger roll!",
+        "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs! Beep beep!",
+        "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] is too cold!",
+        "Walton: [NAME]! A violation of physics!", "Harlan: [NAME] sucks the gravity out!", "Breen: BANG! BANG! [NAME]!",
+        "Mason: [NAME] for TWOOOOO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME]! LAWLER'S LAW!",
+        "Most: [NAME] with the intercept!", "Vitale: Awesome baby, [NAME]!", "Eagle: [NAME] with the elevation!",
+        "Albert: A spectacular move by [NAME]!", "Hearn: [NAME] with a pitty-pat!", "King: [NAME]! Did you get the memo?!",
+        "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] wheeling and dealing!", "Brown: [NAME] knows the game!",
+        "Jones: [NAME] from the silicon valley!", "Walton: [NAME] is a giant!", "Harlan: [NAME] FROM THE PARKING LOT!",
+        "Breen: [NAME] from downtown!", "Mason: [NAME]! DE-TROIT STYLE!", "Marv: [NAME] with the touch!",
+        "Hearn: [NAME] with the reverse!", "King: [NAME]! I like it spicy!", "Eagle: [NAME] terminate!",
+        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME] astounding!", "Brown: [NAME] finishes!",
+        "Albert: [NAME] from deep!", "Hearn: [NAME] jello's jiggling!", "King: [NAME] hot meatballs!",
+        "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: Number [NUM], [NAME]!",
+        "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP'er!", "Eagle: [NAME] rim-rocking!",
+        "Marv: [NAME] from the wing!", "Hearn: [NAME] eggs are cooling!", "King: [NAME] hot sauce!",
+        "Tirico: [NAME] got it!", "Frazier: [NAME] bounds!", "Brown: [NAME] credit!",
+        "Jones: [NAME] bag!", "Walton: [NAME] star!", "Harlan: [NAME] thunder!",
+        "Breen: [NAME] triple!", "Mason: [NAME] Rangers!", "Albert: [NAME] YES!",
+        "Hearn: [NAME] bridge!", "King: [NAME] memo!", "Eagle: [NAME] rack!",
+        "Tirico: [NAME] ride!", "Frazier: [NAME] spin!", "Brown: [NAME] play!",
+        "Jones: [NAME] cold!", "Walton: [NAME] event!", "Harlan: [NAME] eyes!",
+        "Breen: [NAME] bang!", "Mason: [NAME] points!", "Albert: [NAME] touch!",
+        "Hearn: [NAME] fridge!", "King: [NAME] sauce!", "Eagle: [NAME] attack!",
+        "Tirico: [NAME] splash!", "Frazier: [NAME] winning!", "Brown: [NAME] touch!",
+        "Jones: [NAME] bag!", "Walton: [NAME] cosmic!", "Harlan: [NAME] boom!",
+        "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!"
     ];
 
-    // Molalla Girls Roster
+    // Estacada Girls
+    const estRoster = [
+        {n:"Payton Lee", i:"1", g:"11", p:"G"}, {n:"Sammi Klein", i:"2", g:"10", p:"G"},
+        {n:"Ellianna Zavala", i:"3", g:"11", p:"G"}, {n:"Ella Sandell", i:"4", g:"9", p:"G"},
+        {n:"Emily Yost", i:"10", g:"12", p:"G"}, {n:"Madison Seal", i:"11", g:"10", p:"G"},
+        {n:"Kenzie Stubblefield", i:"14", g:"9", p:"G"}, {n:"Reagan Riggs", i:"15", g:"12", p:"F"},
+        {n:"Paisley Shaw", i:"20", g:"9", p:"G"}, {n:"Grace Sager", i:"21", g:"10", p:"G"},
+        {n:"Shanley Colby", i:"24", g:"10", p:"G"}
+    ];
+
+    // Molalla Girls
     const molRoster = [
-        {n:"Grace Teigen", i:"2", info:"G"}, {n:"Madison Shultz", i:"3", info:"G"},
-        {n:"Emma Hugo", i:"4", info:"G"}, {n:"Natalie Settje", i:"5", info:"F"},
-        {n:"Yasmin Montiel", i:"10", info:"G"}, {n:"Evelynn Stephens", i:"11", info:"G"},
-        {n:"Hailey Anderson", i:"12", info:"F"}, {n:"Savanna Padgett", i:"15", info:"G"},
-        {n:"Emma Reiman", i:"20", info:"C"}, {n:"Ava Dunn", i:"22", info:"C"},
-        {n:"Payton Greer", i:"24", info:"G"}, {n:"Gracie Fisher", i:"32", info:"F"}
+        {n:"Grace Teigen", i:"2", p:"G", g:"12"}, {n:"Madison Shultz", i:"3", p:"G", g:"10"},
+        {n:"Emma Hugo", i:"4", p:"G", g:"12"}, {n:"Natalie Settje", i:"5", p:"F", g:"11"},
+        {n:"Yasmin Montiel", i:"10", p:"G", g:"12"}, {n:"Evelynn Stephens", i:"11", p:"G", g:"12"},
+        {n:"Hailey Anderson", i:"12", p:"F", g:"9"}, {n:"Savanna Padgett", i:"15", p:"G", g:"10"},
+        {n:"Emma Reiman", i:"20", p:"C", g:"11"}, {n:"Ava Dunn", i:"22", p:"C", g:"10"},
+        {n:"Payton Greer", i:"24", p:"G", g:"10"}, {n:"Gracie Fisher", i:"32", p:"F", g:"11"}
     ];
 
     let sidesFlipped = false;
-    const callTracker = {};
+    const playerCounters = {};
 
     function init() {
-        renderRoster('leftList', sidesFlipped ? molRoster : estRoster);
-        renderRoster('rightList', sidesFlipped ? estRoster : molRoster);
+        renderRoster('leftList', sidesFlipped ? molRoster : estRoster, !sidesFlipped);
+        renderRoster('rightList', sidesFlipped ? estRoster : molRoster, sidesFlipped);
         
         document.getElementById('leftTitle').innerText = sidesFlipped ? "Molalla (Visitor)" : "Estacada (Home)";
         document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Molalla (Visitor)";
@@ -234,13 +273,18 @@
         renderButtons(estRoster);
     }
 
-    function renderRoster(id, data) {
+    function renderRoster(id, data, isHome) {
         const div = document.getElementById(id);
         div.innerHTML = '';
         data.forEach(p => {
             const item = document.createElement('div');
             item.className = 'p-item';
-            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-info">${p.info}</span>`;
+            // Show Number, Name, Position, and Grade
+            item.innerHTML = `
+                <span class="p-num">${p.i}</span>
+                <span class="p-name">${p.n}</span>
+                <span class="p-meta">${p.p} | Gr ${p.g}</span>
+            `;
             item.onclick = () => item.classList.toggle('is-starter');
             div.appendChild(item);
         });
@@ -253,7 +297,7 @@
             const btn = document.createElement('button');
             btn.className = 'p-call-btn';
             btn.innerText = `#${p.i} ${p.n.split(' ').pop()}`;
-            btn.onclick = () => playerCall(p.n);
+            btn.onclick = () => playerCall(p.n, p.i);
             div.appendChild(btn);
         });
     }
@@ -267,27 +311,21 @@
         if (dir === 'right') document.getElementById('posRight').classList.add('active');
     }
 
-    function playerCall(name) {
+    function playerCall(name, num) {
         const txt = document.getElementById('callText');
-        const tag = document.getElementById('voiceTag');
-        const pool = [
-            `Mike Breen: ${name}... BANG!`, `Kevin Harlan: ${name} NO REGARD!`,
-            `Marv Albert: YES! And the foul for ${name}!`, `Wheels: BOOM-SHAKALAKA, ${name}!`,
-            `Chick Hearn: ${name} puts it in the fridge!`, `Tirico: ${name}... GOT IT!`,
-            `Calabro: ${name} slinging the rock!`, `Stacey King: Give ${name} the hot sauce!`
-        ];
-        if (!callTracker[name]) callTracker[name] = pool.sort(() => Math.random() - 0.5);
-        if (callTracker[name].length === 0) callTracker[name] = pool.sort(() => Math.random() - 0.5);
-        tag.innerText = "The Call: " + name;
-        txt.innerText = callTracker[name].pop();
+        const countDisplay = document.getElementById('callCounter');
+        if (!playerCounters[name]) playerCounters[name] = 0;
+        const currentIdx = playerCounters[name];
+        const template = callTemplates[currentIdx];
+        txt.innerText = template.replace("[NAME]", name).replace("[NUM]", num);
+        countDisplay.innerText = `${currentIdx + 1} / 100`;
+        playerCounters[name] = (currentIdx + 1) % 100;
         txt.style.color = "white";
     }
 
     function playRandom(type) {
         const txt = document.getElementById('callText');
-        const tag = document.getElementById('voiceTag');
         const calls = type === '2pt' ? ["Boom-Shakalaka!", "Bang!", "YES!"] : ["Clackamas River Triple!", "Milo McIver Arc!", "Main Street Bomb!"];
-        tag.innerText = "General Play";
         txt.innerText = calls[Math.floor(Math.random() * calls.length)];
         txt.style.color = (type === '3pt') ? "#4ade80" : "white";
     }
