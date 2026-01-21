@@ -254,7 +254,7 @@
         },
         boys: {
             est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
-            mol: [{n:"Visitor Boy", i:"0", p:"G", g:"SR"}]
+            mol: [{n:"Molalla Visitor", i:"0", p:"G", g:"SR"}]
         },
         unified: {
             est: [{n:"Unified Athlete", i:"00", g:"UN"}],
@@ -321,12 +321,23 @@
         txt.innerText = callTemplates[idx].replace("[NAME]", name).replace("[NUM]", num);
         count.innerText = `${idx + 1} / 100`;
         pCounts[name] = (idx + 1) % 100;
+        txt.style.color = "white";
     }
 
     function playShot(type) {
         const txt = document.getElementById('callText');
-        const calls = type === '2pt' ? ["Bang!", "Bucket!", "Got it!"] : ["Downtown!", "Triple!", "Splash!"];
-        txt.innerText = calls[Math.floor(Math.random() * calls.length)];
+        const count = document.getElementById('callCounter');
+        if (type === '2pt') {
+            const calls = ["Bang!", "Bucket!", "Got it!", "For Two!", "Count it!"];
+            txt.innerText = calls[Math.floor(Math.random() * calls.length)];
+            txt.style.color = "white";
+        } else {
+            const cities = ["Sandy!", "Eagle Creek!", "Molalla!", "Gladstone!", "Boring!", "Redland!", "Colton!"];
+            const city = cities[Math.floor(Math.random() * cities.length)];
+            txt.innerText = "He hit it from " + city + "! SPLASH!";
+            txt.style.color = "#4ade80";
+        }
+        count.innerText = "-";
     }
 
     window.onload = init;
