@@ -142,7 +142,7 @@
         }
 
         #voiceTag { font-size: 0.85rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
-        #callText { font-size: 1.5rem; font-weight: 900; text-align: center; line-height: 1.2; }
+        #callText { font-size: 1.6rem; font-weight: 900; text-align: center; line-height: 1.2; }
         #callCounter { position: absolute; bottom: 8px; right: 12px; font-size: 0.65rem; color: #444; font-weight: bold; }
 
         .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -200,8 +200,11 @@
         <button class="btn-ctrl btn-manage" onclick="openEditor()">Manage Players</button>
         <select id="gameSelector" onchange="init()">
             <option value="unified">1/21 Unified</option>
-            <option value="boys">1/23 Boys Basketball</option>
-            <option value="boys_molalla">2/6 Boys Basketball</option>
+            <option value="boys_gladstone">1/23 Boys vs Gladstone</option>
+            <option value="boys_molalla">2/6 Boys vs Molalla</option>
+            <option value="girls_cascade">2/20 Girls vs Cascade</option>
+            <option value="girls_thedalles">2/24 Girls vs The Dalles</option>
+            <option value="boys_madras">2/26 Boys vs Madras</option>
         </select>
     </div>
 </header>
@@ -288,21 +291,34 @@
         "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!"
     ];
 
+    const girlsRoster = [
+        {n:"Payton Lee", i:"1", g:"JR", p:""}, {n:"Sammi Klein", i:"2", g:"SO", p:""}, {n:"Ellianna Zavala", i:"3", g:"JR", p:""}, {n:"Ella Sandell", i:"4", g:"FR", p:""}, {n:"Emily Yost", i:"10", g:"SR", p:""}, {n:"Madison Seal", i:"11", g:"SO", p:""}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:""}, {n:"Reagan Riggs", i:"15", g:"SR", p:""}, {n:"Paisley Shaw", i:"20", g:"FR", p:""}, {n:"Grace Sager", i:"21", g:"SO", p:""}, {n:"Shanley Colby", i:"24", g:"SO", p:""}
+    ];
+
+    const boysRoster = [
+        {n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}
+    ];
+
     const defaultData = {
         unified: {
             est: [{n:"Horatio Anderson", i:"3", g:"UN"}, {n:"Katelin Monize", i:"5", g:"UN"}, {n:"Waylon Erickson", i:"6", g:"UN"}, {n:"Eayden Eggers", i:"6", g:"UN"}, {n:"Leza Becker", i:"8", g:"UN"}, {n:"Skyei Kyle", i:"11", g:"UN"}, {n:"Alex Harrell", i:"13", g:"UN"}, {n:"Cherish Wischnofske", i:"15", g:"UN"}, {n:"Lucas Clark", i:"15", g:"UN"}, {n:"Nicholas Miles", i:"17", g:"UN"}, {n:"Christopher Anderson", i:"21", g:"UN"}, {n:"Michael Kyle", i:"25", g:"UN"}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN"}, {n:"Mae Anderson", i:"30", g:"UN"}, {n:"Dagan DeAnda", i:"31", g:"UN"}],
-            opp: [{n:"Guest Player", i:"0", p:"G", g:"UN"}],
-            visitorName: "Oregon City"
+            opp: [{n:"Guest Player", i:"0", p:"G", g:"UN"}], visitorName: "Oregon City"
         },
-        boys: {
-            est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
-            opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO"}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO"}, {n:"Max McKee", i:"14", p:"G", g:"JR"}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR"}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO"}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR"}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO"}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR"}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR"}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR"}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO"}],
-            visitorName: "Gladstone"
-        },
-        boys_molalla: {
-            est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
-            opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR"}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR"}, {n:"Grant Brusseau", i:"3", p:"", g:"SR"}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR"}, {n:"Elijah Ott", i:"5", p:"", g:"SR"}, {n:"Camdyn Morey", i:"10", p:"", g:"SR"}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR"}, {n:"Kurt Pederson", i:"14", p:"", g:"SR"}, {n:"Andrew Dahl", i:"21", p:"", g:"JR"}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR"}],
-            visitorName: "Molalla"
+        boys_gladstone: { est: boysRoster, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO"}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO"}, {n:"Max McKee", i:"14", p:"G", g:"JR"}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR"}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO"}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR"}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO"}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR"}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR"}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR"}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO"}], visitorName: "Gladstone" },
+        boys_molalla: { est: boysRoster, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR"}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR"}, {n:"Grant Brusseau", i:"3", p:"", g:"SR"}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR"}, {n:"Elijah Ott", i:"5", p:"", g:"SR"}, {n:"Camdyn Morey", i:"10", p:"", g:"SR"}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR"}, {n:"Kurt Pederson", i:"14", p:"", g:"SR"}, {n:"Andrew Dahl", i:"21", p:"", g:"JR"}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR"}], visitorName: "Molalla" },
+        girls_cascade: { est: girlsRoster, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR"}, {n:"Halle Hammer", i:"1", p:"G", g:"JR"}, {n:"Livia Free", i:"2", p:"G", g:"SR"}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO"}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO"}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR"}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR"}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR"}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR"}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO"}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR"}], visitorName: "Cascade" },
+        girls_thedalles: { est: girlsRoster, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO"}, {n:"Bryce Newby", i:"2", p:"", g:"SO"}, {n:"Morgan Donivan", i:"5", p:"", g:"JR"}, {n:"Molly Carter", i:"10", p:"", g:"FR"}, {n:"Hailey Johnston", i:"12", p:"SR", g:"SR"}, {n:"Willow Ziegenhagen", i:"14", p:"", g:"SO"}, {n:"Kate Dewey", i:"15", p:"", g:"FR"}, {n:"Anuhea Peters", i:"21", p:"", g:"FR"}, {n:"Evelyn Rogers", i:"23", p:"", g:"JR"}, {n:"Kestley Hodges", i:"24", p:"", g:"JR"}, {n:"Evelin Mondrogan", i:"25", p:"", g:"SO"}, {n:"Rozlyn Elliott", i:"32", p:"", g:"FR"}], visitorName: "The Dalles" },
+        boys_madras: { 
+            est: boysRoster, 
+            opp: [
+                {n:"John Buffalo-Ball", i:"10", p:"G", g:"JR"}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR"},
+                {n:"Dre Plazola", i:"14", p:"W/G", g:"JR"}, {n:"Troy Adams", i:"20", p:"W", g:"SR"},
+                {n:"Caleb Shank", i:"22", p:"W", g:"JR"}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR"},
+                {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR"}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR"},
+                {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO"}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO"},
+                {n:"Osmar Orozco", i:"42", p:"P", g:"JR"}, {n:"Devin Super", i:"45", p:"P", g:"SO"}
+            ], 
+            visitorName: "Madras" 
         }
     };
 
@@ -401,7 +417,7 @@
             <input type="text" placeholder="P" value="${data.p || ''}" class="pos">
             <button class="btn-danger" onclick="this.parentElement.remove()">X</button>
         `;
-        document.getElementById(side + 'Editor').appendChild(div);
+            document.getElementById(side + 'Editor').appendChild(div);
     }
 
     function saveAndClose() {
