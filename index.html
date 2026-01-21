@@ -62,9 +62,10 @@
         .arrow { font-size: 1.8rem; color: #444; cursor: pointer; user-select: none; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
+        /* FIXED WIDTH SYMMETRY FOR SIDE PANELS */
         .dashboard {
             display: grid;
-            grid-template-columns: 320px 1fr 350px; /* Slightly wider visitor box for details */
+            grid-template-columns: 340px 1fr 340px; 
             flex-grow: 1;
             overflow: hidden;
         }
@@ -203,7 +204,6 @@
 </div>
 
 <script>
-    // 100 UNIQUE TEMPLATES (Restored from Previous Expansion)
     const callTemplates = [
         "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
         "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
@@ -212,7 +212,7 @@
         "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
         "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
         "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] with the finger roll!",
-        "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs! Beep beep!",
+        "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs!",
         "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] is too cold!",
         "Walton: [NAME]! A violation of physics!", "Harlan: [NAME] sucks the gravity out!", "Breen: BANG! BANG! [NAME]!",
         "Mason: [NAME] for TWOOOOO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME]! LAWLER'S LAW!",
@@ -242,48 +242,46 @@
 
     // Estacada Girls
     const estRoster = [
-        {n:"Payton Lee", i:"1", g:"11", p:"G"}, {n:"Sammi Klein", i:"2", g:"10", p:"G"},
-        {n:"Ellianna Zavala", i:"3", g:"11", p:"G"}, {n:"Ella Sandell", i:"4", g:"9", p:"G"},
-        {n:"Emily Yost", i:"10", g:"12", p:"G"}, {n:"Madison Seal", i:"11", g:"10", p:"G"},
-        {n:"Kenzie Stubblefield", i:"14", g:"9", p:"G"}, {n:"Reagan Riggs", i:"15", g:"12", p:"F"},
-        {n:"Paisley Shaw", i:"20", g:"9", p:"G"}, {n:"Grace Sager", i:"21", g:"10", p:"G"},
-        {n:"Shanley Colby", i:"24", g:"10", p:"G"}
+        {n:"Payton Lee", i:"1", g:"JR", p:"G"}, {n:"Sammi Klein", i:"2", g:"SO", p:"G"},
+        {n:"Ellianna Zavala", i:"3", g:"JR", p:"G"}, {n:"Ella Sandell", i:"4", g:"FR", p:"G"},
+        {n:"Emily Yost", i:"10", g:"SR", p:"G"}, {n:"Madison Seal", i:"11", g:"SO", p:"G"},
+        {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"G"}, {n:"Reagan Riggs", i:"15", g:"SR", p:"F"},
+        {n:"Paisley Shaw", i:"20", g:"FR", p:"G"}, {n:"Grace Sager", i:"21", g:"SO", p:"G"},
+        {n:"Shanley Colby", i:"24", g:"SO", p:"G"}
     ];
 
     // Molalla Girls
     const molRoster = [
-        {n:"Grace Teigen", i:"2", p:"G", g:"12"}, {n:"Madison Shultz", i:"3", p:"G", g:"10"},
-        {n:"Emma Hugo", i:"4", p:"G", g:"12"}, {n:"Natalie Settje", i:"5", p:"F", g:"11"},
-        {n:"Yasmin Montiel", i:"10", p:"G", g:"12"}, {n:"Evelynn Stephens", i:"11", p:"G", g:"12"},
-        {n:"Hailey Anderson", i:"12", p:"F", g:"9"}, {n:"Savanna Padgett", i:"15", p:"G", g:"10"},
-        {n:"Emma Reiman", i:"20", p:"C", g:"11"}, {n:"Ava Dunn", i:"22", p:"C", g:"10"},
-        {n:"Payton Greer", i:"24", p:"G", g:"10"}, {n:"Gracie Fisher", i:"32", p:"F", g:"11"}
+        {n:"Grace Teigen", i:"2", p:"G", g:"SR"}, {n:"Madison Shultz", i:"3", p:"G", g:"SO"},
+        {n:"Emma Hugo", i:"4", p:"G", g:"SR"}, {n:"Natalie Settje", i:"5", p:"F", g:"JR"},
+        {n:"Yasmin Montiel", i:"10", p:"G", g:"SR"}, {n:"Evelynn Stephens", i:"11", p:"G", g:"SR"},
+        {n:"Hailey Anderson", i:"12", p:"F", g:"FR"}, {n:"Savanna Padgett", i:"15", p:"G", g:"SO"},
+        {n:"Emma Reiman", i:"20", p:"C", g:"JR"}, {n:"Ava Dunn", i:"22", p:"C", g:"SO"},
+        {n:"Payton Greer", i:"24", p:"G", g:"SO"}, {n:"Gracie Fisher", i:"32", p:"F", g:"JR"}
     ];
 
     let sidesFlipped = false;
     const playerCounters = {};
 
     function init() {
-        renderRoster('leftList', sidesFlipped ? molRoster : estRoster, !sidesFlipped);
-        renderRoster('rightList', sidesFlipped ? estRoster : molRoster, sidesFlipped);
-        
+        renderRoster('leftList', sidesFlipped ? molRoster : estRoster);
+        renderRoster('rightList', sidesFlipped ? estRoster : molRoster);
         document.getElementById('leftTitle').innerText = sidesFlipped ? "Molalla (Visitor)" : "Estacada (Home)";
         document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Molalla (Visitor)";
-        
         renderButtons(estRoster);
     }
 
-    function renderRoster(id, data, isHome) {
+    function renderRoster(id, data) {
         const div = document.getElementById(id);
         div.innerHTML = '';
         data.forEach(p => {
             const item = document.createElement('div');
             item.className = 'p-item';
-            // Show Number, Name, Position, and Grade
+            // Unified display for Number, Name, Position, and ABBREVIATED Grade
             item.innerHTML = `
                 <span class="p-num">${p.i}</span>
                 <span class="p-name">${p.n}</span>
-                <span class="p-meta">${p.p} | Gr ${p.g}</span>
+                <span class="p-meta">${p.p} | ${p.g}</span>
             `;
             item.onclick = () => item.classList.toggle('is-starter');
             div.appendChild(item);
