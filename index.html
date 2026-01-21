@@ -8,7 +8,7 @@
     <title>Ranger Gameday Hub</title>
     <style>
         :root {
-            --ranger-green: #00471b;
+            --ranger-green: #00471b; /* Official Forest Green */
             --ranger-white: #ffffff;
             --ranger-black: #0a0a0a;
             --ranger-grey: #1a1a1a;
@@ -49,7 +49,6 @@
             cursor: pointer;
         }
 
-        /* Possession Arrow Styles */
         .possession-container {
             display: flex;
             align-items: center;
@@ -60,16 +59,9 @@
             border: 1px solid #444;
         }
 
-        .arrow {
-            font-size: 1.8rem;
-            color: #444;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
+        .arrow { font-size: 1.8rem; color: #444; cursor: pointer; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
-        /* 3-Column Layout */
         .dashboard {
             display: grid;
             grid-template-columns: 300px 1fr 300px;
@@ -166,6 +158,7 @@
             font-weight: 700;
             cursor: pointer;
         }
+        .p-call-btn:active { background: var(--ranger-green); }
     </style>
 </head>
 <body>
@@ -195,12 +188,13 @@
     <div class="center-stage">
         <div class="monitor">
             <div id="voiceTag">Broadcaster Hub</div>
-            <div id="callText">Select a Player or Shot</div>
+            <div id="callText">Select an Estacada Player</div>
         </div>
         <div class="action-row">
             <button class="s-btn btn-2" onclick="playRandom('2pt')">Random 2pt</button>
             <button class="s-btn btn-3" onclick="playRandom('3pt')">Random 3pt</button>
         </div>
+        <div class="pane-header" style="background: var(--ranger-green); color: white;">Trigger Ranger Call</div>
         <div id="callTriggers" class="call-grid"></div>
     </div>
 
@@ -214,37 +208,37 @@
     const teamData = {
         girls: {
             est: [
-                {n:"Payton Lee", i:"1", g:"JR"}, {n:"Sammi Klein", i:"2", g:"SO"},
-                {n:"Ellianna Zavala", i:"3", g:"JR"}, {n:"Ella Sandell", i:"4", g:"FR"},
-                {n:"Emily Yost", i:"10", g:"SR"}, {n:"Madison Seal", i:"11", g:"SO"},
-                {n:"Kenzie Stubblefield", i:"14", g:"FR"}, {n:"Reagan Riggs", i:"15", g:"SR"},
-                {n:"Paisley Shaw", i:"20", g:"FR"}, {n:"Grace Sager", i:"21", g:"SO"},
-                {n:"Shanley Colby", i:"24", g:"SO"}
+                {n:"Payton Lee", i:"1", g:"11"}, {n:"Sammi Klein", i:"2", g:"10"},
+                {n:"Ellianna Zavala", i:"3", g:"11"}, {n:"Ella Sandell", i:"4", g:"9"},
+                {n:"Emily Yost", i:"10", g:"12"}, {n:"Madison Seal", i:"11", g:"10"},
+                {n:"Kenzie Stubblefield", i:"14", g:"9"}, {n:"Reagan Riggs", i:"15", g:"12"},
+                {n:"Paisley Shaw", i:"20", g:"9"}, {n:"Grace Sager", i:"21", g:"10"},
+                {n:"Shanley Colby", i:"24", g:"10"}
             ],
             mol: [
-                {n:"Grace Teigen", i:"2", g:"SR"}, {n:"Madison Shultz", i:"3", g:"SO"},
-                {n:"Emma Hugo", i:"4", g:"SR"}, {n:"Natalie Settje", i:"5", g:"JR"},
-                {n:"Yasmin Montiel", i:"10", g:"SR"}, {n:"Evelynn Stephens", i:"11", g:"SR"},
-                {n:"Hailey Anderson", i:"12", g:"FR"}, {n:"Savanna Padgett", i:"15", g:"SO"},
-                {n:"Emma Reiman", i:"20", g:"JR"}, {n:"Ava Dunn", i:"22", g:"SO"},
-                {n:"Payton Greer", i:"24", g:"SO"}, {n:"Gracie Fisher", i:"31", g:"JR"}
+                {n:"Grace Teigen", i:"2", g:"12"}, {n:"Madison Shultz", i:"3", g:"10"},
+                {n:"Emma Hugo", i:"4", g:"12"}, {n:"Natalie Settje", i:"5", g:"11"},
+                {n:"Yasmin Montiel", i:"10", g:"12"}, {n:"Evelynn Stephens", i:"11", g:"12"},
+                {n:"Hailey Anderson", i:"12", g:"9"}, {n:"Savanna Padgett", i:"15", g:"10"},
+                {n:"Emma Reiman", i:"20", g:"11"}, {n:"Ava Dunn", i:"22", g:"10"},
+                {n:"Payton Greer", i:"24", g:"10"}, {n:"Gracie Fisher", i:"31", g:"11"}
             ]
         },
         boys: {
             est: [
-                {n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"},
-                {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"},
-                {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"},
-                {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"},
-                {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"},
-                {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}
+                {n:"Davin Olsen", i:"0", g:"11"}, {n:"Gavin Gates", i:"1", g:"12"},
+                {n:"Connor Crawford", i:"2", g:"12"}, {n:"Broden Gates", i:"5", g:"10"},
+                {n:"Wyatt Nerpel", i:"10", g:"11"}, {n:"Landen Thomas", i:"11", g:"11"},
+                {n:"Lincoln Bunyard", i:"13", g:"11"}, {n:"Paul Ables", i:"15", g:"12"},
+                {n:"Dane Carpenter", i:"20", g:"10"}, {n:"Duke Durand", i:"22", g:"10"},
+                {n:"Zander Hulsey", i:"30", g:"11"}, {n:"Grant Carpenter", i:"41", g:"9"}
             ],
             mol: [
-                {n:"Garrett Brusseau", i:"1", g:"SR"}, {n:"Chester Smith", i:"2", g:"SR"},
-                {n:"Grant Brusseau", i:"3", g:"SR"}, {n:"Elijah Ott", i:"5", g:"SR"},
-                {n:"Camdyn Morey", i:"10", g:"SR"}, {n:"Tadyn McGinness", i:"12", g:"SR"},
-                {n:"Kurt Pederson", i:"14", g:"SR"}, {n:"Jerearl Abraham", i:"22", g:"SR"},
-                {n:"Jaxson Johnson", i:"23", g:"SR"}
+                {n:"Garrett Brusseau", i:"1", g:"12"}, {n:"Chester Smith", i:"2", g:"12"},
+                {n:"Grant Brusseau", i:"3", g:"12"}, {n:"Elijah Ott", i:"5", g:"12"},
+                {n:"Camdyn Morey", i:"10", g:"12"}, {n:"Tadyn McGinness", i:"12", g:"12"},
+                {n:"Kurt Pederson", i:"14", g:"12"}, {n:"Jerearl Abraham", i:"22", g:"12"},
+                {n:"Jaxson Johnson", i:"23", g:"12"}
             ]
         }
     };
@@ -263,7 +257,8 @@
         document.getElementById('leftTitle').innerText = sidesFlipped ? "Molalla (Visitor)" : "Estacada (Home)";
         document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Molalla (Visitor)";
         
-        renderButtons([...est, ...mol]);
+        // Only render buttons for Estacada players in the center grid
+        renderButtons(est);
     }
 
     function renderRoster(id, data) {
@@ -272,7 +267,7 @@
         data.forEach(p => {
             const item = document.createElement('div');
             item.className = 'p-item';
-            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-grade">${p.g}</span>`;
+            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-grade">Gr ${p.g}</span>`;
             item.onclick = () => item.classList.toggle('is-starter');
             div.appendChild(item);
         });
@@ -310,7 +305,7 @@
         ];
         if (!callTracker[name]) callTracker[name] = pool.sort(() => Math.random() - 0.5);
         if (callTracker[name].length === 0) callTracker[name] = pool.sort(() => Math.random() - 0.5);
-        tag.innerText = "Call: " + name;
+        tag.innerText = "The Call: " + name;
         txt.innerText = callTracker[name].pop();
         txt.style.color = "white";
     }
