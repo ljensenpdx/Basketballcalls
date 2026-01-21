@@ -13,6 +13,7 @@
             --ranger-black: #0a0a0a;
             --ranger-grey: #1a1a1a;
             --starter-yellow: #f1c40f;
+            --unavailable-red: #e74c3c;
         }
 
         body {
@@ -62,7 +63,6 @@
         .arrow { font-size: 1.8rem; color: #444; cursor: pointer; user-select: none; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
-        /* FIXED WIDTH SYMMETRY FOR SIDE PANELS */
         .dashboard {
             display: grid;
             grid-template-columns: 340px 1fr 340px; 
@@ -93,6 +93,7 @@
 
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
+        /* PLAYER ITEM STATES */
         .p-item {
             padding: 12px 10px;
             margin-bottom: 5px;
@@ -103,9 +104,12 @@
             justify-content: space-between;
             align-items: center;
             border: 1px solid #333;
+            transition: background-color 0.2s, color 0.2s;
         }
 
-        .p-item.is-starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: #000; }
+        .p-item.starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: black; }
+        .p-item.unavailable { background: var(--unavailable-red); color: white; border-color: white; opacity: 0.6; }
+
         .p-num { font-weight: 900; width: 35px; }
         .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
         .p-meta { font-size: 0.8rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
@@ -240,14 +244,14 @@
         "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!"
     ];
 
-    // Estacada Girls
+    // Estacada Girls (Positions Blanked)
     const estRoster = [
-        {n:"Payton Lee", i:"1", g:"JR", p:"G"}, {n:"Sammi Klein", i:"2", g:"SO", p:"G"},
-        {n:"Ellianna Zavala", i:"3", g:"JR", p:"G"}, {n:"Ella Sandell", i:"4", g:"FR", p:"G"},
-        {n:"Emily Yost", i:"10", g:"SR", p:"G"}, {n:"Madison Seal", i:"11", g:"SO", p:"G"},
-        {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"G"}, {n:"Reagan Riggs", i:"15", g:"SR", p:"F"},
-        {n:"Paisley Shaw", i:"20", g:"FR", p:"G"}, {n:"Grace Sager", i:"21", g:"SO", p:"G"},
-        {n:"Shanley Colby", i:"24", g:"SO", p:"G"}
+        {n:"Payton Lee", i:"1", g:"JR", p:""}, {n:"Sammi Klein", i:"2", g:"SO", p:""},
+        {n:"Ellianna Zavala", i:"3", g:"JR", p:""}, {n:"Ella Sandell", i:"4", g:"FR", p:""},
+        {n:"Emily Yost", i:"10", g:"SR", p:""}, {n:"Madison Seal", i:"11", g:"SO", p:""},
+        {n:"Kenzie Stubblefield", i:"14", g:"FR", p:""}, {n:"Reagan Riggs", i:"15", g:"SR", p:""},
+        {n:"Paisley Shaw", i:"20", g:"FR", p:""}, {n:"Grace Sager", i:"21", g:"SO", p:""},
+        {n:"Shanley Colby", i:"24", g:"SO", p:""}
     ];
 
     // Molalla Girls
@@ -277,13 +281,21 @@
         data.forEach(p => {
             const item = document.createElement('div');
             item.className = 'p-item';
-            // Unified display for Number, Name, Position, and ABBREVIATED Grade
-            item.innerHTML = `
-                <span class="p-num">${p.i}</span>
-                <span class="p-name">${p.n}</span>
-                <span class="p-meta">${p.p} | ${p.g}</span>
-            `;
-            item.onclick = () => item.classList.toggle('is-starter');
+            // Show Position only if it exists
+            const meta = p.p ? `${p.p} | ${p.g}` : p.g;
+            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-meta">${meta}</span>`;
+            
+            // Cycle: Standard -> Starter (Yellow) -> Unavailable (Red) -> Standard
+            item.onclick = () => {
+                if (!item.classList.contains('starter') && !item.classList.contains('unavailable')) {
+                    item.classList.add('starter');
+                } else if (item.classList.contains('starter')) {
+                    item.classList.remove('starter');
+                    item.classList.add('unavailable');
+                } else {
+                    item.classList.remove('unavailable');
+                }
+            };
             div.appendChild(item);
         });
     }
