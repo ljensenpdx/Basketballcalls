@@ -100,23 +100,38 @@
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
         .p-item {
-            padding: 12px 10px;
+            padding: 8px 10px;
             margin-bottom: 5px;
             border-radius: 6px;
             background: #252525;
-            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #333;
+            transition: background-color 0.2s;
         }
 
         .p-item.starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: black; }
         .p-item.unavailable { background: var(--unavailable-red); color: white; border-color: white; opacity: 0.6; }
 
-        .p-num { font-weight: 900; width: 35px; }
-        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.9rem; }
-        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
+        .p-num { font-weight: 900; width: 30px; cursor: pointer; }
+        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.9rem; cursor: pointer; }
+        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; margin-right: 10px; cursor: pointer; }
+
+        .foul-btn {
+            background: #444;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-weight: 900;
+            font-size: 0.8rem;
+            cursor: pointer;
+            min-width: 45px;
+            text-align: center;
+        }
+        .starter .foul-btn { background: rgba(0,0,0,0.2); border-color: black; color: black; }
+        .foul-btn.danger { background: var(--unavailable-red); border-color: white; color: white; }
 
         .center-stage {
             padding: 12px;
@@ -217,8 +232,8 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Gameday Live</div>
-            <div id="callText">Select a Ranger</div>
+            <div id="voiceTag">Gameday Hub</div>
+            <div id="callText">Foul Tracker Ready</div>
             <div id="callCounter">0 / 100</div>
         </div>
         <div class="action-row">
@@ -228,8 +243,8 @@
         <div id="callTriggers" class="call-grid"></div>
     </div>
 
-    <div id="pane2" class="roster-pane">
-        <div class="pane-header" id="title2">Visitor</div>
+    <div id="rightPane" class="roster-pane">
+        <div class="pane-header" id="rightTitle">Visitor</div>
         <div id="list2" class="scroll-list"></div>
     </div>
 </div>
@@ -304,18 +319,15 @@
     };
 
     let teamData = JSON.parse(localStorage.getItem('rangerHubData')) || defaultData;
-    let isFlipped = false;
     const pCounts = {};
 
     function init() {
         const key = document.getElementById('gameSelector').value;
         const game = teamData[key];
-        isFlipped = false; // Reset flip on new game load
-        
         renderList('list1', game.est);
         renderList('list2', game.opp);
         document.getElementById('title1').innerText = "Estacada (Home)";
-        document.getElementById('title2').innerText = game.visitorName;
+        document.getElementById('rightTitle').innerText = game.visitorName;
         renderTriggers(game.est);
     }
 
@@ -326,39 +338,51 @@
             const item = document.createElement('div');
             item.className = 'p-item';
             const meta = p.p ? `${p.p} | ${p.g}` : p.g;
-            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-meta">${meta}</span>`;
-            item.onclick = () => {
-                if (!item.classList.contains('starter') && !item.classList.contains('unavailable')) { item.classList.add('starter'); }
-                else if (item.classList.contains('starter')) { item.classList.remove('starter'); item.classList.add('unavailable'); }
-                else { item.classList.remove('unavailable'); }
-            };
+            item.innerHTML = `
+                <span class="p-num" onclick="toggleState(this.parentElement)">${p.i}</span>
+                <span class="p-name" onclick="toggleState(this.parentElement)">${p.n}</span>
+                <span class="p-meta" onclick="toggleState(this.parentElement)">${meta}</span>
+                <button class="foul-btn" onclick="addFoul(this, this.parentElement)">0 F</button>
+            `;
             div.appendChild(item);
         });
     }
 
-    /* PERSISTENT HALFTIME FLIP */
+    /* FOUL LOGIC */
+    function addFoul(btn, parent) {
+        let fouls = parseInt(btn.innerText.split(' ')[0]);
+        fouls++;
+        btn.innerText = `${fouls} F`;
+        
+        if (fouls >= 5) {
+            btn.classList.add('danger');
+            parent.className = 'p-item unavailable';
+        }
+    }
+
+    /* 3-STATE COLOR TOGGLE */
+    function toggleState(item) {
+        if (item.classList.contains('unavailable')) return; // Don't allow toggling if fouled out
+        if (!item.classList.contains('starter')) { item.classList.add('starter'); }
+        else { item.classList.remove('starter'); }
+    }
+
     function halftimeFlip() {
         const list1 = document.getElementById('list1');
         const list2 = document.getElementById('list2');
         const title1 = document.getElementById('title1');
-        const title2 = document.getElementById('title2');
+        const title2 = document.getElementById('rightTitle');
 
-        // Swap the actual DOM elements so colors/states stay exactly the same
-        const tempChildren1 = Array.from(list1.childNodes);
-        const tempChildren2 = Array.from(list2.childNodes);
+        const temp1 = Array.from(list1.childNodes);
+        const temp2 = Array.from(list2.childNodes);
         
-        list1.innerHTML = '';
-        list2.innerHTML = '';
-        
-        tempChildren2.forEach(c => list1.appendChild(c));
-        tempChildren1.forEach(c => list2.appendChild(c));
+        list1.innerHTML = ''; list2.innerHTML = '';
+        temp2.forEach(c => list1.appendChild(c));
+        temp1.forEach(c => list2.appendChild(c));
 
-        // Swap titles
         const t1 = title1.innerText;
         title1.innerText = title2.innerText;
         title2.innerText = t1;
-        
-        isFlipped = !isFlipped;
     }
 
     function renderTriggers(data) {
