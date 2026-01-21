@@ -16,6 +16,7 @@
             --ranger-grey: #1a1a1a;
             --starter-yellow: #f1c40f;
             --unavailable-red: #e74c3c;
+            --edit-blue: #3498db;
         }
 
         body {
@@ -36,11 +37,12 @@
             background: var(--ranger-green);
             padding: 8px 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            z-index: 10;
         }
 
         h1 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
 
-        .header-controls { display: flex; align-items: center; gap: 10px; }
+        .header-controls { display: flex; align-items: center; gap: 8px; }
         
         select, .btn-ctrl {
             background: var(--ranger-black);
@@ -50,20 +52,21 @@
             font-weight: 900;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
+
+        .btn-manage { background: var(--edit-blue); border: none; }
 
         .possession-container {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: #222;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 50px;
-            border: 1px solid #444;
         }
 
-        .arrow { font-size: 1.5rem; color: #444; cursor: pointer; user-select: none; }
+        .arrow { font-size: 1.3rem; color: #444; cursor: pointer; user-select: none; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
         .dashboard {
@@ -150,7 +153,6 @@
             border-radius: 10px;
             border: none;
             text-transform: uppercase;
-            cursor: pointer;
         }
         .btn-2 { background: var(--ranger-green); color: white; }
         .btn-3 { background: var(--ranger-white); color: black; }
@@ -160,12 +162,30 @@
             background: #222;
             color: white;
             border: 1px solid #444;
-            padding: 10px 2px;
+            padding: 12px 2px;
             border-radius: 8px;
             font-size: 0.7rem;
             font-weight: 700;
             cursor: pointer;
         }
+
+        /* MODAL / EDITOR STYLES */
+        #editorModal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .editor-container { background: #1a1a1a; padding: 20px; border-radius: 15px; max-width: 800px; margin: auto; }
+        .editor-row { display: grid; grid-template-columns: 60px 1fr 60px 60px 40px; gap: 10px; margin-bottom: 10px; }
+        .editor-row input { background: #333; color: white; border: 1px solid #555; padding: 10px; border-radius: 5px; }
+        .btn-danger { background: var(--unavailable-red); border: none; color: white; border-radius: 5px; cursor: pointer; }
+        .btn-save { background: var(--ranger-green); width: 100%; padding: 15px; color: white; font-weight: 900; margin-top: 20px; border: none; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -178,7 +198,8 @@
             <span id="posRight" class="arrow" onclick="togglePossession('right')">▶</span>
         </div>
         <button class="btn-ctrl" onclick="flipSides()">Flip Sides</button>
-        <select id="teamSelector" onchange="init()">
+        <button class="btn-ctrl btn-manage" onclick="openEditor()">Manage Players</button>
+        <select id="gameSelector" onchange="init()">
             <option value="unified">1/21 Unified</option>
             <option value="boys">1/23 Boys Basketball</option>
         </select>
@@ -193,7 +214,7 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Gameday Hub</div>
+            <div id="voiceTag">Gameday Live</div>
             <div id="callText">Select a Ranger</div>
             <div id="callCounter">0 / 100</div>
         </div>
@@ -207,6 +228,29 @@
     <div id="rightPane" class="roster-pane">
         <div class="pane-header" id="rightTitle">Visitor</div>
         <div id="rightList" class="scroll-list"></div>
+    </div>
+</div>
+
+<div id="editorModal">
+    <div class="editor-container">
+        <h2 style="color:var(--edit-blue)">Manage Rosters</h2>
+        <p style="font-size: 0.8rem; color: #888;">Add or edit players for the selected game. Note: Positions (P) are for visitors only.</p>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h3>Estacada (Home)</h3>
+                <div id="homeEditor"></div>
+                <button class="btn-ctrl" onclick="addRow('home')">+ Add Ranger</button>
+            </div>
+            <div>
+                <h3>Visitor</h3>
+                <div id="oppEditor"></div>
+                <button class="btn-ctrl" onclick="addRow('opp')">+ Add Visitor</button>
+            </div>
+        </div>
+
+        <button class="btn-save" onclick="saveAndClose()">Apply Changes & Save</button>
+        <button class="btn-ctrl" style="width:100%; margin-top:10px; background:#444;" onclick="closeEditor()">Cancel</button>
     </div>
 </div>
 
@@ -224,7 +268,7 @@
         "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!",
         "Mason: [NAME] for TWO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME] BINGO!",
         "Most: [NAME] intercept!", "Vitale: [NAME] awesome baby!", "Eagle: [NAME] elevation!",
-        "Albert: A spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
+        "Marv: Spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
         "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] dealin'!", "Brown: [NAME] knows the game!",
         "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!",
         "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] touch!",
@@ -247,59 +291,31 @@
         "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!"
     ];
 
-    const teamData = {
+    const defaultData = {
         unified: {
-            est: [
-                {n:"Horatio Anderson", i:"3", g:"UN"}, {n:"Katelin Monize", i:"5", g:"UN"},
-                {n:"Waylon Erickson", i:"6", g:"UN"}, {n:"Eayden Eggers", i:"6", g:"UN"},
-                {n:"Leza Becker", i:"8", g:"UN"}, {n:"Skyei Kyle", i:"11", g:"UN"},
-                {n:"Alex Harrell", i:"13", g:"UN"}, {n:"Cherish Wischnofske", i:"15", g:"UN"},
-                {n:"Lucas Clark", i:"15", g:"UN"}, {n:"Nicholas Miles", i:"17", g:"UN"},
-                {n:"Christopher Anderson", i:"21", g:"UN"}, {n:"Michael Kyle", i:"25", g:"UN"},
-                {n:"Nathaniel Paz Sosa", i:"29", g:"UN"}, {n:"Mae Anderson", i:"30", g:"UN"},
-                {n:"Dagan DeAnda", i:"31", g:"UN"}
-            ],
-            opp: [{n:"Oregon City Player", i:"0", p:"G", g:"UN"}],
+            est: [{n:"Horatio Anderson", i:"3", g:"UN"}, {n:"Katelin Monize", i:"5", g:"UN"}, {n:"Waylon Erickson", i:"6", g:"UN"}, {n:"Eayden Eggers", i:"6", g:"UN"}, {n:"Leza Becker", i:"8", g:"UN"}, {n:"Skyei Kyle", i:"11", g:"UN"}, {n:"Alex Harrell", i:"13", g:"UN"}, {n:"Cherish Wischnofske", i:"15", g:"UN"}, {n:"Lucas Clark", i:"15", g:"UN"}, {n:"Nicholas Miles", i:"17", g:"UN"}, {n:"Christopher Anderson", i:"21", g:"UN"}, {n:"Michael Kyle", i:"25", g:"UN"}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN"}, {n:"Mae Anderson", i:"30", g:"UN"}, {n:"Dagan DeAnda", i:"31", g:"UN"}],
+            opp: [{n:"Guest Player", i:"0", p:"G", g:"UN"}],
             visitorName: "Oregon City"
         },
         boys: {
-            est: [
-                {n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"},
-                {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"},
-                {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"},
-                {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"},
-                {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"},
-                {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}
-            ],
-            // Gladstone Roster from image_bb164c.png
-            opp: [
-                {n:"Lucas Ingram", i:"10", p:"G/W", g:"SO"}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO"},
-                {n:"Max McKee", i:"14", p:"G", g:"JR"}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR"},
-                {n:"Eli Jackson", i:"20", p:"P/W", g:"SO"}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR"},
-                {n:"Braylon Bays", i:"24", p:"G/W", g:"SO"}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR"},
-                {n:"Russell Gleason", i:"30", p:"G/W", g:"JR"}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR"},
-                {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO"}
-            ],
+            est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
+            opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO"}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO"}, {n:"Max McKee", i:"14", p:"G", g:"JR"}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR"}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO"}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR"}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO"}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR"}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR"}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR"}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO"}],
             visitorName: "Gladstone"
         }
     };
 
+    let teamData = JSON.parse(localStorage.getItem('rangerHubData')) || defaultData;
     let flipped = false;
     const pCounts = {};
 
     function init() {
-        const key = document.getElementById('teamSelector').value;
+        const key = document.getElementById('gameSelector').value;
         const game = teamData[key];
-        const est = game.est;
-        const opp = game.opp;
-
-        renderList('leftList', flipped ? opp : est);
-        renderList('rightList', flipped ? est : opp);
-        
+        renderList('leftList', flipped ? game.opp : game.est);
+        renderList('rightList', flipped ? game.est : game.opp);
         document.getElementById('leftTitle').innerText = flipped ? game.visitorName : "Estacada (Home)";
         document.getElementById('rightTitle').innerText = flipped ? "Estacada (Home)" : game.visitorName;
-        
-        renderTriggers(est);
+        renderTriggers(game.est);
     }
 
     function renderList(id, data) {
@@ -363,6 +379,49 @@
             txt.style.color = "#4ade80";
         }
     }
+
+    /* EDITOR LOGIC */
+    function openEditor() {
+        const key = document.getElementById('gameSelector').value;
+        document.getElementById('homeEditor').innerHTML = '';
+        document.getElementById('oppEditor').innerHTML = '';
+        teamData[key].est.forEach((p, i) => addRow('home', p, i));
+        teamData[key].opp.forEach((p, i) => addRow('opp', p, i));
+        document.getElementById('editorModal').style.display = 'block';
+    }
+
+    function addRow(side, data = {n:'', i:'', g:'', p:''}, index) {
+        const div = document.createElement('div');
+        div.className = 'editor-row';
+        div.innerHTML = `
+            <input type="text" placeholder="#" value="${data.i}" class="num">
+            <input type="text" placeholder="Name" value="${data.n}" class="name">
+            <input type="text" placeholder="G" value="${data.g}" class="grade">
+            <input type="text" placeholder="P" value="${data.p || ''}" class="pos">
+            <button class="btn-danger" onclick="this.parentElement.remove()">X</button>
+        `;
+        document.getElementById(side + 'Editor').appendChild(div);
+    }
+
+    function saveAndClose() {
+        const key = document.getElementById('gameSelector').value;
+        teamData[key].est = gatherData('homeEditor');
+        teamData[key].opp = gatherData('oppEditor');
+        localStorage.setItem('rangerHubData', JSON.stringify(teamData));
+        init();
+        closeEditor();
+    }
+
+    function gatherData(containerId) {
+        return Array.from(document.getElementById(containerId).querySelectorAll('.editor-row')).map(row => ({
+            i: row.querySelector('.num').value,
+            n: row.querySelector('.name').value,
+            g: row.querySelector('.grade').value,
+            p: row.querySelector('.pos').value
+        }));
+    }
+
+    function closeEditor() { document.getElementById('editorModal').style.display = 'none'; }
 
     window.onload = init;
 </script>
