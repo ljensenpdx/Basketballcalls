@@ -38,7 +38,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        h1 { margin: 0; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
 
         .header-controls { display: flex; align-items: center; gap: 10px; }
         
@@ -50,7 +50,7 @@
             font-weight: 900;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .possession-container {
@@ -112,8 +112,8 @@
         .p-item.unavailable { background: var(--unavailable-red); color: white; border-color: white; opacity: 0.6; }
 
         .p-num { font-weight: 900; width: 35px; }
-        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
-        .p-meta { font-size: 0.8rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
+        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.9rem; }
+        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
 
         .center-stage {
             padding: 12px;
@@ -139,17 +139,18 @@
         }
 
         #voiceTag { font-size: 0.85rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
-        #callText { font-size: 1.6rem; font-weight: 900; text-align: center; line-height: 1.2; }
+        #callText { font-size: 1.5rem; font-weight: 900; text-align: center; line-height: 1.2; }
         #callCounter { position: absolute; bottom: 8px; right: 12px; font-size: 0.65rem; color: #444; font-weight: bold; }
 
         .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .s-btn {
             padding: 15px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 900;
             border-radius: 10px;
             border: none;
             text-transform: uppercase;
+            cursor: pointer;
         }
         .btn-2 { background: var(--ranger-green); color: white; }
         .btn-3 { background: var(--ranger-white); color: black; }
@@ -159,9 +160,9 @@
             background: #222;
             color: white;
             border: 1px solid #444;
-            padding: 12px 2px;
+            padding: 10px 2px;
             border-radius: 8px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 700;
             cursor: pointer;
         }
@@ -180,7 +181,7 @@
         <select id="teamSelector" onchange="init()">
             <option value="girls">Girls Varsity</option>
             <option value="boys">Boys Varsity</option>
-            <option value="unified">Unified</option>
+            <option value="unified">Unified Varsity</option>
         </select>
     </div>
 </header>
@@ -193,13 +194,13 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Active Hub</div>
-            <div id="callText">Select a Ranger</div>
+            <div id="voiceTag">Broadcaster Active</div>
+            <div id="callText">Tap a Ranger Button</div>
             <div id="callCounter">0 / 100</div>
         </div>
         <div class="action-row">
             <button class="s-btn btn-2" onclick="playShot('2pt')">2PT Call</button>
-            <button class="s-btn btn-3" onclick="playShot('3pt')">3PT Call</button>
+            <button class="s-btn btn-3" onclick="playShot('3pt')">3PT City Call</button>
         </div>
         <div id="callTriggers" class="call-grid"></div>
     </div>
@@ -214,8 +215,8 @@
     const callTemplates = [
         "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
         "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
-        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin' and prancin'!",
-        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] a lot of credit!",
+        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin'!",
+        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] credit!",
         "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
         "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
         "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] finger roll!",
@@ -224,7 +225,7 @@
         "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!",
         "Mason: [NAME] for TWO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME] BINGO!",
         "Most: [NAME] intercept!", "Vitale: [NAME] awesome baby!", "Eagle: [NAME] elevation!",
-        "Marv: Spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
+        "Albert: A spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
         "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] dealin'!", "Brown: [NAME] knows the game!",
         "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!",
         "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] touch!",
@@ -257,8 +258,17 @@
             mol: [{n:"Molalla Visitor", i:"0", p:"G", g:"SR"}]
         },
         unified: {
-            est: [{n:"Unified Athlete", i:"00", g:"UN"}],
-            mol: [{n:"Unified Opponent", i:"01", p:"G", g:"UN"}]
+            est: [
+                {n:"Horatio Anderson", i:"3", g:"UN"}, {n:"Katelin Monize", i:"5", g:"UN"},
+                {n:"Waylon Erickson", i:"6", g:"UN"}, {n:"Eayden Eggers", i:"6", g:"UN"},
+                {n:"Leza Becker", i:"8", g:"UN"}, {n:"Skyei Kyle", i:"11", g:"UN"},
+                {n:"Alex Harrell", i:"13", g:"UN"}, {n:"Cherish Wischnofske", i:"15", g:"UN"},
+                {n:"Lucas Clark", i:"15", g:"UN"}, {n:"Nicholas Miles", i:"17", g:"UN"},
+                {n:"Christopher Anderson", i:"21", g:"UN"}, {n:"Michael Kyle", i:"25", g:"UN"},
+                {n:"Nathaniel Paz Sosa", i:"29", g:"UN"}, {n:"Mae Anderson", i:"30", g:"UN"},
+                {n:"Dagan DeAnda", i:"31", g:"UN"}
+            ],
+            mol: [{n:"Unified Opponent", i:"0", p:"G", g:"UN"}]
         }
     };
 
@@ -326,7 +336,6 @@
 
     function playShot(type) {
         const txt = document.getElementById('callText');
-        const count = document.getElementById('callCounter');
         if (type === '2pt') {
             const calls = ["Bang!", "Bucket!", "Got it!", "For Two!", "Count it!"];
             txt.innerText = calls[Math.floor(Math.random() * calls.length)];
@@ -337,7 +346,6 @@
             txt.innerText = "He hit it from " + city + "! SPLASH!";
             txt.style.color = "#4ade80";
         }
-        count.innerText = "-";
     }
 
     window.onload = init;
