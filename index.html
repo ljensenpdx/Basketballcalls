@@ -179,9 +179,8 @@
         </div>
         <button class="btn-ctrl" onclick="flipSides()">Flip Sides</button>
         <select id="teamSelector" onchange="init()">
-            <option value="girls">Girls Varsity</option>
-            <option value="boys">Boys Varsity</option>
-            <option value="unified">Unified Varsity</option>
+            <option value="unified">1/21 Unified</option>
+            <option value="boys">1/23 Boys Basketball</option>
         </select>
     </div>
 </header>
@@ -194,8 +193,8 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Broadcaster Active</div>
-            <div id="callText">Tap a Ranger Button</div>
+            <div id="voiceTag">Gameday Hub</div>
+            <div id="callText">Select a Ranger</div>
             <div id="callCounter">0 / 100</div>
         </div>
         <div class="action-row">
@@ -249,14 +248,6 @@
     ];
 
     const teamData = {
-        girls: {
-            est: [{n:"Payton Lee", i:"1", g:"JR"}, {n:"Sammi Klein", i:"2", g:"SO"}, {n:"Ellianna Zavala", i:"3", g:"JR"}, {n:"Ella Sandell", i:"4", g:"FR"}, {n:"Emily Yost", i:"10", g:"SR"}, {n:"Madison Seal", i:"11", g:"SO"}, {n:"Kenzie Stubblefield", i:"14", g:"FR"}, {n:"Reagan Riggs", i:"15", g:"SR"}, {n:"Paisley Shaw", i:"20", g:"FR"}, {n:"Grace Sager", i:"21", g:"SO"}, {n:"Shanley Colby", i:"24", g:"SO"}],
-            mol: [{n:"Grace Teigen", i:"2", p:"G", g:"SR"}, {n:"Madison Shultz", i:"3", p:"G", g:"SO"}, {n:"Emma Hugo", i:"4", p:"G", g:"SR"}, {n:"Natalie Settje", i:"5", p:"F", g:"JR"}, {n:"Yasmin Montiel", i:"10", p:"G", g:"SR"}, {n:"Evelynn Stephens", i:"11", p:"G", g:"SR"}, {n:"Hailey Anderson", i:"12", p:"F", g:"FR"}, {n:"Savanna Padgett", i:"15", p:"G", g:"SO"}, {n:"Emma Reiman", i:"20", p:"C", g:"JR"}, {n:"Ava Dunn", i:"22", p:"C", g:"SO"}, {n:"Payton Greer", i:"24", p:"G", g:"SO"}, {n:"Gracie Fisher", i:"32", p:"F", g:"JR"}]
-        },
-        boys: {
-            est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
-            mol: [{n:"Molalla Visitor", i:"0", p:"G", g:"SR"}]
-        },
         unified: {
             est: [
                 {n:"Horatio Anderson", i:"3", g:"UN"}, {n:"Katelin Monize", i:"5", g:"UN"},
@@ -268,7 +259,28 @@
                 {n:"Nathaniel Paz Sosa", i:"29", g:"UN"}, {n:"Mae Anderson", i:"30", g:"UN"},
                 {n:"Dagan DeAnda", i:"31", g:"UN"}
             ],
-            mol: [{n:"Unified Opponent", i:"0", p:"G", g:"UN"}]
+            opp: [{n:"Oregon City Player", i:"0", p:"G", g:"UN"}],
+            visitorName: "Oregon City"
+        },
+        boys: {
+            est: [
+                {n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"},
+                {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"},
+                {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"},
+                {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"},
+                {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"},
+                {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}
+            ],
+            // Gladstone Roster from image_bb164c.png
+            opp: [
+                {n:"Lucas Ingram", i:"10", p:"G/W", g:"SO"}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO"},
+                {n:"Max McKee", i:"14", p:"G", g:"JR"}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR"},
+                {n:"Eli Jackson", i:"20", p:"P/W", g:"SO"}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR"},
+                {n:"Braylon Bays", i:"24", p:"G/W", g:"SO"}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR"},
+                {n:"Russell Gleason", i:"30", p:"G/W", g:"JR"}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR"},
+                {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO"}
+            ],
+            visitorName: "Gladstone"
         }
     };
 
@@ -277,12 +289,16 @@
 
     function init() {
         const key = document.getElementById('teamSelector').value;
-        const est = teamData[key].est;
-        const mol = teamData[key].mol;
-        renderList('leftList', flipped ? mol : est);
-        renderList('rightList', flipped ? est : mol);
-        document.getElementById('leftTitle').innerText = flipped ? "Visitor" : "Estacada (Home)";
-        document.getElementById('rightTitle').innerText = flipped ? "Estacada (Home)" : "Visitor";
+        const game = teamData[key];
+        const est = game.est;
+        const opp = game.opp;
+
+        renderList('leftList', flipped ? opp : est);
+        renderList('rightList', flipped ? est : opp);
+        
+        document.getElementById('leftTitle').innerText = flipped ? game.visitorName : "Estacada (Home)";
+        document.getElementById('rightTitle').innerText = flipped ? "Estacada (Home)" : game.visitorName;
+        
         renderTriggers(est);
     }
 
