@@ -8,7 +8,7 @@
     <title>Ranger Gameday Hub</title>
     <style>
         :root {
-            --ranger-green: #00471b; /* Official Forest Green */
+            --ranger-green: #00471b;
             --ranger-white: #ffffff;
             --ranger-black: #0a0a0a;
             --ranger-grey: #1a1a1a;
@@ -39,7 +39,7 @@
 
         .header-controls { display: flex; align-items: center; gap: 15px; }
         
-        select, .btn-ctrl {
+        .btn-ctrl {
             background: var(--ranger-black);
             color: white;
             border: 1px solid var(--ranger-white);
@@ -59,12 +59,12 @@
             border: 1px solid #444;
         }
 
-        .arrow { font-size: 1.8rem; color: #444; cursor: pointer; }
+        .arrow { font-size: 1.8rem; color: #444; cursor: pointer; user-select: none; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
         .dashboard {
             display: grid;
-            grid-template-columns: 300px 1fr 300px;
+            grid-template-columns: 320px 1fr 320px;
             flex-grow: 1;
             overflow: hidden;
         }
@@ -85,7 +85,7 @@
             text-align: center;
             text-transform: uppercase;
             margin-bottom: 10px;
-            padding: 6px;
+            padding: 8px;
             font-weight: 900;
             border-radius: 4px;
         }
@@ -107,7 +107,7 @@
         .p-item.is-starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: #000; }
         .p-num { font-weight: 900; width: 35px; }
         .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 1rem; }
-        .p-grade { font-size: 0.8rem; opacity: 0.8; }
+        .p-info { font-size: 0.85rem; font-weight: 800; opacity: 0.9; width: 30px; text-align: right; }
 
         .center-stage {
             padding: 15px;
@@ -172,10 +172,6 @@
             <span id="posRight" class="arrow" onclick="togglePossession('right')">▶</span>
         </div>
         <button class="btn-ctrl" onclick="flipShootingSides()">Switch Shooting Sides</button>
-        <select id="teamSelector" onchange="loadGame()">
-            <option value="girls">Girls Varsity</option>
-            <option value="boys">Boys Varsity</option>
-        </select>
     </div>
 </header>
 
@@ -205,60 +201,37 @@
 </div>
 
 <script>
-    const teamData = {
-        girls: {
-            est: [
-                {n:"Payton Lee", i:"1", g:"11"}, {n:"Sammi Klein", i:"2", g:"10"},
-                {n:"Ellianna Zavala", i:"3", g:"11"}, {n:"Ella Sandell", i:"4", g:"9"},
-                {n:"Emily Yost", i:"10", g:"12"}, {n:"Madison Seal", i:"11", g:"10"},
-                {n:"Kenzie Stubblefield", i:"14", g:"9"}, {n:"Reagan Riggs", i:"15", g:"12"},
-                {n:"Paisley Shaw", i:"20", g:"9"}, {n:"Grace Sager", i:"21", g:"10"},
-                {n:"Shanley Colby", i:"24", g:"10"}
-            ],
-            mol: [
-                {n:"Grace Teigen", i:"2", g:"12"}, {n:"Madison Shultz", i:"3", g:"10"},
-                {n:"Emma Hugo", i:"4", g:"12"}, {n:"Natalie Settje", i:"5", g:"11"},
-                {n:"Yasmin Montiel", i:"10", g:"12"}, {n:"Evelynn Stephens", i:"11", g:"12"},
-                {n:"Hailey Anderson", i:"12", g:"9"}, {n:"Savanna Padgett", i:"15", g:"10"},
-                {n:"Emma Reiman", i:"20", g:"11"}, {n:"Ava Dunn", i:"22", g:"10"},
-                {n:"Payton Greer", i:"24", g:"10"}, {n:"Gracie Fisher", i:"31", g:"11"}
-            ]
-        },
-        boys: {
-            est: [
-                {n:"Davin Olsen", i:"0", g:"11"}, {n:"Gavin Gates", i:"1", g:"12"},
-                {n:"Connor Crawford", i:"2", g:"12"}, {n:"Broden Gates", i:"5", g:"10"},
-                {n:"Wyatt Nerpel", i:"10", g:"11"}, {n:"Landen Thomas", i:"11", g:"11"},
-                {n:"Lincoln Bunyard", i:"13", g:"11"}, {n:"Paul Ables", i:"15", g:"12"},
-                {n:"Dane Carpenter", i:"20", g:"10"}, {n:"Duke Durand", i:"22", g:"10"},
-                {n:"Zander Hulsey", i:"30", g:"11"}, {n:"Grant Carpenter", i:"41", g:"9"}
-            ],
-            mol: [
-                {n:"Garrett Brusseau", i:"1", g:"12"}, {n:"Chester Smith", i:"2", g:"12"},
-                {n:"Grant Brusseau", i:"3", g:"12"}, {n:"Elijah Ott", i:"5", g:"12"},
-                {n:"Camdyn Morey", i:"10", g:"12"}, {n:"Tadyn McGinness", i:"12", g:"12"},
-                {n:"Kurt Pederson", i:"14", g:"12"}, {n:"Jerearl Abraham", i:"22", g:"12"},
-                {n:"Jaxson Johnson", i:"23", g:"12"}
-            ]
-        }
-    };
+    // Estacada Girls Roster
+    const estRoster = [
+        {n:"Payton Lee", i:"1", info:"JR"}, {n:"Sammi Klein", i:"2", info:"SO"},
+        {n:"Ellianna Zavala", i:"3", info:"JR"}, {n:"Ella Sandell", i:"4", info:"FR"},
+        {n:"Emily Yost", i:"10", info:"SR"}, {n:"Madison Seal", i:"11", info:"SO"},
+        {n:"Kenzie Stubblefield", i:"14", info:"FR"}, {n:"Reagan Riggs", i:"15", info:"SR"},
+        {n:"Paisley Shaw", i:"20", info:"FR"}, {n:"Grace Sager", i:"21", info:"SO"},
+        {n:"Shanley Colby", i:"24", info:"SO"}
+    ];
+
+    // Molalla Girls Roster
+    const molRoster = [
+        {n:"Grace Teigen", i:"2", info:"G"}, {n:"Madison Shultz", i:"3", info:"G"},
+        {n:"Emma Hugo", i:"4", info:"G"}, {n:"Natalie Settje", i:"5", info:"F"},
+        {n:"Yasmin Montiel", i:"10", info:"G"}, {n:"Evelynn Stephens", i:"11", info:"G"},
+        {n:"Hailey Anderson", i:"12", info:"F"}, {n:"Savanna Padgett", i:"15", info:"G"},
+        {n:"Emma Reiman", i:"20", info:"C"}, {n:"Ava Dunn", i:"22", info:"C"},
+        {n:"Payton Greer", i:"24", info:"G"}, {n:"Gracie Fisher", i:"32", info:"F"}
+    ];
 
     let sidesFlipped = false;
     const callTracker = {};
 
-    function loadGame() {
-        const type = document.getElementById('teamSelector').value;
-        const est = teamData[type].est;
-        const mol = teamData[type].mol;
-
-        renderRoster('leftList', sidesFlipped ? mol : est);
-        renderRoster('rightList', sidesFlipped ? est : mol);
+    function init() {
+        renderRoster('leftList', sidesFlipped ? molRoster : estRoster);
+        renderRoster('rightList', sidesFlipped ? estRoster : molRoster);
         
         document.getElementById('leftTitle').innerText = sidesFlipped ? "Molalla (Visitor)" : "Estacada (Home)";
         document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Molalla (Visitor)";
         
-        // Only render buttons for Estacada players in the center grid
-        renderButtons(est);
+        renderButtons(estRoster);
     }
 
     function renderRoster(id, data) {
@@ -267,7 +240,7 @@
         data.forEach(p => {
             const item = document.createElement('div');
             item.className = 'p-item';
-            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-grade">Gr ${p.g}</span>`;
+            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-info">${p.info}</span>`;
             item.onclick = () => item.classList.toggle('is-starter');
             div.appendChild(item);
         });
@@ -285,7 +258,7 @@
         });
     }
 
-    function flipShootingSides() { sidesFlipped = !sidesFlipped; loadGame(); }
+    function flipShootingSides() { sidesFlipped = !sidesFlipped; init(); }
 
     function togglePossession(dir) {
         document.getElementById('posLeft').classList.remove('active');
@@ -319,7 +292,7 @@
         txt.style.color = (type === '3pt') ? "#4ade80" : "white";
     }
 
-    window.onload = loadGame;
+    window.onload = init;
 </script>
 </body>
 </html>
