@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#00471b">
-    
     <title>Ranger Gameday Hub</title>
     <style>
         :root {
-            --ranger-green: #00471b; /* Official Forest Green */
+            --ranger-green: #00471b;
             --ranger-white: #ffffff;
             --ranger-black: #0a0a0a;
             --ranger-grey: #1a1a1a;
@@ -29,8 +27,6 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            /* Ensures content stays below the front-facing camera/notch area */
-            padding-top: env(safe-area-inset-top); 
         }
 
         header {
@@ -38,7 +34,7 @@
             justify-content: space-between;
             align-items: center;
             background: var(--ranger-green);
-            padding: 8px 20px;
+            padding: 8px 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
@@ -72,7 +68,7 @@
 
         .dashboard {
             display: grid;
-            grid-template-columns: 320px 1fr 320px; 
+            grid-template-columns: 340px 1fr 340px; 
             flex-grow: 1;
             overflow: hidden;
         }
@@ -93,7 +89,7 @@
             text-align: center;
             text-transform: uppercase;
             margin-bottom: 8px;
-            padding: 5px;
+            padding: 6px;
             font-weight: 900;
             border-radius: 4px;
         }
@@ -101,8 +97,8 @@
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
         .p-item {
-            padding: 10px 8px;
-            margin-bottom: 4px;
+            padding: 12px 10px;
+            margin-bottom: 5px;
             border-radius: 6px;
             background: #252525;
             cursor: pointer;
@@ -115,9 +111,9 @@
         .p-item.starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: black; }
         .p-item.unavailable { background: var(--unavailable-red); color: white; border-color: white; opacity: 0.6; }
 
-        .p-num { font-weight: 900; width: 30px; }
-        .p-name { flex-grow: 1; text-align: left; padding-left: 6px; font-size: 0.9rem; }
-        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
+        .p-num { font-weight: 900; width: 35px; }
+        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
+        .p-meta { font-size: 0.8rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
 
         .center-stage {
             padding: 12px;
@@ -134,7 +130,7 @@
             border: 2px solid var(--ranger-green);
             border-radius: 15px;
             padding: 15px;
-            min-height: 110px;
+            min-height: 120px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -143,7 +139,7 @@
         }
 
         #voiceTag { font-size: 0.85rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
-        #callText { font-size: 1.5rem; font-weight: 900; text-align: center; line-height: 1.2; }
+        #callText { font-size: 1.6rem; font-weight: 900; text-align: center; line-height: 1.2; }
         #callCounter { position: absolute; bottom: 8px; right: 12px; font-size: 0.65rem; color: #444; font-weight: bold; }
 
         .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -180,10 +176,11 @@
             <span id="posLeft" class="arrow" onclick="togglePossession('left')">◀</span>
             <span id="posRight" class="arrow" onclick="togglePossession('right')">▶</span>
         </div>
-        <button class="btn-ctrl" onclick="flipShootingSides()">Flip Sides</button>
+        <button class="btn-ctrl" onclick="flipSides()">Flip Sides</button>
         <select id="teamSelector" onchange="init()">
             <option value="girls">Girls Varsity</option>
             <option value="boys">Boys Varsity</option>
+            <option value="unified">Unified</option>
         </select>
     </div>
 </header>
@@ -196,13 +193,13 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Active Broadcast</div>
-            <div id="callText">Tap Player for Call</div>
+            <div id="voiceTag">Active Hub</div>
+            <div id="callText">Select a Ranger</div>
             <div id="callCounter">0 / 100</div>
         </div>
         <div class="action-row">
-            <button class="s-btn btn-2" onclick="playRandom('2pt')">Rand 2pt</button>
-            <button class="s-btn btn-3" onclick="playRandom('3pt')">Rand 3pt</button>
+            <button class="s-btn btn-2" onclick="playShot('2pt')">2PT Call</button>
+            <button class="s-btn btn-3" onclick="playShot('3pt')">3PT Call</button>
         </div>
         <div id="callTriggers" class="call-grid"></div>
     </div>
@@ -214,15 +211,14 @@
 </div>
 
 <script>
-    // 100 TEMPLATES RESTORED
     const callTemplates = [
         "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
         "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
-        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin'!",
-        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] credit!",
+        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin' and prancin'!",
+        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] a lot of credit!",
         "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
         "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
-        "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] with the finger roll!",
+        "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] finger roll!",
         "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs!",
         "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] bag!",
         "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!",
@@ -231,12 +227,12 @@
         "Marv: Spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
         "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] dealin'!", "Brown: [NAME] knows the game!",
         "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!",
-        "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] with the touch!",
+        "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] touch!",
         "Hearn: [NAME] reverse!", "King: [NAME] spicy sauce!", "Eagle: [NAME] terminate!",
-        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] play!",
+        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] finishes!",
         "Albert: [NAME] from deep!", "Hearn: [NAME] jello!", "King: [NAME] meatballs!",
-        "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: Number [NUM], [NAME]!",
-        "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP!", "Eagle: [NAME] rim-rocking!",
+        "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: # [NUM], [NAME]!",
+        "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP'er!", "Eagle: [NAME] rim-rock!",
         "Marv: [NAME] wing!", "Hearn: [NAME] eggs!", "King: [NAME] hot!",
         "Tirico: [NAME] got it!", "Frazier: [NAME] bounds!", "Brown: [NAME] credit!",
         "Jones: [NAME] bag!", "Walton: [NAME] star!", "Harlan: [NAME] thunder!",
@@ -258,25 +254,29 @@
         },
         boys: {
             est: [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}],
-            mol: [{n:"Molalla Visitor", i:"0", p:"G", g:"SR"}]
+            mol: [{n:"Visitor Boy", i:"0", p:"G", g:"SR"}]
+        },
+        unified: {
+            est: [{n:"Unified Athlete", i:"00", g:"UN"}],
+            mol: [{n:"Unified Opponent", i:"01", p:"G", g:"UN"}]
         }
     };
 
-    let sidesFlipped = false;
-    const pCounters = {};
+    let flipped = false;
+    const pCounts = {};
 
     function init() {
-        const teamKey = document.getElementById('teamSelector').value;
-        const est = teamData[teamKey].est;
-        const mol = teamData[teamKey].mol;
-        renderRoster('leftList', sidesFlipped ? mol : est);
-        renderRoster('rightList', sidesFlipped ? est : mol);
-        document.getElementById('leftTitle').innerText = sidesFlipped ? "Visitor" : "Estacada (Home)";
-        document.getElementById('rightTitle').innerText = sidesFlipped ? "Estacada (Home)" : "Visitor";
-        renderButtons(est);
+        const key = document.getElementById('teamSelector').value;
+        const est = teamData[key].est;
+        const mol = teamData[key].mol;
+        renderList('leftList', flipped ? mol : est);
+        renderList('rightList', flipped ? est : mol);
+        document.getElementById('leftTitle').innerText = flipped ? "Visitor" : "Estacada (Home)";
+        document.getElementById('rightTitle').innerText = flipped ? "Estacada (Home)" : "Visitor";
+        renderTriggers(est);
     }
 
-    function renderRoster(id, data) {
+    function renderList(id, data) {
         const div = document.getElementById(id);
         div.innerHTML = '';
         data.forEach(p => {
@@ -293,7 +293,7 @@
         });
     }
 
-    function renderButtons(data) {
+    function renderTriggers(data) {
         const div = document.getElementById('callTriggers');
         div.innerHTML = '';
         data.forEach(p => {
@@ -305,7 +305,7 @@
         });
     }
 
-    function flipShootingSides() { sidesFlipped = !sidesFlipped; init(); }
+    function flipSides() { flipped = !flipped; init(); }
 
     function togglePossession(dir) {
         document.getElementById('posLeft').classList.remove('active');
@@ -315,17 +315,17 @@
 
     function playerCall(name, num) {
         const txt = document.getElementById('callText');
-        const countDisplay = document.getElementById('callCounter');
-        if (!pCounters[name]) pCounters[name] = 0;
-        const currentIdx = pCounters[name];
-        txt.innerText = callTemplates[currentIdx].replace("[NAME]", name).replace("[NUM]", num);
-        countDisplay.innerText = `${currentIdx + 1} / 100`;
-        pCounters[name] = (currentIdx + 1) % 100;
+        const count = document.getElementById('callCounter');
+        if (!pCounts[name]) pCounts[name] = 0;
+        const idx = pCounts[name];
+        txt.innerText = callTemplates[idx].replace("[NAME]", name).replace("[NUM]", num);
+        count.innerText = `${idx + 1} / 100`;
+        pCounts[name] = (idx + 1) % 100;
     }
 
-    function playRandom(type) {
+    function playShot(type) {
         const txt = document.getElementById('callText');
-        const calls = type === '2pt' ? ["Boom-Shakalaka!", "Bang!", "YES!"] : ["River Triple!", "McIver Arc!", "Main St Bomb!"];
+        const calls = type === '2pt' ? ["Bang!", "Bucket!", "Got it!"] : ["Downtown!", "Triple!", "Splash!"];
         txt.innerText = calls[Math.floor(Math.random() * calls.length)];
     }
 

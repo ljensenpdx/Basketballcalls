@@ -1,0 +1,9 @@
+{
+  "short_name": "Ranger Hub",
+  "name": "Estacada Rangers Broadcast Hub",
+  "start_url": "index.html",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00471b"
+}
