@@ -16,7 +16,6 @@
             --ranger-grey: #1a1a1a;
             --starter-yellow: #f1c40f;
             --unavailable-red: #e74c3c;
-            --edit-blue: #3498db;
         }
 
         body {
@@ -54,8 +53,6 @@
             cursor: pointer;
             font-size: 0.75rem;
         }
-
-        .btn-manage { background: var(--edit-blue); border: none; }
 
         .possession-container {
             display: flex;
@@ -100,38 +97,24 @@
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
         .p-item {
-            padding: 8px 10px;
+            padding: 12px 10px;
             margin-bottom: 5px;
             border-radius: 6px;
-            background: #252525;
+            background: transparent;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border: 1px solid #333;
-            transition: background-color 0.2s;
+            transition: 0.2s ease;
         }
 
         .p-item.starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: black; }
         .p-item.unavailable { background: var(--unavailable-red); color: white; border-color: white; opacity: 0.6; }
 
-        .p-num { font-weight: 900; width: 30px; cursor: pointer; }
-        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.9rem; cursor: pointer; }
-        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; margin-right: 10px; cursor: pointer; }
-
-        .foul-btn {
-            background: #444;
-            color: white;
-            border: 1px solid #666;
-            border-radius: 4px;
-            padding: 4px 8px;
-            font-weight: 900;
-            font-size: 0.8rem;
-            cursor: pointer;
-            min-width: 45px;
-            text-align: center;
-        }
-        .starter .foul-btn { background: rgba(0,0,0,0.2); border-color: black; color: black; }
-        .foul-btn.danger { background: var(--unavailable-red); border-color: white; color: white; }
+        .p-num { font-weight: 900; width: 35px; }
+        .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
+        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
 
         .center-stage {
             padding: 12px;
@@ -183,23 +166,6 @@
             font-weight: 700;
             cursor: pointer;
         }
-
-        #editorModal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 100;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
-        }
-
-        .editor-container { background: #1a1a1a; padding: 20px; border-radius: 15px; max-width: 800px; margin: auto; }
-        .editor-row { display: grid; grid-template-columns: 60px 1fr 60px 60px 40px; gap: 10px; margin-bottom: 10px; }
-        .editor-row input { background: #333; color: white; border: 1px solid #555; padding: 10px; border-radius: 5px; }
-        .btn-danger { background: var(--unavailable-red); border: none; color: white; border-radius: 5px; cursor: pointer; }
-        .btn-save { background: var(--ranger-green); width: 100%; padding: 15px; color: white; font-weight: 900; margin-top: 20px; border: none; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -211,11 +177,11 @@
             <span id="posLeft" class="arrow" onclick="togglePossession('left')">◀</span>
             <span id="posRight" class="arrow" onclick="togglePossession('right')">▶</span>
         </div>
-        <button class="btn-ctrl" onclick="halftimeFlip()">HALFTIME: FLIP SIDES</button>
-        <button class="btn-ctrl btn-manage" onclick="openEditor()">Manage Players</button>
+        <button class="btn-ctrl" onclick="flipSides()">Flip Sides</button>
         <select id="gameSelector" onchange="init()">
             <option value="unified">1/21 Unified</option>
             <option value="boys_gladstone">1/23 Boys vs Gladstone</option>
+            <option value="girls_mckay">1/27 Girls vs McKay</option>
             <option value="boys_molalla">2/6 Boys vs Molalla</option>
             <option value="girls_cascade">2/20 Girls vs Cascade</option>
             <option value="girls_thedalles">2/24 Girls vs The Dalles</option>
@@ -225,16 +191,16 @@
 </header>
 
 <div class="dashboard">
-    <div id="pane1" class="roster-pane">
-        <div class="pane-header" id="title1">Estacada (Home)</div>
-        <div id="list1" class="scroll-list"></div>
+    <div id="leftPane" class="roster-pane">
+        <div class="pane-header" id="leftTitle">Estacada (Home)</div>
+        <div id="leftList" class="scroll-list"></div>
     </div>
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Gameday Hub</div>
-            <div id="callText">Foul Tracker Ready</div>
-            <div id="callCounter">0 / 100</div>
+            <div id="voiceTag">Vault v30.0</div>
+            <div id="callText">Tap Ranger for 200 Calls</div>
+            <div id="callCounter">0 / 200</div>
         </div>
         <div class="action-row">
             <button class="s-btn btn-2" onclick="playShot('2pt')">2PT Call</button>
@@ -245,39 +211,20 @@
 
     <div id="rightPane" class="roster-pane">
         <div class="pane-header" id="rightTitle">Visitor</div>
-        <div id="list2" class="scroll-list"></div>
-    </div>
-</div>
-
-<div id="editorModal">
-    <div class="editor-container">
-        <h2 style="color:var(--edit-blue)">Manage Rosters</h2>
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div>
-                <h3>Estacada (Home)</h3>
-                <div id="homeEditor"></div>
-                <button class="btn-ctrl" onclick="addRow('home')">+ Add Ranger</button>
-            </div>
-            <div>
-                <h3>Visitor</h3>
-                <div id="oppEditor"></div>
-                <button class="btn-ctrl" onclick="addRow('opp')">+ Add Visitor</button>
-            </div>
-        </div>
-        <button class="btn-save" onclick="saveAndClose()">Apply Changes & Save</button>
-        <button class="btn-ctrl" style="width:100%; margin-top:10px; background:#444;" onclick="closeEditor()">Cancel</button>
+        <div id="rightList" class="scroll-list"></div>
     </div>
 </div>
 
 <script>
+    // EXPANDED VAULT: 200 UNIQUE TEMPLATES
     const callTemplates = [
         "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
         "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
-        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin'!",
-        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] credit!",
+        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin' and prancin'!",
+        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] a lot of credit!",
         "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
         "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
-        "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] finger roll!",
+        "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] with the finger roll!",
         "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs!",
         "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] bag!",
         "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!",
@@ -288,7 +235,7 @@
         "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!",
         "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] touch!",
         "Hearn: [NAME] reverse!", "King: [NAME] spicy sauce!", "Eagle: [NAME] terminate!",
-        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] play!",
+        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] finishes!",
         "Albert: [NAME] from deep!", "Hearn: [NAME] jello!", "King: [NAME] meatballs!",
         "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: # [NUM], [NAME]!",
         "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP'er!", "Eagle: [NAME] rim-rock!",
@@ -303,86 +250,106 @@
         "Hearn: [NAME] fridge!", "King: [NAME] sauce!", "Eagle: [NAME] attack!",
         "Tirico: [NAME] splash!", "Frazier: [NAME] winning!", "Brown: [NAME] touch!",
         "Jones: [NAME] bag!", "Walton: [NAME] cosmic!", "Harlan: [NAME] boom!",
-        "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!"
+        "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!",
+        // 101-200 RANGE STARTS HERE
+        "Gus Johnson: [NAME]! HA-HAAA! UNBELIEVABLE!", "Kevin Calabro: [NAME] slinging the pill!", "Calabro: [NAME] with the high-octane finish!",
+        "Pete Pratt: Clear the tracks, [NAME] is coming through!", "Ranger Pride: [NAME] is cooking with fire tonight!",
+        "The Clackamas Call: The river is rising after that [NAME] bucket!", "Gus Johnson: [NAME]! RISE AND FIRE!",
+        "Calabro: [NAME] with the sweet stroke!", "Mason: [NAME] making it look easy at the high school!",
+        "PA Mic: Estacada points for [NAME]!", "Main Street: [NAME] with the downtown delivery!",
+        "McIver Park: [NAME] with the park-range triple!", "Eagle Creek: [NAME] soaring to the rim!",
+        "Boring, OR: Nothing boring about that play by [NAME]!", "Colton: [NAME] sending it back to the forest!",
+        "Ranger Nation: Hear the crowd for [NAME]!", "Vitale: You gotta be kidding me, [NAME]!",
+        "Gus Johnson: [NAME]! FOR THE LEAD!", "Marv Albert: [NAME]... from the baseline!",
+        "Breen: [NAME] with the crossover and the BANG!", "Harlan: [NAME] WITH THE POWER!",
+        "Lawler: First to 100 wins! BINGO [NAME]!", "Tirico: [NAME]... Are you serious?!",
+        "Wheels: [NAME] puts the heart in the game!", "Frazier: [NAME] shakin' and bakin'!",
+        "Brown: Now that is how you run the floor, [NAME]!", "Jones: [NAME] is in his bag tonight!",
+        "Walton: I have seen the future, and its name is [NAME]!", "King: [NAME]! Put 'em on a poster!",
+        "Eagle: [NAME] with the heavy lifting!", "Michaels: [NAME] with the miracle finish!",
+        "Most: [NAME] takes it away! He's gone!", "Costas: A defining moment for [NAME]!",
+        "Demers: Pure effort from [NAME]!", "Vitale: [NAME] is a superstar in the making!",
+        "Johnson: [NAME]! PURE COLD BLOODED!", "Calabro: [NAME] painting the corners!",
+        "Pratt: [NAME]... Boom goes the dynamite!", "Ranger Pride: [NAME] carrying the green and white!",
+        "Clackamas: [NAME] with a flood of points!", "Main Street: [NAME] is the mayor of the court!",
+        "McIver: [NAME] with the trail-blazing move!", "Eagle Creek: [NAME] with the vertical!",
+        "Colton: [NAME] out of the woods and to the hoop!", "Breen: [NAME]... PURE!",
+        "Harlan: [NAME]... THE FLAMETHROWER!", "Marv: [NAME]... A vintage performance!",
+        "Hearn: [NAME] with the mustard and onions!", "Wheels: [NAME]... You betcha!",
+        "Tirico: [NAME]... AT THE BUZZER!", "Frazier: [NAME] tantalizing!",
+        "Walton: [NAME]... A symphony of movement!", "King: [NAME]! Drive the bus!",
+        "Eagle: [NAME] with the authority!", "Brown: [NAME]... High IQ play!",
+        "Jones: [NAME]... Too much sauce!", "Lawler: [NAME]... OH ME OH MY!",
+        "Most: [NAME]... He's everywhere!", "Vitale: [NAME]... M&M! Magnificent and Marvelous!",
+        "Michaels: [NAME]... One for the ages!", "Costas: [NAME]... Masterful!",
+        "Demers: [NAME]... UNSTOPPABLE!", "Gus Johnson: [NAME]... THE HEART OF A CHAMPION!",
+        "Calabro: [NAME]... Roundball royalty!", "Pratt: [NAME]... That's Ranger ball!",
+        "Ranger Nation: [NAME]... Leading the charge!", "Breen: [NAME]... FROM DEEP!",
+        "Harlan: [NAME]... UNGUARDABLE!", "Marv: [NAME]... From the land of plenty!",
+        "Hearn: [NAME]... In the fridge!", "Wheels: [NAME]... BOOM!",
+        "Tirico: [NAME]... GOT IT!", "Frazier: [NAME]... Prancin'!",
+        "Walton: [NAME]... A star is born!", "King: [NAME]... HOT!",
+        "Eagle: [NAME]... ATTACK!", "Brown: [NAME]... CREDIT!",
+        "Jones: [NAME]... COLD!", "Lawler: [NAME]... BINGO!",
+        "Most: [NAME]... STEAL!", "Vitale: [NAME]... BABY!",
+        "Michaels: [NAME]... BELIEVE!", "Costas: [NAME]... DRAMA!",
+        "Demers: [NAME]... LEADERSHIP!", "Gus Johnson: [NAME]! HA-HAAA!",
+        "Calabro: [NAME]! SLINGING IT!", "Pratt: [NAME]! BOOM!",
+        "Ranger Pride: [NAME]! GREEN AND WHITE!", "Main Street: [NAME]! DOWNTOWN!",
+        "Breen: [NAME]! BANG!", "Harlan: [NAME]! NO REGARD!",
+        "Marv: [NAME]! YES!", "Hearn: [NAME]! FRIDGE!",
+        "Wheels: [NAME]! BOOM-SHAKALAKA!", "Tirico: [NAME]! SPLASH!",
+        "Frazier: [NAME]! WINNING!", "Walton: [NAME]! CELESTIAL!",
+        "King: [NAME]! HOT SAUCE!", "Eagle: [NAME]! TERMINATE!",
+        "Brown: [NAME]! KNOWS THE GAME!", "Jones: [NAME]! BAG!"
     ];
 
-    const girlsRoster = [{n:"Payton Lee", i:"1", g:"JR", p:""}, {n:"Sammi Klein", i:"2", g:"SO", p:""}, {n:"Ellianna Zavala", i:"3", g:"JR", p:""}, {n:"Ella Sandell", i:"4", g:"FR", p:""}, {n:"Emily Yost", i:"10", g:"SR", p:""}, {n:"Madison Seal", i:"11", g:"SO", p:""}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:""}, {n:"Reagan Riggs", i:"15", g:"SR", p:""}, {n:"Paisley Shaw", i:"20", g:"FR", p:""}, {n:"Grace Sager", i:"21", g:"SO", p:""}, {n:"Shanley Colby", i:"24", g:"SO", p:""}];
-    const boysRoster = [{n:"Davin Olsen", i:"0", g:"JR"}, {n:"Gavin Gates", i:"1", g:"SR"}, {n:"Connor Crawford", i:"2", g:"SR"}, {n:"Broden Gates", i:"5", g:"SO"}, {n:"Wyatt Nerpel", i:"10", g:"JR"}, {n:"Landen Thomas", i:"11", g:"JR"}, {n:"Lincoln Bunyard", i:"13", g:"JR"}, {n:"Paul Ables", i:"15", g:"SR"}, {n:"Dane Carpenter", i:"20", g:"SO"}, {n:"Duke Durand", i:"22", g:"SO"}, {n:"Zander Hulsey", i:"30", g:"JR"}, {n:"Grant Carpenter", i:"41", g:"FR"}];
+    const gRoster = [{n:"Payton Lee", i:"1", g:"JR", p:"", s:0}, {n:"Sammi Klein", i:"2", g:"SO", p:"", s:0}, {n:"Ellianna Zavala", i:"3", g:"JR", p:"", s:0}, {n:"Ella Sandell", i:"4", g:"FR", p:"", s:0}, {n:"Emily Yost", i:"10", g:"SR", p:"", s:0}, {n:"Madison Seal", i:"11", g:"SO", p:"", s:0}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"", s:0}, {n:"Reagan Riggs", i:"15", g:"SR", p:"", s:0}, {n:"Paisley Shaw", i:"20", g:"FR", p:"", s:0}, {n:"Grace Sager", i:"21", g:"SO", p:"", s:0}, {n:"Shanley Colby", i:"24", g:"SO", p:"", s:0}];
+    const bRoster = [{n:"Davin Olsen", i:"0", g:"JR", s:0}, {n:"Gavin Gates", i:"1", g:"SR", s:0}, {n:"Connor Crawford", i:"2", g:"SR", s:0}, {n:"Broden Gates", i:"5", g:"SO", s:0}, {n:"Wyatt Nerpel", i:"10", g:"JR", s:0}, {n:"Landen Thomas", i:"11", g:"JR", s:0}, {n:"Lincoln Bunyard", i:"13", g:"JR", s:0}, {n:"Paul Ables", i:"15", g:"SR", s:0}, {n:"Dane Carpenter", i:"20", g:"SO", s:0}, {n:"Duke Durand", i:"22", g:"SO", s:0}, {n:"Zander Hulsey", i:"30", g:"JR", s:0}, {n:"Grant Carpenter", i:"41", g:"FR", s:0}];
 
-    const defaultData = {
-        unified: { est: [{n:"Horatio Anderson", i:"3", g:"UN"}, {n:"Katelin Monize", i:"5", g:"UN"}, {n:"Waylon Erickson", i:"6", g:"UN"}, {n:"Eayden Eggers", i:"6", g:"UN"}, {n:"Leza Becker", i:"8", g:"UN"}, {n:"Skyei Kyle", i:"11", g:"UN"}, {n:"Alex Harrell", i:"13", g:"UN"}, {n:"Cherish Wischnofske", i:"15", g:"UN"}, {n:"Lucas Clark", i:"15", g:"UN"}, {n:"Nicholas Miles", i:"17", g:"UN"}, {n:"Christopher Anderson", i:"21", g:"UN"}, {n:"Michael Kyle", i:"25", g:"UN"}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN"}, {n:"Mae Anderson", i:"30", g:"UN"}, {n:"Dagan DeAnda", i:"31", g:"UN"}], opp: [{n:"Guest Player", i:"0", p:"G", g:"UN"}], visitorName: "Oregon City" },
-        boys_gladstone: { est: boysRoster, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO"}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO"}, {n:"Max McKee", i:"14", p:"G", g:"JR"}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR"}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO"}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR"}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO"}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR"}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR"}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR"}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO"}], visitorName: "Gladstone" },
-        boys_molalla: { est: boysRoster, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR"}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR"}, {n:"Grant Brusseau", i:"3", p:"", g:"SR"}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR"}, {n:"Elijah Ott", i:"5", p:"", g:"SR"}, {n:"Camdyn Morey", i:"10", p:"", g:"SR"}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR"}, {n:"Kurt Pederson", i:"14", p:"", g:"SR"}, {n:"Andrew Dahl", i:"21", p:"", g:"JR"}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR"}], visitorName: "Molalla" },
-        girls_cascade: { est: girlsRoster, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR"}, {n:"Halle Hammer", i:"1", p:"G", g:"JR"}, {n:"Livia Free", i:"2", p:"G", g:"SR"}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO"}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO"}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR"}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR"}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR"}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR"}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO"}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR"}], visitorName: "Cascade" },
-        girls_thedalles: { est: girlsRoster, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO"}, {n:"Bryce Newby", i:"2", p:"G", g:"SO"}, {n:"Morgan Donivan", i:"5", p:"G", g:"JR"}, {n:"Molly Carter", i:"10", p:"G", g:"FR"}, {n:"Hailey Johnston", i:"12", p:"G", g:"SR"}, {n:"Willow Ziegenhagen", i:"14", p:"G", g:"SO"}, {n:"Kate Dewey", i:"15", p:"G", g:"FR"}, {n:"Anuhea Peters", i:"21", p:"G", g:"FR"}, {n:"Evelyn Rogers", i:"23", p:"G", g:"JR"}, {n:"Kestley Hodges", i:"24", p:"G", g:"JR"}, {n:"Evelin Mondrogan", i:"25", p:"G", g:"SO"}, {n:"Rozlyn Elliott", i:"32", p:"G", g:"FR"}], visitorName: "The Dalles" },
-        boys_madras: { est: boysRoster, opp: [{n:"John Buffalo-Ball", i:"10", p:"G", g:"JR"}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR"}, {n:"Dre Plazola", i:"14", p:"W/G", g:"JR"}, {n:"Troy Adams", i:"20", p:"W", g:"SR"}, {n:"Caleb Shank", i:"22", p:"W", g:"JR"}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR"}, {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR"}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR"}, {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO"}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO"}, {n:"Osmar Orozco", i:"42", p:"P", g:"JR"}, {n:"Devin Super", i:"45", p:"P", g:"SO"}], visitorName: "Madras" }
+    const teamData = {
+        unified: { est: [{n:"Horatio Anderson", i:"3", g:"UN", s:0}, {n:"Katelin Monize", i:"5", g:"UN", s:0}, {n:"Waylon Erickson", i:"6", g:"UN", s:0}, {n:"Eayden Eggers", i:"6", g:"UN", s:0}, {n:"Leza Becker", i:"8", g:"UN", s:0}, {n:"Skyei Kyle", i:"11", g:"UN", s:0}, {n:"Alex Harrell", i:"13", g:"UN", s:0}, {n:"Cherish Wischnofske", i:"15", g:"UN", s:0}, {n:"Lucas Clark", i:"15", g:"UN", s:0}, {n:"Nicholas Miles", i:"17", g:"UN", s:0}, {n:"Christopher Anderson", i:"21", g:"UN", s:0}, {n:"Michael Kyle", i:"25", g:"UN", s:0}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN", s:0}, {n:"Mae Anderson", i:"30", g:"UN", s:0}, {n:"Dagan DeAnda", i:"31", g:"UN", s:0}], opp: [{n:"Guest Player", i:"0", p:"G", g:"UN", s:0}], vName: "Oregon City" },
+        boys_gladstone: { est: bRoster, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO", s:0}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO", s:0}, {n:"Max McKee", i:"14", p:"G", g:"JR", s:0}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR", s:0}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO", s:0}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR", s:0}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO", s:0}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR", s:0}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR", s:0}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR", s:0}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO", s:0}], vName: "Gladstone" },
+        girls_mckay: { est: gRoster, opp: [{n:"Allison Reynolds", i:"1", p:"", g:"SO", s:0}, {n:"Karen Linares", i:"2", p:"", g:"JR", s:0}, {n:"Ameyah Higheagle", i:"3", p:"", g:"SO", s:0}, {n:"Tram Nguyen", i:"4", p:"", g:"SO", s:0}, {n:"Melissa Garcia Mejia", i:"5", p:"", g:"JR", s:0}, {n:"Priscilla Martinez", i:"10", p:"", g:"JR", s:0}, {n:"Lohlah Tanguy", i:"11", p:"", g:"JR", s:0}, {n:"Makaila Mau", i:"14", p:"", g:"JR", s:0}, {n:"Cassidy Dixon", i:"21", p:"", g:"SR", s:0}, {n:"Grace Truong", i:"23", p:"", g:"JR", s:0}, {n:"Emme Lopez", i:"24", p:"", g:"FR", s:0}, {n:"Saiya Sampson", i:"25", p:"", g:"SR", s:0}, {n:"Emily Escudero", i:"32", p:"", g:"SO", s:0}], vName: "McKay" },
+        boys_molalla: { est: bRoster, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR", s:0}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR", s:0}, {n:"Grant Brusseau", i:"3", p:"", g:"SR", s:0}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR", s:0}, {n:"Elijah Ott", i:"5", p:"", g:"SR", s:0}, {n:"Camdyn Morey", i:"10", p:"", g:"SR", s:0}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR", s:0}, {n:"Kurt Pederson", i:"14", p:"", g:"SR", s:0}, {n:"Andrew Dahl", i:"21", p:"", g:"JR", s:0}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR", s:0}], vName: "Molalla" },
+        girls_cascade: { est: gRoster, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR", s:0}, {n:"Halle Hammer", i:"1", p:"G", g:"JR", s:0}, {n:"Livia Free", i:"2", p:"G", g:"SR", s:0}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO", s:0}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO", s:0}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR", s:0}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR", s:0}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR", s:0}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR", s:0}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO", s:0}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR", s:0}], vName: "Cascade" },
+        girls_thedalles: { est: gRoster, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO", s:0}, {n:"Bryce Newby", i:"2", p:"G", g:"SO", s:0}, {n:"Morgan Donivan", i:"5", p:"G", g:"JR", s:0}, {n:"Molly Carter", i:"10", p:"G", g:"FR", s:0}, {n:"Hailey Johnston", i:"12", p:"G", g:"SR", s:0}, {n:"Willow Ziegenhagen", i:"14", p:"G", g:"SO", s:0}, {n:"Kate Dewey", i:"15", p:"G", g:"FR", s:0}, {n:"Anuhea Peters", i:"21", p:"G", g:"FR", s:0}, {n:"Evelyn Rogers", i:"23", p:"G", g:"JR", s:0}, {n:"Kestley Hodges", i:"24", p:"G", g:"JR", s:0}, {n:"Evelin Mondrogan", i:"25", p:"G", g:"SO", s:0}, {n:"Rozlyn Elliott", i:"32", p:"G", g:"FR", s:0}], vName: "The Dalles" },
+        boys_madras: { est: bRoster, opp: [{n:"John Buffalo-Ball", i:"10", p:"G", g:"JR", s:0}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR", s:0}, {n:"Dre Plazola", i:"14", p:"W/G", g:"JR", s:0}, {n:"Troy Adams", i:"20", p:"W", g:"SR", s:0}, {n:"Caleb Shank", i:"22", p:"W", g:"JR", s:0}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR", s:0}, {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR", s:0}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR", s:0}, {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO", s:0}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO", s:0}, {n:"Osmar Orozco", i:"42", p:"P", g:"JR", s:0}, {n:"Devin Super", i:"45", p:"P", g:"SO", s:0}], vName: "Madras" }
     };
 
-    let teamData = JSON.parse(localStorage.getItem('rangerHubData')) || defaultData;
+    let flipped = false;
     const pCounts = {};
 
     function init() {
         const key = document.getElementById('gameSelector').value;
         const game = teamData[key];
-        renderList('list1', game.est);
-        renderList('list2', game.opp);
-        document.getElementById('title1').innerText = "Estacada (Home)";
-        document.getElementById('rightTitle').innerText = game.visitorName;
+        renderLists(game);
         renderTriggers(game.est);
     }
 
-    function renderList(id, data) {
+    function renderLists(game) {
+        const estSorted = [...game.est].sort((a,b) => (b.s === 1) - (a.s === 1) || parseInt(a.i) - parseInt(b.i));
+        const oppSorted = [...game.opp].sort((a,b) => (b.s === 1) - (a.s === 1) || parseInt(a.i) - parseInt(b.i));
+        renderPanel('leftList', flipped ? oppSorted : estSorted);
+        renderPanel('rightList', flipped ? estSorted : oppSorted);
+        document.getElementById('leftTitle').innerText = flipped ? game.vName : "Estacada (Home)";
+        document.getElementById('rightTitle').innerText = flipped ? "Estacada (Home)" : game.vName;
+    }
+
+    function renderPanel(id, data) {
         const div = document.getElementById(id);
         div.innerHTML = '';
         data.forEach(p => {
             const item = document.createElement('div');
-            item.className = 'p-item';
+            item.className = `p-item ${p.s === 1 ? 'starter' : ''} ${p.s === 2 ? 'unavailable' : ''}`;
             const meta = p.p ? `${p.p} | ${p.g}` : p.g;
-            item.innerHTML = `
-                <span class="p-num" onclick="toggleState(this.parentElement)">${p.i}</span>
-                <span class="p-name" onclick="toggleState(this.parentElement)">${p.n}</span>
-                <span class="p-meta" onclick="toggleState(this.parentElement)">${meta}</span>
-                <button class="foul-btn" onclick="addFoul(this, this.parentElement)">0 F</button>
-            `;
+            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-meta">${meta}</span>`;
+            item.onclick = () => {
+                p.s = (p.s + 1) % 3;
+                init();
+            };
             div.appendChild(item);
         });
-    }
-
-    /* FOUL LOGIC */
-    function addFoul(btn, parent) {
-        let fouls = parseInt(btn.innerText.split(' ')[0]);
-        fouls++;
-        btn.innerText = `${fouls} F`;
-        
-        if (fouls >= 5) {
-            btn.classList.add('danger');
-            parent.className = 'p-item unavailable';
-        }
-    }
-
-    /* 3-STATE COLOR TOGGLE */
-    function toggleState(item) {
-        if (item.classList.contains('unavailable')) return; // Don't allow toggling if fouled out
-        if (!item.classList.contains('starter')) { item.classList.add('starter'); }
-        else { item.classList.remove('starter'); }
-    }
-
-    function halftimeFlip() {
-        const list1 = document.getElementById('list1');
-        const list2 = document.getElementById('list2');
-        const title1 = document.getElementById('title1');
-        const title2 = document.getElementById('rightTitle');
-
-        const temp1 = Array.from(list1.childNodes);
-        const temp2 = Array.from(list2.childNodes);
-        
-        list1.innerHTML = ''; list2.innerHTML = '';
-        temp2.forEach(c => list1.appendChild(c));
-        temp1.forEach(c => list2.appendChild(c));
-
-        const t1 = title1.innerText;
-        title1.innerText = title2.innerText;
-        title2.innerText = t1;
     }
 
     function renderTriggers(data) {
@@ -397,6 +364,8 @@
         });
     }
 
+    function flipSides() { flipped = !flipped; init(); }
+
     function togglePossession(dir) {
         document.getElementById('posLeft').classList.remove('active');
         document.getElementById('posRight').classList.remove('active');
@@ -408,52 +377,27 @@
         const count = document.getElementById('callCounter');
         if (!pCounts[name]) pCounts[name] = 0;
         const idx = pCounts[name];
+        // Now cycles through 200 templates
         txt.innerText = callTemplates[idx].replace("[NAME]", name).replace("[NUM]", num);
-        count.innerText = `${idx + 1} / 100`;
-        pCounts[name] = (idx + 1) % 100;
+        count.innerText = `${idx + 1} / 200`;
+        pCounts[name] = (idx + 1) % 200;
+        txt.style.color = "white";
     }
 
     function playShot(type) {
         const txt = document.getElementById('callText');
         if (type === '2pt') {
-            const calls = ["Bang!", "Bucket!", "Got it!", "For Two!", "Count it!"];
+            const calls = ["Bang!", "Bucket!", "Got it!", "Count it!", "Ranger Points!", "Bucket for the Green and White!"];
             txt.innerText = calls[Math.floor(Math.random() * calls.length)];
             txt.style.color = "white";
         } else {
-            const cities = ["Sandy!", "Eagle Creek!", "Molalla!", "Gladstone!", "Boring!", "Redland!", "Colton!"];
+            const cities = ["Sandy!", "Eagle Creek!", "Molalla!", "Gladstone!", "Boring!", "Redland!", "Colton!", "Estacada!"];
             const city = cities[Math.floor(Math.random() * cities.length)];
             txt.innerText = "He hit it from " + city + "! SPLASH!";
             txt.style.color = "#4ade80";
         }
     }
 
-    function openEditor() {
-        const key = document.getElementById('gameSelector').value;
-        document.getElementById('homeEditor').innerHTML = '';
-        document.getElementById('oppEditor').innerHTML = '';
-        teamData[key].est.forEach((p, i) => addRow('home', p, i));
-        teamData[key].opp.forEach((p, i) => addRow('opp', p, i));
-        document.getElementById('editorModal').style.display = 'block';
-    }
-
-    function addRow(side, data = {n:'', i:'', g:'', p:''}, index) {
-        const div = document.createElement('div');
-        div.className = 'editor-row';
-        div.innerHTML = `<input type="text" placeholder="#" value="${data.i}" class="num"><input type="text" placeholder="Name" value="${data.n}" class="name"><input type="text" placeholder="G" value="${data.g}" class="grade"><input type="text" placeholder="P" value="${data.p || ''}" class="pos"><button class="btn-danger" onclick="this.parentElement.remove()">X</button>`;
-        document.getElementById(side + 'Editor').appendChild(div);
-    }
-
-    function saveAndClose() {
-        const key = document.getElementById('gameSelector').value;
-        teamData[key].est = gatherData('homeEditor');
-        teamData[key].opp = gatherData('oppEditor');
-        localStorage.setItem('rangerHubData', JSON.stringify(teamData));
-        init();
-        closeEditor();
-    }
-
-    function gatherData(id) { return Array.from(document.getElementById(id).querySelectorAll('.editor-row')).map(row => ({ i: row.querySelector('.num').value, n: row.querySelector('.name').value, g: row.querySelector('.grade').value, p: row.querySelector('.pos').value })); }
-    function closeEditor() { document.getElementById('editorModal').style.display = 'none'; }
     window.onload = init;
 </script>
 </body>
