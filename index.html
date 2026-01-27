@@ -97,7 +97,7 @@
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
         .p-item {
-            padding: 12px 10px;
+            padding: 10px;
             margin-bottom: 5px;
             border-radius: 6px;
             background: transparent;
@@ -114,7 +114,20 @@
 
         .p-num { font-weight: 900; width: 35px; }
         .p-name { flex-grow: 1; text-align: left; padding-left: 8px; font-size: 0.95rem; }
-        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; }
+        .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; margin-right: 8px; }
+
+        .foul-btn {
+            background: #444;
+            color: white;
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 4px 6px;
+            font-weight: 900;
+            font-size: 0.75rem;
+            min-width: 40px;
+        }
+        .starter .foul-btn { background: rgba(0,0,0,0.2); border-color: black; color: black; }
+        .foul-btn.danger { background: var(--unavailable-red); color: white; border-color: white; }
 
         .center-stage {
             padding: 12px;
@@ -198,7 +211,7 @@
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Vault v30.0</div>
+            <div id="voiceTag">Desk Active</div>
             <div id="callText">Tap Ranger for 200 Calls</div>
             <div id="callCounter">0 / 200</div>
         </div>
@@ -216,7 +229,6 @@
 </div>
 
 <script>
-    // EXPANDED VAULT: 200 UNIQUE TEMPLATES
     const callTemplates = [
         "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
         "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
@@ -251,7 +263,6 @@
         "Tirico: [NAME] splash!", "Frazier: [NAME] winning!", "Brown: [NAME] touch!",
         "Jones: [NAME] bag!", "Walton: [NAME] cosmic!", "Harlan: [NAME] boom!",
         "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!",
-        // 101-200 RANGE STARTS HERE
         "Gus Johnson: [NAME]! HA-HAAA! UNBELIEVABLE!", "Kevin Calabro: [NAME] slinging the pill!", "Calabro: [NAME] with the high-octane finish!",
         "Pete Pratt: Clear the tracks, [NAME] is coming through!", "Ranger Pride: [NAME] is cooking with fire tonight!",
         "The Clackamas Call: The river is rising after that [NAME] bucket!", "Gus Johnson: [NAME]! RISE AND FIRE!",
@@ -304,17 +315,17 @@
         "Brown: [NAME]! KNOWS THE GAME!", "Jones: [NAME]! BAG!"
     ];
 
-    const gRoster = [{n:"Payton Lee", i:"1", g:"JR", p:"", s:0}, {n:"Sammi Klein", i:"2", g:"SO", p:"", s:0}, {n:"Ellianna Zavala", i:"3", g:"JR", p:"", s:0}, {n:"Ella Sandell", i:"4", g:"FR", p:"", s:0}, {n:"Emily Yost", i:"10", g:"SR", p:"", s:0}, {n:"Madison Seal", i:"11", g:"SO", p:"", s:0}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"", s:0}, {n:"Reagan Riggs", i:"15", g:"SR", p:"", s:0}, {n:"Paisley Shaw", i:"20", g:"FR", p:"", s:0}, {n:"Grace Sager", i:"21", g:"SO", p:"", s:0}, {n:"Shanley Colby", i:"24", g:"SO", p:"", s:0}];
-    const bRoster = [{n:"Davin Olsen", i:"0", g:"JR", s:0}, {n:"Gavin Gates", i:"1", g:"SR", s:0}, {n:"Connor Crawford", i:"2", g:"SR", s:0}, {n:"Broden Gates", i:"5", g:"SO", s:0}, {n:"Wyatt Nerpel", i:"10", g:"JR", s:0}, {n:"Landen Thomas", i:"11", g:"JR", s:0}, {n:"Lincoln Bunyard", i:"13", g:"JR", s:0}, {n:"Paul Ables", i:"15", g:"SR", s:0}, {n:"Dane Carpenter", i:"20", g:"SO", s:0}, {n:"Duke Durand", i:"22", g:"SO", s:0}, {n:"Zander Hulsey", i:"30", g:"JR", s:0}, {n:"Grant Carpenter", i:"41", g:"FR", s:0}];
+    const girlsRoster = [{n:"Payton Lee", i:"1", g:"JR", p:"", s:0, f:0}, {n:"Sammi Klein", i:"2", g:"SO", p:"", s:0, f:0}, {n:"Ellianna Zavala", i:"3", g:"JR", p:"", s:0, f:0}, {n:"Ella Sandell", i:"4", g:"FR", p:"", s:0, f:0}, {n:"Emily Yost", i:"10", g:"SR", p:"", s:0, f:0}, {n:"Madison Seal", i:"11", g:"SO", p:"", s:0, f:0}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"", s:0, f:0}, {n:"Reagan Riggs", i:"15", g:"SR", p:"", s:0, f:0}, {n:"Paisley Shaw", i:"20", g:"FR", p:"", s:0, f:0}, {n:"Grace Sager", i:"21", g:"SO", p:"", s:0, f:0}, {n:"Shanley Colby", i:"24", g:"SO", p:"", s:0, f:0}];
+    const boysRoster = [{n:"Davin Olsen", i:"0", g:"JR", s:0, f:0}, {n:"Gavin Gates", i:"1", g:"SR", s:0, f:0}, {n:"Connor Crawford", i:"2", g:"SR", s:0, f:0}, {n:"Broden Gates", i:"5", g:"SO", s:0, f:0}, {n:"Wyatt Nerpel", i:"10", g:"JR", s:0, f:0}, {n:"Landen Thomas", i:"11", g:"JR", s:0, f:0}, {n:"Lincoln Bunyard", i:"13", g:"JR", s:0, f:0}, {n:"Paul Ables", i:"15", g:"SR", s:0, f:0}, {n:"Dane Carpenter", i:"20", g:"SO", s:0, f:0}, {n:"Duke Durand", i:"22", g:"SO", s:0, f:0}, {n:"Zander Hulsey", i:"30", g:"JR", s:0, f:0}, {n:"Grant Carpenter", i:"41", g:"FR", s:0, f:0}];
 
     const teamData = {
-        unified: { est: [{n:"Horatio Anderson", i:"3", g:"UN", s:0}, {n:"Katelin Monize", i:"5", g:"UN", s:0}, {n:"Waylon Erickson", i:"6", g:"UN", s:0}, {n:"Eayden Eggers", i:"6", g:"UN", s:0}, {n:"Leza Becker", i:"8", g:"UN", s:0}, {n:"Skyei Kyle", i:"11", g:"UN", s:0}, {n:"Alex Harrell", i:"13", g:"UN", s:0}, {n:"Cherish Wischnofske", i:"15", g:"UN", s:0}, {n:"Lucas Clark", i:"15", g:"UN", s:0}, {n:"Nicholas Miles", i:"17", g:"UN", s:0}, {n:"Christopher Anderson", i:"21", g:"UN", s:0}, {n:"Michael Kyle", i:"25", g:"UN", s:0}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN", s:0}, {n:"Mae Anderson", i:"30", g:"UN", s:0}, {n:"Dagan DeAnda", i:"31", g:"UN", s:0}], opp: [{n:"Guest Player", i:"0", p:"G", g:"UN", s:0}], vName: "Oregon City" },
-        boys_gladstone: { est: bRoster, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO", s:0}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO", s:0}, {n:"Max McKee", i:"14", p:"G", g:"JR", s:0}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR", s:0}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO", s:0}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR", s:0}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO", s:0}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR", s:0}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR", s:0}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR", s:0}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO", s:0}], vName: "Gladstone" },
-        girls_mckay: { est: gRoster, opp: [{n:"Allison Reynolds", i:"1", p:"", g:"SO", s:0}, {n:"Karen Linares", i:"2", p:"", g:"JR", s:0}, {n:"Ameyah Higheagle", i:"3", p:"", g:"SO", s:0}, {n:"Tram Nguyen", i:"4", p:"", g:"SO", s:0}, {n:"Melissa Garcia Mejia", i:"5", p:"", g:"JR", s:0}, {n:"Priscilla Martinez", i:"10", p:"", g:"JR", s:0}, {n:"Lohlah Tanguy", i:"11", p:"", g:"JR", s:0}, {n:"Makaila Mau", i:"14", p:"", g:"JR", s:0}, {n:"Cassidy Dixon", i:"21", p:"", g:"SR", s:0}, {n:"Grace Truong", i:"23", p:"", g:"JR", s:0}, {n:"Emme Lopez", i:"24", p:"", g:"FR", s:0}, {n:"Saiya Sampson", i:"25", p:"", g:"SR", s:0}, {n:"Emily Escudero", i:"32", p:"", g:"SO", s:0}], vName: "McKay" },
-        boys_molalla: { est: bRoster, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR", s:0}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR", s:0}, {n:"Grant Brusseau", i:"3", p:"", g:"SR", s:0}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR", s:0}, {n:"Elijah Ott", i:"5", p:"", g:"SR", s:0}, {n:"Camdyn Morey", i:"10", p:"", g:"SR", s:0}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR", s:0}, {n:"Kurt Pederson", i:"14", p:"", g:"SR", s:0}, {n:"Andrew Dahl", i:"21", p:"", g:"JR", s:0}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR", s:0}], vName: "Molalla" },
-        girls_cascade: { est: gRoster, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR", s:0}, {n:"Halle Hammer", i:"1", p:"G", g:"JR", s:0}, {n:"Livia Free", i:"2", p:"G", g:"SR", s:0}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO", s:0}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO", s:0}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR", s:0}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR", s:0}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR", s:0}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR", s:0}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO", s:0}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR", s:0}], vName: "Cascade" },
-        girls_thedalles: { est: gRoster, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO", s:0}, {n:"Bryce Newby", i:"2", p:"G", g:"SO", s:0}, {n:"Morgan Donivan", i:"5", p:"G", g:"JR", s:0}, {n:"Molly Carter", i:"10", p:"G", g:"FR", s:0}, {n:"Hailey Johnston", i:"12", p:"G", g:"SR", s:0}, {n:"Willow Ziegenhagen", i:"14", p:"G", g:"SO", s:0}, {n:"Kate Dewey", i:"15", p:"G", g:"FR", s:0}, {n:"Anuhea Peters", i:"21", p:"G", g:"FR", s:0}, {n:"Evelyn Rogers", i:"23", p:"G", g:"JR", s:0}, {n:"Kestley Hodges", i:"24", p:"G", g:"JR", s:0}, {n:"Evelin Mondrogan", i:"25", p:"G", g:"SO", s:0}, {n:"Rozlyn Elliott", i:"32", p:"G", g:"FR", s:0}], vName: "The Dalles" },
-        boys_madras: { est: bRoster, opp: [{n:"John Buffalo-Ball", i:"10", p:"G", g:"JR", s:0}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR", s:0}, {n:"Dre Plazola", i:"14", p:"W/G", g:"JR", s:0}, {n:"Troy Adams", i:"20", p:"W", g:"SR", s:0}, {n:"Caleb Shank", i:"22", p:"W", g:"JR", s:0}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR", s:0}, {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR", s:0}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR", s:0}, {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO", s:0}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO", s:0}, {n:"Osmar Orozco", i:"42", p:"P", g:"JR", s:0}, {n:"Devin Super", i:"45", p:"P", g:"SO", s:0}], vName: "Madras" }
+        unified: { est: [{n:"Horatio Anderson", i:"3", g:"UN", s:0, f:0}, {n:"Katelin Monize", i:"5", g:"UN", s:0, f:0}, {n:"Waylon Erickson", i:"6", g:"UN", s:0, f:0}, {n:"Eayden Eggers", i:"6", g:"UN", s:0, f:0}, {n:"Leza Becker", i:"8", g:"UN", s:0, f:0}, {n:"Skyei Kyle", i:"11", g:"UN", s:0, f:0}, {n:"Alex Harrell", i:"13", g:"UN", s:0, f:0}, {n:"Cherish Wischnofske", i:"15", g:"UN", s:0, f:0}, {n:"Lucas Clark", i:"15", g:"UN", s:0, f:0}, {n:"Nicholas Miles", i:"17", g:"UN", s:0, f:0}, {n:"Christopher Anderson", i:"21", g:"UN", s:0, f:0}, {n:"Michael Kyle", i:"25", g:"UN", s:0, f:0}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN", s:0, f:0}, {n:"Mae Anderson", i:"30", g:"UN", s:0, f:0}, {n:"Dagan DeAnda", i:"31", g:"UN", s:0, f:0}], opp: [{n:"Guest Player", i:"0", p:"G", g:"UN", s:0, f:0}], vName: "Oregon City" },
+        boys_gladstone: { est: boysRoster, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO", s:0, f:0}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO", s:0, f:0}, {n:"Max McKee", i:"14", p:"G", g:"JR", s:0, f:0}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR", s:0, f:0}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO", s:0, f:0}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR", s:0, f:0}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO", s:0, f:0}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR", s:0, f:0}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR", s:0, f:0}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR", s:0, f:0}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO", s:0, f:0}], vName: "Gladstone" },
+        girls_mckay: { est: girlsRoster, opp: [{n:"Allison Reynolds", i:"1", p:"", g:"SO", s:0, f:0}, {n:"Karen Linares", i:"2", p:"", g:"JR", s:0, f:0}, {n:"Ameyah Higheagle", i:"3", p:"", g:"SO", s:0, f:0}, {n:"Tram Nguyen", i:"4", p:"", g:"SO", s:0, f:0}, {n:"Melissa Garcia Mejia", i:"5", p:"", g:"JR", s:0, f:0}, {n:"Priscilla Martinez", i:"10", p:"", g:"JR", s:0, f:0}, {n:"Lohlah Tanguy", i:"11", p:"", g:"JR", s:0, f:0}, {n:"Makaila Mau", i:"14", p:"", g:"JR", s:0, f:0}, {n:"Cassidy Dixon", i:"21", p:"", g:"SR", s:0, f:0}, {n:"Grace Truong", i:"23", p:"", g:"JR", s:0, f:0}, {n:"Emme Lopez", i:"24", p:"", g:"FR", s:0, f:0}, {n:"Saiya Sampson", i:"25", p:"", g:"SR", s:0, f:0}, {n:"Emily Escudero", i:"32", p:"", g:"SO", s:0, f:0}], vName: "McKay" },
+        boys_molalla: { est: boysRoster, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR", s:0, f:0}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR", s:0, f:0}, {n:"Grant Brusseau", i:"3", p:"", g:"SR", s:0, f:0}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR", s:0, f:0}, {n:"Elijah Ott", i:"5", p:"", g:"SR", s:0, f:0}, {n:"Camdyn Morey", i:"10", p:"", g:"SR", s:0, f:0}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR", s:0, f:0}, {n:"Kurt Pederson", i:"14", p:"", g:"SR", s:0, f:0}, {n:"Andrew Dahl", i:"21", p:"", g:"JR", s:0, f:0}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR", s:0, f:0}], vName: "Molalla" },
+        girls_cascade: { est: girlsRoster, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR", s:0, f:0}, {n:"Halle Hammer", i:"1", p:"G", g:"JR", s:0, f:0}, {n:"Livia Free", i:"2", p:"G", g:"SR", s:0, f:0}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO", s:0, f:0}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO", s:0, f:0}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR", s:0, f:0}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR", s:0, f:0}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR", s:0, f:0}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR", s:0, f:0}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO", s:0, f:0}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR", s:0, f:0}], vName: "Cascade" },
+        girls_thedalles: { est: girlsRoster, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO", s:0, f:0}, {n:"Bryce Newby", i:"2", p:"G", g:"SO", s:0, f:0}, {n:"Morgan Donivan", i:"5", p:"G", g:"JR", s:0, f:0}, {n:"Molly Carter", i:"10", p:"G", g:"FR", s:0, f:0}, {n:"Hailey Johnston", i:"12", p:"G", g:"SR", s:0, f:0}, {n:"Willow Ziegenhagen", i:"14", p:"G", g:"SO", s:0, f:0}, {n:"Kate Dewey", i:"15", p:"G", g:"FR", s:0, f:0}, {n:"Anuhea Peters", i:"21", p:"G", g:"FR", s:0, f:0}, {n:"Evelyn Rogers", i:"23", p:"G", g:"JR", s:0, f:0}, {n:"Kestley Hodges", i:"24", p:"G", g:"JR", s:0, f:0}, {n:"Evelin Mondrogan", i:"25", p:"G", g:"SO", s:0, f:0}, {n:"Rozlyn Elliott", i:"32", p:"G", g:"FR", s:0, f:0}], vName: "The Dalles" },
+        boys_madras: { est: boysRoster, opp: [{n:"John Buffalo-Ball", i:"10", p:"G", g:"JR", s:0, f:0}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR", s:0, f:0}, {n:"Dre Plazola", i:"14", p:"W/G", g:"JR", s:0, f:0}, {n:"Troy Adams", i:"20", p:"W", g:"SR", s:0, f:0}, {n:"Caleb Shank", i:"22", p:"W", g:"JR", s:0, f:0}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR", s:0, f:0}, {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR", s:0, f:0}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR", s:0, f:0}, {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO", s:0, f:0}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO", s:0, f:0}, {n:"Osmar Orozco", i:"42", p:"P", g:"JR", s:0, f:0}, {n:"Devin Super", i:"45", p:"P", g:"SO", s:0, f:0}], vName: "Madras" }
     };
 
     let flipped = false;
@@ -328,10 +339,13 @@
     }
 
     function renderLists(game) {
+        // Starters (s=1) go to top, then sorted numerically
         const estSorted = [...game.est].sort((a,b) => (b.s === 1) - (a.s === 1) || parseInt(a.i) - parseInt(b.i));
         const oppSorted = [...game.opp].sort((a,b) => (b.s === 1) - (a.s === 1) || parseInt(a.i) - parseInt(b.i));
+        
         renderPanel('leftList', flipped ? oppSorted : estSorted);
         renderPanel('rightList', flipped ? estSorted : oppSorted);
+        
         document.getElementById('leftTitle').innerText = flipped ? game.vName : "Estacada (Home)";
         document.getElementById('rightTitle').innerText = flipped ? "Estacada (Home)" : game.vName;
     }
@@ -343,13 +357,35 @@
             const item = document.createElement('div');
             item.className = `p-item ${p.s === 1 ? 'starter' : ''} ${p.s === 2 ? 'unavailable' : ''}`;
             const meta = p.p ? `${p.p} | ${p.g}` : p.g;
-            item.innerHTML = `<span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-meta">${meta}</span>`;
+            item.innerHTML = `
+                <span class="p-num">${p.i}</span>
+                <span class="p-name">${p.n}</span>
+                <span class="p-meta">${meta}</span>
+                <button class="foul-btn ${p.f >= 5 ? 'danger' : ''}" onclick="event.stopPropagation(); addFoul(this, ${JSON.stringify(p).replace(/"/g, '&quot;')})">${p.f} F</button>
+            `;
             item.onclick = () => {
-                p.s = (p.s + 1) % 3;
+                if (p.f < 5) {
+                    p.s = (p.s + 1) % 2; // Cycle Neutral -> Yellow
+                } else {
+                    p.s = 2; // Forced Unavailable
+                }
                 init();
             };
             div.appendChild(item);
         });
+    }
+
+    /* RESTORED FOUL LOGIC */
+    function addFoul(btn, pRef) {
+        const key = document.getElementById('gameSelector').value;
+        const game = teamData[key];
+        const player = [...game.est, ...game.opp].find(x => x.n === pRef.n && x.i === pRef.i);
+        
+        player.f++;
+        if (player.f >= 5) {
+            player.s = 2; // Auto Unavailable
+        }
+        init();
     }
 
     function renderTriggers(data) {
@@ -377,7 +413,6 @@
         const count = document.getElementById('callCounter');
         if (!pCounts[name]) pCounts[name] = 0;
         const idx = pCounts[name];
-        // Now cycles through 200 templates
         txt.innerText = callTemplates[idx].replace("[NAME]", name).replace("[NUM]", num);
         count.innerText = `${idx + 1} / 200`;
         pCounts[name] = (idx + 1) % 200;
@@ -387,7 +422,7 @@
     function playShot(type) {
         const txt = document.getElementById('callText');
         if (type === '2pt') {
-            const calls = ["Bang!", "Bucket!", "Got it!", "Count it!", "Ranger Points!", "Bucket for the Green and White!"];
+            const calls = ["Bang!", "Bucket!", "Got it!", "Count it!", "Ranger Points!"];
             txt.innerText = calls[Math.floor(Math.random() * calls.length)];
             txt.style.color = "white";
         } else {
