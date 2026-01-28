@@ -22,96 +22,60 @@
 
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0;
-            background-color: var(--ranger-black);
-            color: var(--ranger-white);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            margin: 0; background-color: var(--ranger-black);
+            color: var(--ranger-white); height: 100vh;
+            display: flex; flex-direction: column; overflow: hidden;
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--ranger-green);
-            padding: 8px 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--ranger-green); padding: 8px 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5); z-index: 10;
         }
 
         h1 { margin: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; }
-
         .header-controls { display: flex; align-items: center; gap: 8px; }
         
         select, .btn-ctrl {
-            background: var(--ranger-black);
-            color: white;
-            border: 1px solid var(--ranger-white);
-            padding: 6px 10px;
-            font-weight: 900;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
+            background: var(--ranger-black); color: white;
+            border: 1px solid var(--ranger-white); padding: 6px 10px;
+            font-weight: 900; border-radius: 8px; cursor: pointer; font-size: 0.75rem;
         }
 
         .btn-manage { background: var(--edit-blue); border: none; }
         .btn-sports { background: var(--sports-purple); border: none; }
 
         .possession-container {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: #222;
-            padding: 4px 10px;
-            border-radius: 50px;
+            display: flex; align-items: center; gap: 6px;
+            background: #222; padding: 4px 10px; border-radius: 50px;
         }
 
         .arrow { font-size: 1.3rem; color: #444; cursor: pointer; user-select: none; }
         .arrow.active { color: var(--starter-yellow); text-shadow: 0 0 10px var(--starter-yellow); }
 
         .dashboard {
-            display: grid;
-            grid-template-columns: 340px 1fr 340px; 
-            flex-grow: 1;
-            overflow: hidden;
+            display: grid; grid-template-columns: 340px 1fr 340px; 
+            flex-grow: 1; overflow: hidden;
         }
 
         .roster-pane {
-            background: var(--ranger-grey);
-            border: 1px solid #333;
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            overflow: hidden;
+            background: var(--ranger-grey); border: 1px solid #333;
+            display: flex; flex-direction: column; padding: 10px; overflow: hidden;
         }
 
         .pane-header {
-            font-size: 0.8rem;
-            color: var(--ranger-green);
-            background: var(--ranger-white);
-            text-align: center;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            padding: 6px;
-            font-weight: 900;
-            border-radius: 4px;
+            font-size: 0.8rem; color: var(--ranger-green); background: var(--ranger-white);
+            text-align: center; text-transform: uppercase; margin-bottom: 8px;
+            padding: 6px; font-weight: 900; border-radius: 4px;
         }
 
         .scroll-list { flex-grow: 1; overflow-y: auto; }
 
         .p-item {
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 6px;
-            background: transparent;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #333;
-            transition: background-color 0.2s;
+            padding: 10px; margin-bottom: 5px; border-radius: 6px;
+            background: transparent; cursor: pointer; display: flex;
+            justify-content: space-between; align-items: center;
+            border: 1px solid #333; transition: background-color 0.2s;
         }
 
         .p-item.starter { background: var(--starter-yellow); color: black; font-weight: 900; border-color: black; }
@@ -122,86 +86,46 @@
         .p-meta { font-size: 0.75rem; font-weight: 800; opacity: 0.9; text-align: right; white-space: nowrap; margin-right: 8px; }
 
         .foul-btn {
-            background: #444;
-            color: white;
-            border: 1px solid #666;
-            border-radius: 4px;
-            padding: 4px 6px;
-            font-weight: 900;
-            font-size: 0.75rem;
-            min-width: 40px;
+            background: #444; color: white; border: 1px solid #666;
+            border-radius: 4px; padding: 4px 6px; font-weight: 900;
+            font-size: 0.75rem; min-width: 40px;
         }
         .starter .foul-btn { background: rgba(0,0,0,0.2); border-color: black; color: black; }
         .foul-btn.danger { background: var(--unavailable-red); color: white; border-color: white; }
 
-        .center-stage {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-            border-left: 2px solid var(--ranger-green);
-            border-right: 2px solid var(--ranger-green);
-        }
+        .center-stage { padding: 12px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; border-left: 2px solid var(--ranger-green); border-right: 2px solid var(--ranger-green); }
 
         .monitor {
-            background: #000;
-            border: 2px solid var(--ranger-green);
-            border-radius: 15px;
-            padding: 15px;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
+            background: #000; border: 2px solid var(--ranger-green);
+            border-radius: 15px; padding: 15px; min-height: 120px;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; position: relative;
         }
 
-        #voiceTag { font-size: 0.85rem; color: var(--ranger-green); font-weight: 800; text-transform: uppercase; margin-bottom: 4px; }
         #callText { font-size: 1.5rem; font-weight: 900; text-align: center; line-height: 1.2; }
         #callCounter { position: absolute; bottom: 8px; right: 12px; font-size: 0.65rem; color: #444; font-weight: bold; }
 
         .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .s-btn {
-            padding: 15px;
-            font-size: 0.9rem;
-            font-weight: 900;
-            border-radius: 10px;
-            border: none;
-            text-transform: uppercase;
-        }
+        .s-btn { padding: 15px; font-size: 0.9rem; font-weight: 900; border-radius: 10px; border: none; text-transform: uppercase; }
         .btn-2 { background: var(--ranger-green); color: white; }
         .btn-3 { background: var(--ranger-white); color: black; }
 
         .call-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .p-call-btn {
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 12px 2px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            cursor: pointer;
+            background: #222; color: white; border: 1px solid #444;
+            padding: 12px 2px; border-radius: 8px; font-size: 0.7rem;
+            font-weight: 700; cursor: pointer;
         }
 
         .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 100;
-            padding: 20px;
-            box-sizing: border-box;
-            overflow-y: auto;
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9); z-index: 100; padding: 20px; box-sizing: border-box; overflow-y: auto;
         }
 
-        .modal-content { background: #1a1a1a; padding: 30px; border-radius: 15px; max-width: 700px; margin: auto; }
+        .modal-content { background: #1a1a1a; padding: 30px; border-radius: 15px; max-width: 800px; margin: auto; }
         .sports-text { font-size: 1.3rem; line-height: 1.6; text-align: left; border-left: 5px solid var(--sports-purple); padding-left: 20px; }
         .editor-row { display: grid; grid-template-columns: 60px 1fr 60px 60px 40px; gap: 10px; margin-bottom: 10px; }
         .editor-row input { background: #333; color: white; border: 1px solid #555; padding: 10px; border-radius: 5px; }
-        .btn-danger { background: var(--unavailable-red); border: none; color: white; border-radius: 5px; }
-        .btn-save { background: var(--ranger-green); width: 100%; padding: 15px; color: white; font-weight: 900; margin-top: 20px; border: none; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -229,14 +153,14 @@
 </header>
 
 <div class="dashboard">
-    <div id="listPane1" class="roster-pane">
+    <div id="pane1" class="roster-pane">
         <div class="pane-header" id="title1">Estacada (Home)</div>
         <div id="list1" class="scroll-list"></div>
     </div>
 
     <div class="center-stage">
         <div class="monitor">
-            <div id="voiceTag">Broadcaster Hub</div>
+            <div id="voiceTag" style="font-size:0.8rem; color:var(--ranger-green); font-weight:800; margin-bottom:4px;">Vault v36.0</div>
             <div id="callText">Tap Ranger for 200 Calls</div>
             <div id="callCounter">0 / 200</div>
         </div>
@@ -247,7 +171,7 @@
         <div id="callTriggers" class="call-grid"></div>
     </div>
 
-    <div id="listPane2" class="roster-pane">
+    <div id="pane2" class="roster-pane">
         <div class="pane-header" id="title2">Visitor</div>
         <div id="list2" class="scroll-list"></div>
     </div>
@@ -255,104 +179,157 @@
 
 <div id="sportsModal" class="modal">
     <div class="modal-content">
-        <h2 style="color:var(--sports-purple); margin-top:0;">OSAA Sportsmanship Statement</h2>
+        <h2 style="color:var(--sports-purple); margin-top:0;">Sportsmanship Statement</h2>
         <div class="sports-text">
             Estacada High School is a member school of the Oregon State Activities Association that promotes good sportsmanship and is committed to the true spirit of competition. The OSAA requests that you model good sportsmanship by refraining from derogatory cheers, chants, or behavior toward students, coaches, officials, or other spectators. Speak out if you see inappropriate behavior by immediately notifying event management staff. Together, we can provide a safe and respectful environment for all.
         </div>
-        <button class="btn-save" style="background:#444;" onclick="closeSports()">Close Statement</button>
+        <button class="btn-ctrl" style="width:100%; margin-top:20px; padding:15px;" onclick="closeSports()">Close</button>
     </div>
 </div>
 
 <div id="editorModal" class="modal">
-    <div class="modal-content" style="max-width:800px;">
+    <div class="modal-content">
         <h2 style="color:var(--edit-blue)">Manage Rosters</h2>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div><h3>Estacada (Home)</h3><div id="homeEditor"></div><button class="btn-ctrl" onclick="addRow('home')">+ Add Ranger</button></div>
-            <div><h3>Visitor</h3><div id="oppEditor"></div><button class="btn-ctrl" onclick="addRow('opp')">+ Add Visitor</button></div>
+            <div><h3>Home</h3><div id="homeEditor"></div><button class="btn-ctrl" onclick="addRow('home')">+ Add</button></div>
+            <div><h3>Visitor</h3><div id="oppEditor"></div><button class="btn-ctrl" onclick="addRow('opp')">+ Add</button></div>
         </div>
-        <button class="btn-save" onclick="saveAndClose()">Apply Changes & Save</button>
-        <button class="btn-ctrl" style="width:100%; margin-top:10px; background:#444;" onclick="closeEditor()">Cancel</button>
+        <button class="btn-ctrl" style="background:var(--ranger-green); width:100%; margin-top:20px; padding:15px;" onclick="saveAndClose()">Save Changes</button>
+        <button class="btn-ctrl" style="width:100%; margin-top:10px;" onclick="closeEditor()">Cancel</button>
     </div>
 </div>
 
 <script>
-    // EXPANDED 200 CALLS
-    const callTemplates = [
-        "Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", 
-        "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!",
-        "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin'!",
-        "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] credit!",
-        "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!",
-        "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!",
-        "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] finger roll!",
-        "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs!",
-        "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] bag!",
-        "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!",
-        "Mason: [NAME] for TWO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME] BINGO!",
-        "Most: [NAME] intercept!", "Vitale: [NAME] awesome baby!", "Eagle: [NAME] elevation!",
-        "Marv: Spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!",
-        "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] dealin'!", "Brown: [NAME] knows the game!",
-        "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!",
-        "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] touch!",
-        "Hearn: [NAME] reverse!", "King: [NAME] spicy sauce!", "Eagle: [NAME] terminate!",
-        "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] play!",
-        "Albert: [NAME] from deep!", "Hearn: [NAME] jello!", "King: [NAME] meatballs!",
-        "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: # [NUM], [NAME]!",
-        "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP'er!", "Eagle: [NAME] rim-rock!",
-        "Marv: [NAME] wing!", "Hearn: [NAME] eggs!", "King: [NAME] hot!",
-        "Tirico: [NAME] got it!", "Frazier: [NAME] bounds!", "Brown: [NAME] credit!",
-        "Jones: [NAME] bag!", "Walton: [NAME] star!", "Harlan: [NAME] thunder!",
-        "Breen: [NAME] triple!", "Mason: [NAME] Rangers!", "Albert: [NAME] YES!",
-        "Hearn: [NAME] bridge!", "King: [NAME] memo!", "Eagle: [NAME] rack!",
-        "Tirico: [NAME] ride!", "Frazier: [NAME] spin!", "Brown: [NAME] play!",
-        "Jones: [NAME] cold!", "Walton: [NAME] event!", "Harlan: [NAME] eyes!",
-        "Breen: [NAME] bang!", "Mason: [NAME] points!", "Albert: [NAME] touch!",
-        "Hearn: [NAME] fridge!", "King: [NAME] sauce!", "Eagle: [NAME] attack!",
-        "Tirico: [NAME] splash!", "Frazier: [NAME] winning!", "Brown: [NAME] touch!",
-        "Jones: [NAME] bag!", "Walton: [NAME] cosmic!", "Harlan: [NAME] boom!",
-        "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!",
-        "Gus Johnson: HA-HAAA! [NAME]!", "Calabro: [NAME] slinging the pill!", "Pete Pratt: Clear the tracks!",
-        "Ranger Pride: [NAME] is cooking tonight!", "Clackamas: River is rising!",
-        "Johnson: RISE AND FIRE, [NAME]!", "Main Street: Downtown delivery!",
-        "McIver: Trail-blazing move, [NAME]!", "Eagle Creek: Soaring to the rim!",
-        "Boring, OR: Nothing boring about [NAME]!", "Colton: [NAME] sending it back!",
-        "Ranger Nation: Hear the crowd for [NAME]!", "Vitale: Kiddin' me, [NAME]!",
-        "Johnson: FOR THE LEAD!", "Breen: Crossover by [NAME]!", "Harlan: POWER BY [NAME]!",
-        "Lawler: BINGO [NAME]!", "Tirico: Are you serious?!", "Frazier: Shakin' bakin'!",
-        "Brown: High floor logic!", "Jones: In his bag!", "Walton: The future is [NAME]!",
-        "King: Put 'em on a poster!", "Eagle: Heavy lifting!", "Michaels: Miracle finish!",
-        "Most: Takes it away!", "Costas: Defining moment!", "Demers: Pure effort!", "Johnson: COLD BLOODED!",
-        "Calabro: Painting corners!", "Ranger Pride: Green and White!", "Clackamas: Flood of points!",
-        "Main Street: Mayor of the court!", "Eagle Creek: Vertical jump!", "Colton: Out of the woods!",
-        "Breen: PURE!", "Harlan: FLAMETHROWER!", "Marv: VINTAGE!", "Hearn: Mustard and onions!",
-        "Wheels: YOU BETCHA!", "Tirico: AT THE BUZZER!", "Frazier: TANTALIZING!", "Walton: SYMPHONY!",
-        "King: DRIVE THE BUS!", "Eagle: AUTHORITY!", "Brown: HIGH IQ!", "Jones: TOO MUCH SAUCE!",
-        "Lawler: OH ME OH MY!", "Most: HE IS EVERYWHERE!", "Vitale: MAGNIFICENT!", "Michaels: ONE FOR THE AGES!",
-        "Costas: MASTERFUL!", "Demers: UNSTOPPABLE!", "Gus Johnson: HEART OF A CHAMPION!",
-        "Calabro: ROUNDBALL ROYALTY!", "Pratt: THAT IS RANGER BALL!", "Ranger Nation: LEADING THE CHARGE!",
-        "Breen: FROM DEEP!", "Harlan: UNGUARDABLE!", "Marv: LAND OF PLENTY!", "Hearn: IN THE FRIDGE!",
-        "Wheels: BOOM!", "Tirico: GOT IT!", "Frazier: PRANCIN'!", "Walton: STAR IS BORN!",
-        "King: HOT!", "Eagle: ATTACK!", "Brown: CREDIT!", "Jones: COLD!",
-        "Lawler: BINGO!", "Most: STEAL!", "Vitale: BABY!", "Michaels: BELIEVE!",
-        "Costas: DRAMA!", "Demers: LEADERSHIP!", "Gus Johnson: HA-HAAA!",
-        "Calabro: SLINGING IT!", "Pratt: BOOM!", "Ranger Pride: GREEN AND WHITE!",
-        "Main Street: DOWNTOWN!", "Breen: BANG!", "Harlan: NO REGARD!",
-        "Marv: YES!", "Hearn: FRIDGE!", "Wheels: BOOM-SHAKALAKA!",
-        "Tirico: SPLASH!", "Frazier: WINNING!", "Walton: CELESTIAL!",
-        "King: HOT SAUCE!", "Eagle: TERMINATE!", "Brown: KNOWS THE GAME!", "Jones: BAG!"
-    ];
+    // 200 templates preserved...
+    const callTemplates = ["Mike Breen: [NAME]... BANG!", "Kevin Harlan: [NAME] WITH NO REGARD!", "Marv Albert: YES! And the foul for [NAME]!", "Chick Hearn: [NAME] puts it in the fridge!", "Wheels: BOOM-SHAKALAKA, [NAME]!", "Tirico: [NAME]... GOT IT!", "Calabro: [NAME] slinging the rock!", "Stacey King: Give [NAME] the hot sauce!", "Walt Frazier: [NAME] dancin'!", "Bill Walton: A celestial event by [NAME]!", "Ian Eagle: A rack attack by [NAME]!", "Hubie Brown: Give [NAME] credit!", "Mark Jones: [NAME] is hot as fish grease!", "Ralph Lawler: Oh me, oh my! BINGO [NAME]!", "Johnny Most: [NAME] with the steal!", "Dick Vitale: [NAME] is a diaper dandy!", "Bob Costas: Pure drama from [NAME]!", "Travis Demers: LEADERSHIP from [NAME]!", "Al Michaels: Do you believe in [NAME]?!", "Mike Fratello: The Czar loves [NAME]!", "Chick Hearn: [NAME] finger roll!", "Harlan: [NAME] RIGHT BETWEEN THE EYES!", "Breen: Put it in the book for [NAME]!", "King: [NAME] goes upstairs!", "Marv: [NAME] from the land of plenty!", "Frazier: [NAME] hooping and scooping!", "Jones: [NAME] bag!", "Walton: [NAME] cosmic star!", "Harlan: [NAME] FROM THE PARKING LOT!", "Breen: BANG! BANG! [NAME]!", "Mason: [NAME] for TWO!", "Clay: Aaaaaannnd now... [NAME]!", "Lawler: [NAME] BINGO!", "Most: [NAME] intercept!", "Vitale: [NAME] awesome baby!", "Eagle: [NAME] elevation!", "Marv: Spectacular move by [NAME]!", "Hearn: [NAME] pitty-pat!", "King: Did you get the memo, [NAME]?!", "Tirico: [NAME] gives it a ride!", "Frazier: [NAME] dealin'!", "Brown: [NAME] knows the game!", "Jones: [NAME] too cold!", "Walton: [NAME] violation of physics!", "Harlan: [NAME] SUCKS THE GRAVITY OUT!", "Breen: [NAME] from downtown!", "Mason: [NAME] Rangers style!", "Marv: [NAME] touch!", "Hearn: [NAME] reverse!", "King: [NAME] spicy sauce!", "Eagle: [NAME] terminate!", "Tirico: [NAME]... SPLASH!", "Frazier: [NAME]ounds!", "Brown: [NAME] play!", "Albert: [NAME] from deep!", "Hearn: [NAME] jello!", "King: [NAME] meatballs!", "Harlan: [NAME] BUCKLE UP!", "Breen: [NAME] takes it!", "Clay: # [NUM], [NAME]!", "Lawler: [NAME] BINGO!", "Vitale: [NAME] PTP'er!", "Eagle: [NAME] rim-rock!", "Marv: [NAME] wing!", "Hearn: [NAME] eggs!", "King: [NAME] hot!", "Tirico: [NAME] got it!", "Frazier: [NAME] bounds!", "Brown: [NAME] credit!", "Jones: [NAME] bag!", "Walton: [NAME] star!", "Harlan: [NAME] thunder!", "Breen: [NAME] triple!", "Mason: [NAME] Rangers!", "Albert: [NAME] YES!", "Hearn: [NAME] bridge!", "King: [NAME] memo!", "Eagle: [NAME] rack!", "Tirico: [NAME] ride!", "Frazier: [NAME] spin!", "Brown: [NAME] play!", "Jones: [NAME] cold!", "Walton: [NAME] event!", "Harlan: [NAME] eyes!", "Breen: [NAME] bang!", "Mason: [NAME] points!", "Albert: [NAME] touch!", "Hearn: [NAME] fridge!", "King: [NAME] sauce!", "Eagle: [NAME] attack!", "Tirico: [NAME] splash!", "Frazier: [NAME] winning!", "Brown: [NAME] touch!", "Jones: [NAME] bag!", "Walton: [NAME] cosmic!", "Harlan: [NAME] boom!", "Breen: [NAME] book!", "Mason: [NAME] varsity!", "Albert: [NAME] spectacular!", "Gus Johnson: HA-HAAA! [NAME]!", "Calabro: [NAME] slinging the pill!", "Pete Pratt: Clear the tracks!", "Ranger Pride: [NAME] is cooking tonight!", "Clackamas: River is rising!", "Johnson: RISE AND FIRE, [NAME]!", "Main Street: Downtown delivery!", "McIver: Trail-blazing move, [NAME]!", "Eagle Creek: Soaring to the rim!", "Boring, OR: Nothing boring about [NAME]!", "Colton: [NAME] sending it back!", "Ranger Nation: Hear the crowd for [NAME]!", "Vitale: Kiddin' me, [NAME]!", "Johnson: FOR THE LEAD!", "Breen: Crossover by [NAME]!", "Harlan: POWER BY [NAME]!", "Lawler: BINGO [NAME]!", "Tirico: Are you serious?!", "Frazier: Shakin' bakin'!", "Brown: High floor logic!", "Jones: In his bag!", "Walton: The future is [NAME]!", "King: Put 'em on a poster!", "Eagle: Heavy lifting!", "Michaels: Miracle finish!", "Most: Takes it away!", "Costas: Defining moment!", "Demers: Pure effort!", "Johnson: COLD BLOODED!", "Calabro: Painting corners!", "Ranger Pride: Green and White!", "Clackamas: Flood of points!", "Main Street: Mayor of the court!", "Eagle Creek: Vertical jump!", "Colton: Out of the woods!", "Breen: PURE!", "Harlan: FLAMETHROWER!", "Marv: VINTAGE!", "Hearn: Mustard and onions!", "Wheels: YOU BETCHA!", "Tirico: AT THE BUZZER!", "Frazier: TANTALIZING!", "Walton: SYMPHONY!", "King: DRIVE THE BUS!", "Eagle: AUTHORITY!", "Brown: HIGH IQ!", "Jones: TOO MUCH SAUCE!", "Lawler: OH ME OH MY!", "Most: HE IS EVERYWHERE!", "Vitale: MAGNIFICENT!", "Michaels: ONE FOR THE AGES!", "Costas: MASTERFUL!", "Demers: UNSTOPPABLE!", "Gus Johnson: HEART OF A CHAMPION!", "Calabro: ROUNDBALL ROYALTY!", "Pratt: THAT IS RANGER BALL!", "Ranger Nation: LEADING THE CHARGE!", "Breen: FROM DEEP!", "Harlan: UNGUARDABLE!", "Marv: LAND OF PLENTY!", "Hearn: IN THE FRIDGE!", "Wheels: BOOM!", "Tirico: GOT IT!", "Frazier: PRANCIN'!", "Walton: STAR IS BORN!", "King: HOT!", "Eagle: ATTACK!", "Brown: CREDIT!", "Jones: COLD!", "Lawler: BINGO!", "Most: STEAL!", "Vitale: BABY!", "Michaels: BELIEVE!", "Costas: DRAMA!", "Demers: LEADERSHIP!", "Gus Johnson: HA-HAAA!", "Calabro: SLINGING IT!", "Pratt: BOOM!", "Ranger Pride: GREEN AND WHITE!", "Main Street: DOWNTOWN!", "Breen: BANG!", "Harlan: NO REGARD!", "Marv: YES!", "Hearn: FRIDGE!", "Wheels: BOOM-SHAKALAKA!", "Tirico: SPLASH!", "Frazier: WINNING!", "Walton: CELESTIAL!", "King: HOT SAUCE!", "Eagle: TERMINATE!", "Brown: KNOWS THE GAME!", "Jones: BAG!"];
 
-    const girlsRoster = [{n:"Payton Lee", i:"1", g:"JR", p:"", s:0, f:0}, {n:"Sammi Klein", i:"2", g:"SO", p:"", s:0, f:0}, {n:"Ellianna Zavala", i:"3", g:"JR", p:"", s:0, f:0}, {n:"Ella Sandell", i:"4", g:"FR", p:"", s:0, f:0}, {n:"Emily Yost", i:"10", g:"SR", p:"", s:0, f:0}, {n:"Madison Seal", i:"11", g:"SO", p:"", s:0, f:0}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"", s:0, f:0}, {n:"Reagan Riggs", i:"15", g:"SR", p:"", s:0, f:0}, {n:"Paisley Shaw", i:"20", g:"FR", p:"", s:0, f:0}, {n:"Grace Sager", i:"21", g:"SO", p:"", s:0, f:0}, {n:"Shanley Colby", i:"24", g:"SO", p:"", s:0, f:0}];
-    const boysRoster = [{n:"Davin Olsen", i:"0", g:"JR", s:0, f:0}, {n:"Gavin Gates", i:"1", g:"SR", s:0, f:0}, {n:"Connor Crawford", i:"2", g:"SR", s:0, f:0}, {n:"Broden Gates", i:"5", g:"SO", s:0, f:0}, {n:"Wyatt Nerpel", i:"10", g:"JR", s:0, f:0}, {n:"Landen Thomas", i:"11", g:"JR", s:0, f:0}, {n:"Lincoln Bunyard", i:"13", g:"JR", s:0, f:0}, {n:"Paul Ables", i:"15", g:"SR", s:0, f:0}, {n:"Dane Carpenter", i:"20", g:"SO", s:0, f:0}, {n:"Duke Durand", i:"22", g:"SO", s:0, f:0}, {n:"Zander Hulsey", i:"30", g:"JR", s:0, f:0}, {n:"Grant Carpenter", i:"41", g:"FR", s:0, f:0}];
+    const gR = [{n:"Payton Lee", i:"1", g:"JR", p:"", s:0, f:0}, {n:"Sammi Klein", i:"2", g:"SO", p:"", s:0, f:0}, {n:"Ellianna Zavala", i:"3", g:"JR", p:"", s:0, f:0}, {n:"Ella Sandell", i:"4", g:"FR", p:"", s:0, f:0}, {n:"Emily Yost", i:"10", g:"SR", p:"", s:0, f:0}, {n:"Madison Seal", i:"11", g:"SO", p:"", s:0, f:0}, {n:"Kenzie Stubblefield", i:"14", g:"FR", p:"", s:0, f:0}, {n:"Reagan Riggs", i:"15", g:"SR", p:"", s:0, f:0}, {n:"Paisley Shaw", i:"20", g:"FR", p:"", s:0, f:0}, {n:"Grace Sager", i:"21", g:"SO", p:"", s:0, f:0}, {n:"Shanley Colby", i:"24", g:"SO", p:"", s:0, f:0}];
+    const bR = [{n:"Davin Olsen", i:"0", g:"JR", s:0, f:0}, {n:"Gavin Gates", i:"1", g:"SR", s:0, f:0}, {n:"Connor Crawford", i:"2", g:"SR", s:0, f:0}, {n:"Broden Gates", i:"5", g:"SO", s:0, f:0}, {n:"Wyatt Nerpel", i:"10", g:"JR", s:0, f:0}, {n:"Landen Thomas", i:"11", g:"JR", s:0, f:0}, {n:"Lincoln Bunyard", i:"13", g:"JR", s:0, f:0}, {n:"Paul Ables", i:"15", g:"SR", s:0, f:0}, {n:"Dane Carpenter", i:"20", g:"SO", s:0, f:0}, {n:"Duke Durand", i:"22", g:"SO", s:0, f:0}, {n:"Zander Hulsey", i:"30", g:"JR", s:0, f:0}, {n:"Grant Carpenter", i:"41", g:"FR", s:0, f:0}];
 
-    const defaultData = {
+    const masterRosters = {
         unified: { est: [{n:"Horatio Anderson", i:"3", g:"UN", s:0, f:0}, {n:"Katelin Monize", i:"5", g:"UN", s:0, f:0}, {n:"Waylon Erickson", i:"6", g:"UN", s:0, f:0}, {n:"Eayden Eggers", i:"6", g:"UN", s:0, f:0}, {n:"Leza Becker", i:"8", g:"UN", s:0, f:0}, {n:"Skyei Kyle", i:"11", g:"UN", s:0, f:0}, {n:"Alex Harrell", i:"13", g:"UN", s:0, f:0}, {n:"Cherish Wischnofske", i:"15", g:"UN", s:0, f:0}, {n:"Lucas Clark", i:"15", g:"UN", s:0, f:0}, {n:"Nicholas Miles", i:"17", g:"UN", s:0, f:0}, {n:"Christopher Anderson", i:"21", g:"UN", s:0, f:0}, {n:"Michael Kyle", i:"25", g:"UN", s:0, f:0}, {n:"Nathaniel Paz Sosa", i:"29", g:"UN", s:0, f:0}, {n:"Mae Anderson", i:"30", g:"UN", s:0, f:0}, {n:"Dagan DeAnda", i:"31", g:"UN", s:0, f:0}], opp: [{n:"Guest", i:"0", p:"G", g:"UN", s:0, f:0}], vName: "Oregon City" },
-        boys_gladstone: { est: boysRoster, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO", s:0, f:0}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO", s:0, f:0}, {n:"Max McKee", i:"14", p:"G", g:"JR", s:0, f:0}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR", s:0, f:0}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO", s:0, f:0}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR", s:0, f:0}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO", s:0, f:0}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR", s:0, f:0}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR", s:0, f:0}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR", s:0, f:0}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO", s:0, f:0}], vName: "Gladstone" },
-        girls_mckay: { est: girlsRoster, opp: [{n:"Allison Reynolds", i:"1", p:"", g:"SO", s:0, f:0}, {n:"Karen Linares", i:"2", p:"", g:"JR", s:0, f:0}, {n:"Ameyah Higheagle", i:"3", p:"", g:"SO", s:0, f:0}, {n:"Tram Nguyen", i:"4", p:"", g:"SO", s:0, f:0}, {n:"Melissa Garcia Mejia", i:"5", p:"", g:"JR", s:0, f:0}, {n:"Priscilla Martinez", i:"10", p:"", g:"JR", s:0, f:0}, {n:"Lohlah Tanguy", i:"11", p:"", g:"JR", s:0, f:0}, {n:"Makaila Mau", i:"14", p:"", g:"JR", s:0, f:0}, {n:"Cassidy Dixon", i:"21", p:"", g:"SR", s:0, f:0}, {n:"Grace Truong", i:"23", p:"", g:"JR", s:0, f:0}, {n:"Emme Lopez", i:"24", p:"", g:"FR", s:0, f:0}, {n:"Saiya Sampson", i:"25", p:"", g:"SR", s:0, f:0}, {n:"Emily Escudero", i:"32", p:"", g:"SO", s:0, f:0}], vName: "McKay" },
-        boys_molalla: { est: boysRoster, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR", s:0, f:0}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR", s:0, f:0}, {n:"Grant Brusseau", i:"3", p:"", g:"SR", s:0, f:0}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR", s:0, f:0}, {n:"Elijah Ott", i:"5", p:"", g:"SR", s:0, f:0}, {n:"Camdyn Morey", i:"10", p:"", g:"SR", s:0, f:0}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR", s:0, f:0}, {n:"Kurt Pederson", i:"14", p:"", g:"SR", s:0, f:0}, {n:"Andrew Dahl", i:"21", p:"", g:"JR", s:0, f:0}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR", s:0, f:0}], vName: "Molalla" },
-        girls_cascade: { est: girlsRoster, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR", s:0, f:0}, {n:"Halle Hammer", i:"1", p:"G", g:"JR", s:0, f:0}, {n:"Livia Free", i:"2", p:"G", g:"SR", s:0, f:0}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO", s:0, f:0}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO", s:0, f:0}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR", s:0, f:0}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR", s:0, f:0}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR", s:0, f:0}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR", s:0, f:0}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO", s:0, f:0}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR", s:0, f:0}], vName: "Cascade" },
-        girls_thedalles: { est: girlsRoster, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO", s:0, f:0}, {n:"Bryce Newby", i:"2", p:"G", g:"SO", s:0, f:0}, {n:"Morgan Donivan", i:"5", p:"G", g:"JR", s:0, f:0}, {n:"Molly Carter", i:"10", p:"G", g:"FR", s:0, f:0}, {n:"Hailey Johnston", i:"12", p:"G", g:"SR", s:0, f:0}, {n:"Willow Ziegenhagen", i:"14", p:"G", g:"SO", s:0, f:0}, {n:"Kate Dewey", i:"15", p:"G", g:"FR", s:0, f:0}, {n:"Anuhea Peters", i:"21", p:"G", g:"FR", s:0, f:0}, {n:"Evelyn Rogers", i:"23", p:"G", g:"JR", s:0, f:0}, {n:"Kestley Hodges", i:"24", p:"G", g:"JR", s:0, f:0}, {n:"Evelin Mondrogan", i:"25", p:"G", g:"SO", s:0, f:0}, {n:"Rozlyn Elliott", i:"32", p:"G", g:"FR", s:0, f:0}], vName: "The Dalles" },
-        boys_madras: { est: boysRoster, opp: [{n:"John Buffalo-Ball", i:"10", p:"G", g:"JR", s:0, f:0}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR", s:0, f:0}, {n:"Dre Plazola", i:"14", p:"W/G", g:"JR", s:0, f:0}, {n:"Troy Adams", i:"20", p:"W", g:"SR", s:0, f:0}, {n:"Caleb Shank", i:"22", p:"W", g:"JR", s:0, f:0}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR", s:0, f:0}, {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR", s:0, f:0}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR", s:0, f:0}, {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO", s:0, f:0}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO", s:0, f:0}, {n:"Osmar Orozco", i:"42", p:"P", g:"JR", s:0, f:0}, {n:"Devin Super", i:"45", p:"P", g:"SO", s:0, f:0}], vName: "Madras" }
+        boys_gladstone: { est: bR, opp: [{n:"Lucas Ingram", i:"10", p:"G/W", g:"SO", s:0, f:0}, {n:"Dixon Fisher", i:"12", p:"G", g:"SO", s:0, f:0}, {n:"Max McKee", i:"14", p:"G", g:"JR", s:0, f:0}, {n:"Rylan Fisher", i:"15", p:"G", g:"SR", s:0, f:0}, {n:"Eli Jackson", i:"20", p:"P/W", g:"SO", s:0, f:0}, {n:"Ezra Meyer", i:"22", p:"G/W", g:"JR", s:0, f:0}, {n:"Braylon Bays", i:"24", p:"G/W", g:"SO", s:0, f:0}, {n:"Cohen Wendling", i:"25", p:"G/W", g:"JR", s:0, f:0}, {n:"Russell Gleason", i:"30", p:"G/W", g:"JR", s:0, f:0}, {n:"Liam Mendoza", i:"35", p:"P/W", g:"SR", s:0, f:0}, {n:"Rohnen Schlenker", i:"50", p:"P/W", g:"SO", s:0, f:0}], vName: "Gladstone" },
+        girls_mckay: { est: gR, opp: [{n:"Allison Reynolds", i:"1", p:"", g:"SO", s:0, f:0}, {n:"Karen Linares", i:"2", p:"", g:"JR", s:0, f:0}, {n:"Ameyah Higheagle", i:"3", p:"", g:"SO", s:0, f:0}, {n:"Tram Nguyen", i:"4", p:"", g:"SO", s:0, f:0}, {n:"Melissa Garcia Mejia", i:"5", p:"", g:"JR", s:0, f:0}, {n:"Priscilla Martinez", i:"10", p:"", g:"JR", s:0, f:0}, {n:"Lohlah Tanguy", i:"11", p:"", g:"JR", s:0, f:0}, {n:"Makaila Mau", i:"14", p:"", g:"JR", s:0, f:0}, {n:"Cassidy Dixon", i:"21", p:"", g:"SR", s:0, f:0}, {n:"Grace Truong", i:"23", p:"", g:"JR", s:0, f:0}, {n:"Emme Lopez", i:"24", p:"", g:"FR", s:0, f:0}, {n:"Saiya Sampson", i:"25", p:"", g:"SR", s:0, f:0}, {n:"Emily Escudero", i:"32", p:"", g:"SO", s:0, f:0}], vName: "McKay" },
+        boys_molalla: { est: bR, opp: [{n:"Garrett Brusseau", i:"1", p:"", g:"SR", s:0, f:0}, {n:"Jerearl Abraham", i:"2", p:"", g:"SR", s:0, f:0}, {n:"Grant Brusseau", i:"3", p:"", g:"SR", s:0, f:0}, {n:"Tadyn McGinness", i:"4", p:"", g:"SR", s:0, f:0}, {n:"Elijah Ott", i:"5", p:"", g:"SR", s:0, f:0}, {n:"Camdyn Morey", i:"10", p:"", g:"SR", s:0, f:0}, {n:"Jaxson Johnson", i:"11", p:"", g:"SR", s:0, f:0}, {n:"Kurt Pederson", i:"14", p:"", g:"SR", s:0, f:0}, {n:"Andrew Dahl", i:"21", p:"", g:"JR", s:0, f:0}, {n:"Mason Strohmeyer", i:"33", p:"", g:"JR", s:0, f:0}], vName: "Molalla" },
+        girls_cascade: { est: gR, opp: [{n:"Olivia Bennett", i:"0", p:"G", g:"SR", s:0, f:0}, {n:"Halle Hammer", i:"1", p:"G", g:"JR", s:0, f:0}, {n:"Livia Free", i:"2", p:"G", g:"SR", s:0, f:0}, {n:"Bella Dobrkovsky", i:"3", p:"P", g:"SO", s:0, f:0}, {n:"Paytn McKenzie", i:"5", p:"W", g:"SO", s:0, f:0}, {n:"Alayna Salvo", i:"10", p:"W", g:"SR", s:0, f:0}, {n:"Rozalyn Schmunk", i:"11", p:"P", g:"SR", s:0, f:0}, {n:"Lainey Klampe", i:"12", p:"P", g:"JR", s:0, f:0}, {n:"Cassidy Crabtree", i:"13", p:"G", g:"SR", s:0, f:0}, {n:"Jazlyn Ziebert", i:"15", p:"W", g:"SO", s:0, f:0}, {n:"Pearl Pruett", i:"23", p:"W", g:"JR", s:0, f:0}], vName: "Cascade" },
+        girls_thedalles: { est: gR, opp: [{n:"Halle Kennedy", i:"1", p:"", g:"SO", s:0, f:0}, {n:"Bryce Newby", i:"2", p:"G", g:"SO", s:0, f:0}, {n:"Morgan Donivan", i:"5", p:"G", g:"JR", s:0, f:0}, {n:"Molly Carter", i:"10", p:"G", g:"FR", s:0, f:0}, {n:"Hailey Johnston", i:"12", p:"G", g:"SR", s:0, f:0}, {n:"Willow Ziegenhagen", i:"14", p:"G", g:"SO", s:0, f:0}, {n:"Kate Dewey", i:"15", p:"G", g:"FR", s:0, f:0}, {n:"Anuhea Peters", i:"21", p:"G", g:"FR", s:0, f:0}, {n:"Evelyn Rogers", i:"23", p:"G", g:"JR", s:0, f:0}, {n:"Kestley Hodges", i:"24", p:"G", g:"JR", s:0, f:0}, {n:"Evelin Mondrogan", i:"25", p:"G", g:"SO", s:0, f:0}, {n:"Rozlyn Elliott", i:"32", p:"G", g:"FR", s:0, f:0}], vName: "The Dalles" },
+        boys_madras: { est: bR, opp: [{n:"John Buffalo-Ball", i:"10", p:"G", g:"JR", s:0, f:0}, {n:"Warren Wallulatum", i:"12", p:"G", g:"JR", s:0, f:0}, {n:"Dre Plazola", i:"14", p:"W/G", g:"JR", s:0, f:0}, {n:"Troy Adams", i:"20", p:"W", g:"SR", s:0, f:0}, {n:"Caleb Shank", i:"22", p:"W", g:"JR", s:0, f:0}, {n:"Angelo Perez-Perez", i:"24", p:"W", g:"SR", s:0, f:0}, {n:"Kiellan Allen", i:"25", p:"W/G", g:"JR", s:0, f:0}, {n:"Matthew Suppah-Scott", i:"34", p:"P", g:"SR", s:0, f:0}, {n:"Jamos Riddle", i:"35", p:"G/W", g:"SO", s:0, f:0}, {n:"Eddie Alferez", i:"40", p:"G/W", g:"SO", s:0, f:0}, {n:"Osmar Orozco", i:"42", p:"P", g:"JR", s:0, f:0}, {n:"Devin Super", i:"45", p:"P", g:"SO", s:0, f:0}], vName: "Madras" }
     };
 
-    let teamData =
+    let teamData = JSON.parse(localStorage.getItem('rangerHubData')) || masterRosters;
+    
+    // REPAIR SCRIPT: Force missing games into storage
+    Object.keys(masterRosters).forEach(key => { if (!teamData[key]) teamData[key] = masterRosters[key]; });
+
+    let flipped = false;
+    const pCounts = {};
+
+    function init() {
+        const key = document.getElementById('gameSelector').value;
+        const game = teamData[key];
+        renderLists(game);
+        renderTriggers(game.est);
+    }
+
+    function renderLists(game) {
+        const estSorted = [...game.est].sort((a,b) => (b.s === 1) - (a.s === 1) || parseInt(a.i) - parseInt(b.i));
+        const oppSorted = [...game.opp].sort((a,b) => (b.s === 1) - (a.s === 1) || parseInt(a.i) - parseInt(b.i));
+        renderPanel('list1', flipped ? oppSorted : estSorted);
+        renderPanel('list2', flipped ? estSorted : oppSorted);
+        document.getElementById('title1').innerText = flipped ? game.vName : "Estacada (Home)";
+        document.getElementById('title2').innerText = flipped ? "Estacada (Home)" : game.vName;
+    }
+
+    function renderPanel(id, data) {
+        const div = document.getElementById(id); div.innerHTML = '';
+        data.forEach(p => {
+            const item = document.createElement('div');
+            item.className = `p-item ${p.s === 1 ? 'starter' : ''} ${p.s === 2 ? 'unavailable' : ''}`;
+            const meta = p.p ? `${p.p} | ${p.g}` : p.g;
+            item.innerHTML = `
+                <span class="p-num">${p.i}</span><span class="p-name">${p.n}</span><span class="p-meta">${meta}</span>
+                <button class="foul-btn ${p.f >= 5 ? 'danger' : ''}" onclick="event.stopPropagation(); updateFoul('${p.n}', '${p.i}')">${p.f} F</button>
+            `;
+            item.onclick = () => { if (p.f < 5) { p.s = (p.s + 1) % 2; } else { p.s = 2; } init(); };
+            div.appendChild(item);
+        });
+    }
+
+    function updateFoul(name, num) {
+        const key = document.getElementById('gameSelector').value;
+        const player = [...teamData[key].est, ...teamData[key].opp].find(x => x.n === name && x.i === num);
+        player.f++; if (player.f >= 5) player.s = 2; init();
+    }
+
+    function halftimeFlip() { flipped = !flipped; init(); }
+    function openSports() { document.getElementById('sportsModal').style.display = 'block'; }
+    function closeSports() { document.getElementById('sportsModal').style.display = 'none'; }
+    
+    function openEditor() {
+        const key = document.getElementById('gameSelector').value;
+        document.getElementById('homeEditor').innerHTML = ''; document.getElementById('oppEditor').innerHTML = '';
+        teamData[key].est.forEach(p => addRow('home', p));
+        teamData[key].opp.forEach(p => addRow('opp', p));
+        document.getElementById('editorModal').style.display = 'block';
+    }
+
+    function addRow(side, data = {n:'', i:'', g:'', p:'', f:0, s:0}) {
+        const div = document.createElement('div'); div.className = 'editor-row';
+        div.innerHTML = `<input type="text" value="${data.i}" class="num"><input type="text" value="${data.n}" class="name"><input type="text" value="${data.g}" class="grade"><input type="text" value="${data.p || ''}" class="pos"><button class="btn-ctrl" style="background:var(--unavailable-red); border:none;" onclick="this.parentElement.remove()">X</button>`;
+        document.getElementById(side + 'Editor').appendChild(div);
+    }
+
+    function saveAndClose() {
+        const key = document.getElementById('gameSelector').value;
+        teamData[key].est = gatherData('homeEditor').sort((a,b) => parseInt(a.i) - parseInt(b.i));
+        teamData[key].opp = gatherData('oppEditor').sort((a,b) => parseInt(a.i) - parseInt(b.i));
+        localStorage.setItem('rangerHubData', JSON.stringify(teamData));
+        init(); closeEditor();
+    }
+
+    function gatherData(id) {
+        return Array.from(document.getElementById(id).querySelectorAll('.editor-row')).map(row => ({
+            i: row.querySelector('.num').value, n: row.querySelector('.name').value,
+            g: row.querySelector('.grade').value, p: row.querySelector('.pos').value, f: 0, s: 0
+        }));
+    }
+
+    function closeEditor() { document.getElementById('editorModal').style.display = 'none'; }
+
+    function renderTriggers(data) {
+        const div = document.getElementById('callTriggers'); div.innerHTML = '';
+        data.forEach(p => {
+            const btn = document.createElement('button');
+            btn.className = 'p-call-btn'; btn.innerText = `#${p.i} ${p.n.split(' ').pop()}`;
+            btn.onclick = () => playerCall(p.n, p.i); div.appendChild(btn);
+        });
+    }
+
+    function togglePossession(dir) {
+        document.getElementById('posLeft').classList.remove('active'); document.getElementById('posRight').classList.remove('active');
+        document.getElementById('pos' + (dir === 'left' ? 'Left' : 'Right')).classList.add('active');
+    }
+
+    function playerCall(name, num) {
+        const txt = document.getElementById('callText'); const count = document.getElementById('callCounter');
+        if (!pCounts[name]) pCounts[name] = 0; const idx = pCounts[name];
+        txt.innerText = callTemplates[idx].replace("[NAME]", name).replace("[NUM]", num);
+        count.innerText = `${idx + 1} / 200`; pCounts[name] = (idx + 1) % 200;
+    }
+
+    function playShot(type) {
+        const txt = document.getElementById('callText');
+        if (type === '2pt') {
+            txt.innerText = ["Bang!", "Bucket!", "Got it!", "Count it!", "Ranger Points!"][Math.floor(Math.random() * 5)];
+            txt.style.color = "white";
+        } else {
+            const city = ["Sandy!", "Eagle Creek!", "Molalla!", "Gladstone!", "Boring!", "Redland!", "Colton!", "Estacada!"][Math.floor(Math.random() * 8)];
+            txt.innerText = "He hit it from " + city + "! SPLASH!";
+            txt.style.color = "#4ade80";
+        }
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>
